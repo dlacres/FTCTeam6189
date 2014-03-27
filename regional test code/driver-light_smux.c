@@ -129,7 +129,7 @@ if(nMotorEncoder[blockthrower]>1700)
 	block_count=0;
 	sm_light=LIGHT_OFF;
 }
-	/*if (joystick.joy2_y2<0&&block_there()==true) // Block in and light sees yellow
+	if (joystick.joy2_y2<0&&block_there()==true) // Block in and light sees yellow
 	{
 		++block_count;
 		sm_light=LIGHT_ON_1;
@@ -139,12 +139,7 @@ if(nMotorEncoder[blockthrower]>1700)
 		--block_count;
 		sm_light=LIGHT_ON_1;
 	}
-	*/
-	if (block_there()==true) // Block in and light sees yellow
-	{
-		++block_count;
-		sm_light=LIGHT_ON_1;
-	}
+
 break;
 
 case LIGHT_ON_1:

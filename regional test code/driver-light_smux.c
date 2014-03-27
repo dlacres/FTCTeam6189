@@ -208,8 +208,10 @@ if( nMotorEncoder[blockthrower]>1700)
 }
 if(joystick.joy2_y2>0&&block_there()==false)
 {
+	--block_count;
 sm_light=LIGHT_ON_2;
 }
+
 break;
 }
 //writeDebugStreamLine("color=%d",SensorValue(S4));

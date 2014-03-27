@@ -88,16 +88,16 @@ int state=0;
 	bool IRval;
 	//calculate when to increment path
 if (abs(path[pathIdx][DIR_IDX] - dirDegrees) < 4 && abs(path[pathIdx][DIST_IDX] - distInches) < 3) pathIdx++;
-// State O Follow Path
 
-if (state==0)
+
+if (state==0)// State O Follow Path
 {
 	if (distInches>28&&distInches<48)
 	{
 		state=1;
 	}
 }
-if(state==1)
+if(state==1)// State 1 Swing out irArm
 {
 	servo[irArm]=95;
 	if (distInches>48)
@@ -107,8 +107,7 @@ if(state==1)
 	}
 }
 IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
-// State 1 Look for IR Beacon
- if (state==2)
+ if (state==2)// state 2 look for ir under box 1
  {
    speedCmd=10;
   if ( IRval)
@@ -120,8 +119,8 @@ IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
   	state=3;
   }
 }
-// State 2 Follow Path
-if (state==3)
+
+if (state==3)//state 3 look for box 2 and follow path
 {
 
 	if (distInches>55)
@@ -130,8 +129,8 @@ if (state==3)
 	}
 
 }
-// State 3 Look for IR Beacon
- if (state==4)
+
+ if (state==4)//state 4 look for ir under box 2
  {
    speedCmd=10;
   if ( IRval==true)
@@ -144,8 +143,8 @@ if (state==3)
   }
   servo[irArm]=243;
 }
-// State 4 Follow Path
-if (state==5)
+
+if (state==5)//state 5 look for box 3 and follow path
 {
 	if (distInches>74)//36
 	{
@@ -154,8 +153,8 @@ if (state==5)
 
 }
 
-// State 5 Look for IR Beacon
- if (state==6)
+
+ if (state==6)// State 6 Look for ir under box 3
  {
    speedCmd=10;
   if ( IRval==true)
@@ -167,8 +166,8 @@ if (state==5)
   	state=7;
   }
 }
-// State 6 Follow Path
-if (state==7)
+
+if (state==7)// State 7 look for box 4
 {
 	if (pathIdx == 3)//45
 	{
@@ -176,7 +175,7 @@ if (state==7)
 	}
 }
 
-if (state==8)// flip arm
+if (state==8)// state 8 flip arm
 {
 	speedCmd=0;
 	dirCmd = 0;
@@ -189,7 +188,7 @@ if (state==8)// flip arm
 		}
 
 }
-if (state==9)
+if (state==9)//state 9 lower arm
 {
 	speedCmd = 0;
 	dirCmd = 0;
@@ -200,12 +199,12 @@ if (state==9)
 			state=10;
 		}
 }
-if (state==10)
+if (state==10)//state 10 swing in irArm
 {
 servo[irArm]=243;
 state=11;
 }
-if(state==11)
+if(state==11)//state 11 follow path
 {
 }
 

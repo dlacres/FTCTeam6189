@@ -41,7 +41,7 @@ int speedCmdZ1=0;
 int countState = 0;
 void initializeRobot()
 {
-  // Place code here to sinitialize servos to starting positions.
+  // Place code here to initialize servos to starting positions.
   // Sensors are automatically configured and setup by ROBOTC. They may need a brief time to stabilize.
 
   return;
@@ -62,124 +62,124 @@ int state=0;
 		ClearTimer(T1);
 		hogCPU();
 		//--------------------Robot Code---------------------------//
-	long armEncoder = nMotorEncoder[blockthrower];
-	long  robotDist = nMotorEncoder[rtWheelMotor] + nMotorEncoder[ltWheelMotor];
-	long  robotDir  = nMotorEncoder[ltWheelMotor] - nMotorEncoder[rtWheelMotor];
-	long  distInches = robotDist/IN2CLK;
+		long armEncoder = nMotorEncoder[blockthrower];
+		long  robotDist = nMotorEncoder[rtWheelMotor] + nMotorEncoder[ltWheelMotor];
+		long  robotDir  = nMotorEncoder[ltWheelMotor] - nMotorEncoder[rtWheelMotor];
+		long  distInches = robotDist/IN2CLK;
 		// Calculate the speed and direction commands
     int speedCmd = ForwardDist(path[pathIdx][DIST_IDX], robotDist, path[pathIdx][SPD_IDX]);
 		int dirCmd=Direction(path[pathIdx][DIR_IDX], robotDir);
 		int armSpd = FlipperArm(armEncoder, armSetPos);
-	bool IRval;
-	//calculate when to increment path
-if (abs(speedCmd)<3 && abs(dirCmd)<3) pathIdx++;
-// State O Follow Path
-if (state==0)
-{
-	if (distInches>48)
-	{
-		state=1;
-	}
-}
-IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
-// State 1 Look for IR Beacon
- if (state==1)
- {
-   speedCmd=10;
-  if ( IRval)
-  {
-  	state=7;
-  }
-  else
-  {
-  	state=2;
-  }
-}
-// State 2 Follow Path
-if (state==2)
-{
+		bool IRval;
 
-	if (distInches>55)
-	{
-		state=3;
-	}
+		//calculate when to increment path
+		if (abs(speedCmd)<3 && abs(dirCmd)<3) pathIdx++;
 
-}
-// State 3 Look for IR Beacon
- if (state==3)
- {
-   speedCmd=10;
-  if ( IRval==true)
-  {
-  	state=7;
-  }
-  else
-  {
-  	state=4;
-  }
-}
-// State 4 Follow Path
-if (state==4)
-{
-	if (distInches>74)//36
-	{
-		state=5;
-	}
-
-}
-
-// State 5 Look for IR Beacon
- if (state==5)
- {
-   speedCmd=10;
-  if ( IRval==true)
-  {
-  	state=7;
-  }
-  else
-  {
-  	state=6;
-  }
-}
-// State 6 Follow Path
-if (state==6)
-{
-	if (pathIdx == 3)//45
-	{
-		state=7;
-	}
-}
-
-if (state==7)// flip arm
-{
-	speedCmd=0;
-	dirCmd = 0;
-	armSetPos = 2300;
-		if (abs(armSetPos - armEncoder) <10)
+		// State O Follow Path
+		if (state==0)
 		{
-			countState++;
-		if(countState == 3)
-			state=8;
-		}
-
-}
-if (state==8)
-{
-	speedCmd = 0;
-	dirCmd = 0;
-	armSetPos = 0;
-		if (abs(armSetPos) - abs(armEncoder) < 200)
-		{
-			if(pathIdx == 3)
+			if (distInches>48)
 			{
-			state=9;
+				state=1;
 			}
 		}
-}
-if (state==9)
-{
-	pathIdx = 3;
-}
+		IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
+		// State 1 Look for IR Beacon
+		if (state==1)
+		{
+		  speedCmd=10;
+		  if ( IRval)
+		  {
+		  	state=7;
+		  }
+		  else
+		  {
+		  	state=2;
+		  }
+		}
+		// State 2 Follow Path
+		if (state==2)
+		{
+
+			if (distInches>55)
+			{
+				state=3;
+			}
+
+		}
+		// State 3 Look for IR Beacon
+		if (state==3)
+		{
+		  speedCmd=10;
+		  if ( IRval==true)
+		  {
+		  	state=7;
+		  }
+		  else
+		  {
+		  	state=4;
+		  }
+		}
+		// State 4 Follow Path
+		if (state==4)
+		{
+			if (distInches>74)//36
+			{
+				state=5;
+			}
+		}
+		// State 5 Look for IR Beacon
+		if (state==5)
+		{
+		   speedCmd=10;
+		  if ( IRval==true)
+		  {
+		  	state=7;
+		  }
+		  else
+		  {
+		  	state=6;
+		  }
+		}
+		// State 6 Follow Path
+		if (state==6)
+		{
+			if (pathIdx == 3)//45
+			{
+				state=7;
+			}
+		}
+
+		if (state==7)// flip arm
+		{
+			speedCmd=0;
+			dirCmd = 0;
+			armSetPos = 2300;
+				if (abs(armSetPos - armEncoder) <10)
+				{
+					countState++;
+				if(countState == 3)
+					state=8;
+				}
+
+		}
+		if (state==8)
+		{
+			speedCmd = 0;
+			dirCmd = 0;
+			armSetPos = 0;
+				if (abs(armSetPos) - abs(armEncoder) < 200)
+				{
+					if(pathIdx == 3)
+					{
+					state=9;
+					}
+				}
+		}
+		if (state==9)
+		{
+			pathIdx = 3;
+		}
 
 		DebugInt("spd",speedCmd);
 		DebugInt("dir",robotDir/DEG2CLK);
@@ -188,13 +188,12 @@ if (state==9)
     DebugInt("state",state);
     DebugInt("irval",SensorValue[IR]);
 
-
 		// Calculate when to move to the next path index
 
 		int s=sizeof(path)/sizeof(path[0])-1;
 		DebugInt("siz",s);
 		if (pathIdx>s) pathIdx=s;
-	speedCmd = RateLimit(speedCmd, START_RATE,speedCmdZ1 );
+		speedCmd = RateLimit(speedCmd, START_RATE,speedCmdZ1 );
 		motor[ltWheelMotor]=speedCmd+dirCmd;
 		motor[rtWheelMotor]=speedCmd-dirCmd;
 		motor[blockthrower]=armSpd;

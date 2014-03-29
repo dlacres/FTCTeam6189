@@ -58,7 +58,7 @@ task main()
 		jstickY = jsShape(joystick.joy1_y2)*3/2;// same here
 
     motor[leftmotor] = (-jstickY + jstickX)/2; // uses revised values to make driving on one joystick
-   	motor[rightmotor] = (-jstickY + -jstickX)/2;// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   	motor[rightmotor] = (-jstickY - jstickX)/2;// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     motor[blockgrabber] = jstick2Y2;
 		motor[leftsweeper] = -jstick2Y2;
 		writeDebugStreamLine("Color=%d,light=%d",SensorValue[S4],motor[light]);

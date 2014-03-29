@@ -6,7 +6,7 @@
 #pragma config(Sensor, S4,     HTSMUX,         sensorI2CCustom)
 #pragma config(Motor,  motorA,          leftsweeper,   tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          light,         tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorC,          rightsweeper,  tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     ltMotor,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     rtMotor,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     ltBack,        tmotorTetrix, openLoop, reversed)
@@ -73,7 +73,6 @@ task main()
 	bias=(HTGYROreadRot(HTGYRO)+bias);
 	wait10Msec(20);
 	bias=(HTGYROreadRot(HTGYRO)+bias)/3;
-	servo[irArm]=243;
 	bool lightflash=true;
 
 		Pid_Init();
@@ -83,7 +82,7 @@ task main()
 	{
 				ClearTimer(T1);
 		hogCPU();
-
+		servo[irArm]=243;
 		int jstickX = 0;
 		int jstickY = 0;
 		getJoystickSettings(joystick);
@@ -101,6 +100,7 @@ task main()
    	leftmotors = (-jstickY + -jstickX)/2;// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     motor[blockgrabber] = jstick2Y2;
 		motor[leftsweeper] = -jstick2Y2;
+		motor[rightsweeper] = -jstick2Y2;
 	motor[rtBack]=rightmotors;
 	motor[rtMotor]=rightmotors;
 	motor[ltMotor]=leftmotors;

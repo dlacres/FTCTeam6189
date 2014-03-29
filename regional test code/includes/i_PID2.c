@@ -52,9 +52,10 @@ int Pid2(int speedCmd, int distance){
   error=speedCmd-speed2;  // Normilize speedCmd to the size of motor command 0->100.
   errorKp=error*Kp;
   integral2=integral2+error;  // find value of integral
+  if (integral2>MAX_INTEGRAL) integral2=MAX_INTEGRAL; // Limit the value of the integral
+  if (integral2<-MAX_INTEGRAL) integral2=-MAX_INTEGRAL;
   integralKi=integral2*Ki;   // Normilize to the size of motor command 0->100.
-  if (integralKi>MAX_INTEGRAL) integralKi=MAX_INTEGRAL; // Limit the value of the integral
-  if (integralKi<-MAX_INTEGRAL) integralKi=-MAX_INTEGRAL;
+
 
   output=errorKp+integralKi+Kd*acceleration;
 
@@ -76,10 +77,11 @@ int Pid(int speedCmd, int distance){
 	acceleration = speed - speedOld; speedOld=speed;
   error=speedCmd-speed;  // Normilize speedCmd to the size of motor command 0->100.
   errorKp=error*Kp;
-  integral=integral+error;  // find value of integral
+  integral=integral+error;// find value of integral
+  if (integral>MAX_INTEGRAL) integral=MAX_INTEGRAL; // Limit the value of the integral
+  if (integral<-MAX_INTEGRAL) integral=-MAX_INTEGRAL;
   integralKi=integral*Ki;   // Normilize to the size of motor command 0->100.
-  if (integralKi>MAX_INTEGRAL) integralKi=MAX_INTEGRAL; // Limit the value of the integral
-  if (integralKi<-MAX_INTEGRAL) integralKi=-MAX_INTEGRAL;
+
 
   output=errorKp+integralKi+Kd*acceleration;
 

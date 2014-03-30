@@ -1,9 +1,7 @@
 // As a developer I want to filter a sensor to remove noise or to delay a response.
-float lpOld=0;
-float out;
-int Lowpass(int in,float tau){
-	out = lpOld + tau * ((float)in - lpOld);
-	lpOld=out;
+//float lpOld=0;
+int Lowpass(int in,float tau, float &lpOld){
+	lpOld = lpOld + tau * ((float)in - lpOld);
 	return((int)lpOld);
 }
 

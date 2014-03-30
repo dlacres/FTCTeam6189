@@ -56,6 +56,7 @@ task main()
 	nMotorEncoder[robotlifter] = 0;
 	nMotorEncoder[blockthrower] = 0;
 	bool lifterTrigger = false;
+	bFloatDuringInactiveMotorPWM=false;
 	int rightmotors;
 	int leftmotors;
 	int lifterEncoder = 0;
@@ -300,7 +301,7 @@ throwerSpd = FlipperArm(throwerEncoder, throwerSet);
 
  motor[robotlifter] = lifterSpd;
  motor[blockthrower] = throwerSpd;
-
+//DebugPrint();
 		//--------------------------Robot Code--------------------------//
 		// Wait for next itteration
 	  timeLeft=FOREGROUND_MS-time1[T1];

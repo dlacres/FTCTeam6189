@@ -109,16 +109,16 @@ IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
  if (state==2)// state 2 look for ir under box 1
  {
    speedCmd=10;
-   speedCmd=0;
+  // speedCmd=0;
 
   if ( IRval)
   {
-//  	state=12;
+	state=12;
   	servo[irArm]=243;
   }
   else
   {
-//  	state=3;
+  	state=3;
   }
 }
 
@@ -237,8 +237,8 @@ if(state==10)//state 10 follow path
 		DebugInt("spd",speedCmd);
 		//DebugInt("dir",robotDir/DEG2CLK);
 		DebugInt("dist",distInches);
-//		DebugInt("path",pathIdx);
-    //DebugInt("state",state);
+		DebugInt("path",pathIdx);
+    DebugInt("state",state);
     //DebugInt("irval",SensorValue[IR]);
 
 

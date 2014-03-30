@@ -6,7 +6,7 @@
 #pragma config(Sensor, S4,     HTSMUX,         sensorI2CCustom)
 #pragma config(Motor,  motorA,          leftsweeper,   tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          light,         tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop, encoder)
+#pragma config(Motor,  motorC,          rightsweeper,  tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     ltMotor,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     rtMotor,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     ltBack,        tmotorTetrix, openLoop)
@@ -235,11 +235,11 @@ if(state==10)//state 10 follow path
 }
 
 		DebugInt("spd",speedCmd);
-		DebugInt("dir",robotDir/DEG2CLK);
+		//DebugInt("dir",robotDir/DEG2CLK);
 		DebugInt("dist",distInches);
 //		DebugInt("path",pathIdx);
-    DebugInt("state",state);
-    DebugInt("irval",SensorValue[IR]);
+    //DebugInt("state",state);
+    //DebugInt("irval",SensorValue[IR]);
 
 
 		// Calculate when to move to the next path index
@@ -255,8 +255,10 @@ if(state==10)//state 10 follow path
 		motor[ltMotor]=leftmotors;
 		motor[ltBack]=leftmotors;
 		motor[blockthrower]=armSpd;
-		DebugInt("rightmotors",rightmotors);
-		DebugInt("leftmotors",leftmotors);
+		//DebugInt("rightmotors",rightmotors);
+		//DebugInt("leftmotors",leftmotors);
+		DebugInt("rightencoder",nMotorEncoder[rtMotor]);
+		DebugInt("leftencoder",nMotorEncoder[ltMotor]);
 		//--------------------------Robot Code--------------------------//
 		// Wait for next itteration
 	  timeLeft=FOREGROUND_MS-time1[T1];

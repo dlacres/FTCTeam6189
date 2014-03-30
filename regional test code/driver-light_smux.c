@@ -32,7 +32,7 @@
 #include "joystickDeadzone.c"
 #include "i_PID2.c"
 #include "joystickShaper.c"
-
+#include "i_debug.c"
 #include "i_block_there.c"
 #include "i_limit.c"
 #include "i_flipperArm_driver.c"
@@ -107,6 +107,8 @@ task main()
 	motor[ltBack]=leftmotors;
 	rightmotors=Pid(spdCmd, nMotorEncoder[rtMotor]);
 	leftmotors=Pid2(spdCmd, nMotorEncoder[ltMotor]);
+		DebugInt("rightencoder",nMotorEncoder[rtMotor]);
+		DebugInt("leftencoder",nMotorEncoder[ltMotor]);
 //	writeDebugStreamLine("motorspeed %d", rightmotors);
 
 
@@ -265,7 +267,7 @@ lifterEncoder = nMotorEncoder[robotlifter];
 			motor[flagraiser] = jstick2Y1;
 		}
 
-writeDebugStreamLine("lifterEncoder  %d",nMotorEncoder[robotlifter] );
+//writeDebugStreamLine("lifterEncoder  %d",nMotorEncoder[robotlifter] );
 
 //***************** block thrower **********************************************
 			throwerEncoder = nMotorEncoder[blockthrower];

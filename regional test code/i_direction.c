@@ -38,7 +38,7 @@ long Direction(long dirCmd, long dir)
 	int dirMotorCmd;
 
 	dirCmd=RateLimit(dirCmd*DEG2CLK,DIR_RL,directionRl);
-	DebugInt("dirCR",dirCmd);
+//	DebugInt("dirCR",dirCmd);
 	dirMotorCmd = (dirCmd-dir)/DIR_KP;
 
 	return(dirMotorCmd);

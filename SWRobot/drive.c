@@ -43,8 +43,8 @@ task main(){
 		jstickX = jsShape(joystick.joy1_x2);
 		jstickY = jsShape(joystick.joy1_y2);
 
-		motor[ltMotor]=Pid1(-jstickY - jstickX);
-		motor[rtMotor]=Pid2(-jstickY + jstickX);
+		motor[ltMotor]=Pid1(-jstickY - jstickX)*3/2;
+		motor[rtMotor]=Pid2(-jstickY + jstickX)*3/2;
 
 	  //--------------------------END FOREGROUND--------------------------------//
 

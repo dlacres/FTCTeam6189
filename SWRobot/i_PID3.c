@@ -11,7 +11,7 @@
 #define m2 rtMotor
 #define m3 rtMotor
 
-#include "i_lowpass.c"
+#include "i_Lowpass.c"
 
 #define Kp .3  // Kp
 #define Ki 0.08 // Ki
@@ -105,7 +105,7 @@ int Pid1(int speedCmd){
 	lpError=Lowpass(errorKp,0.4,lpZ11);
   if (lpError>ERR_SIZE || failedPid){
   	failedPid=true;
-  	output=0;
+  	//output=0;
   }
 	return((int)output);
 }
@@ -141,7 +141,7 @@ int Pid2(int speedCmd){
 	lpError=Lowpass(errorKp,0.4,lpZ21);
   if (lpError>ERR_SIZE || failedPid){
   	failedPid=true;
-  	output=0;
+  	//output=0;
   }
 
 	return((int)output);

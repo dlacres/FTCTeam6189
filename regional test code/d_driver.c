@@ -97,14 +97,14 @@ task main()
 		jstickY = jsShape(joystick.joy1_y2);// same here
 		jstickX = joystick.joy1_x2;// makes driving less touchy... hopefully
 		jstickY = joystick.joy1_y2;// same here
-	  jstickX = jstickX+(deadZone((HTGYROreadRot(HTGYRO)-bias), 3));
+	  jstickX = jstickX-(deadZone((HTGYROreadRot(HTGYRO)-bias), 3));
 	  writeDebugStreamLine("sensor=%d",HTGYROreadRot(HTGYRO));
 //	writeDebugStreamLine("joyX=%d,bias=%d",jstickX,bias);
 //		writeDebugStreamLine("motorspeed %d", rightmotors);
     //rightmotors = (jstickY - jstickX)/2;
    	//leftmotors = (jstickY + jstickX)/2;
-		leftmotors =Pid1(jstickY - jstickX);
-		rightmotors=Pid2(jstickY + jstickX);
+		leftmotors =Pid1(jstickY + jstickX);
+		rightmotors=Pid2(jstickY - jstickX);
     motor[blockgrabber] = jstick2Y2;
 		motor[leftsweeper] = -jstick2Y2;
 		motor[rightsweeper] = -jstick2Y2;

@@ -7,10 +7,10 @@
 #pragma config(Motor,  motorA,          leftsweeper,   tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          light,         tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorC,          rightsweeper,  tmotorNXT, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     ltMotor,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     rtMotor,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     ltBack,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     rtBack,        tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     ltMotor,       tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     rtMotor,       tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     ltBack,        tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     rtBack,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     flagraiser,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     blockthrower,  tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C4_1,     robotlifter,   tmotorTetrix, PIDControl, encoder)
@@ -29,7 +29,7 @@
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_PID3.c"
 #include "i_delayatrue.c"
-//#include "i_debug.c"
+#include "i_debug.c"
 #include "i_limit.c"
 #include "i_rateLimit.c"
 #include "i_direction.c"
@@ -37,16 +37,11 @@
 #include "i_flipperArm_auto.c"
 //-------------------Path definition----------------------//
 // dist, dir, spd
-/*int path[][]={
-		{20, 0, 50},
-		{28, -47, 50},
-		{88, -47, 50},
-		{70, -47, 50}
-								};*/
 int path[][]={
-		{20,  0, 30},
-		{28, 45, 30},
-		{38, 45, 30},
+		{30, 0, 75},
+		{38, -45, 75},
+		{88, -45, 75},
+		{70, -45, 75}
 								};
 
 int armSetPos = 0;
@@ -122,17 +117,17 @@ task main(){
 
 		// Calculate the IR value
 		IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
-/*
+
 		if (state==0)// State O Follow Path
 		{
-			if (distInches>28)
+			if (dirCmd<-45)
 			{
 				state=1;
 			}
 		}
 		if(state==1)// State 1 Swing out irArm
 		{
-			servo[irArm]=95;
+			servo[irArm]=115;
 			if (distInches>34)
 			{
 
@@ -193,6 +188,7 @@ task main(){
 		}
 		if (state==15) // pulls servo arm in
 		{
+			speedCmd=0;
 			if(distInches>57)
 			{
 				servo[irArm] = 95;
@@ -258,7 +254,7 @@ task main(){
 		if(state==10)//state 10 follow path
 		{
 		}
-		//*/
+
 		//DebugInt("spd",speedCmd);
 		//DebugInt("dir",robotDir/DEG2CLK);
 		//DebugInt("dist",distInches);
@@ -287,8 +283,8 @@ task main(){
 		//DebugInt("rightencoder",nMotorEncoder[rtMotor]);
 		//DebugInt("leftencoder",nMotorEncoder[ltMotor]);
 		if (iFrameCnt==0)
-			writeDebugStreamLine("i,pthIdx,rbtDist,rbtDir,spdCmd,dirCmd");
-		writeDebugStreamLine("%3i,%3i,%4i,%4i,%3i,%3i",iFrameCnt,pathIdx,distInches,robotDir,speedCmd,dirCmd);
+			writeDebugStreamLine("i,pthIdx,rbtDist,ir,spdCmd,state");
+		writeDebugStreamLine("%3i,%3i,%4i,%4i,%3i,%3i",iFrameCnt,pathIdx,distInches,SensorValue[IR],speedCmd,state);
 		//--------------------------Robot Code--------------------------//
 		// Wait for next itteration
 		iFrameCnt++;

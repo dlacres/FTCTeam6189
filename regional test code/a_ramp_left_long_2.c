@@ -34,9 +34,9 @@
 // dist, dir, spd
 int path[][]={
 		{20, 0, 50},
-		{28, -46, 50},
-		{88, -46, 50},
-		{70, -46, 50}
+		{28, -45, 50},
+		{83, -45, 50},
+		{68, -45, 50}
 								};
 
 int armSetPos = 0;
@@ -118,8 +118,7 @@ task main(){
 		}
 		if (state==2)// state 2 look for ir under box 1
 		{
-		  speedCmd=10;
-		  // speedCmd=0;
+
 
 		  if ( IRval)
 		  {
@@ -133,7 +132,8 @@ task main(){
 		}
 		if (state==12)//follows path before flipping arm
 		{
-			if(distInches>48)
+//speedCmd=0;
+		if(distInches>44)
 			{
 				state = 8;
 			}
@@ -149,7 +149,7 @@ task main(){
 		}
 		if (state==4)//state 4 look for ir under box 2
 		{
-		  speedCmd=10;
+
 		  if ( IRval==true)
 		  {
 		  	state=13;
@@ -163,12 +163,12 @@ task main(){
 		}
 		if (state==13) // waits for distance before flipping
 		{
-			if(distInches>56)
+			if(distInches>52)
 			{
 				state = 8;
 			}
 		}
-		if (state==15) // pulls servo arm in
+		if (state==15) // pulls servo arm out
 		{
 			if(distInches>57)
 			{
@@ -178,14 +178,14 @@ task main(){
 		}
 		if (state==5)//state 5 look for box 3 and follow path
 		{
-			if (distInches>67)//36
+			if (distInches>66)//36
 			{
 				state=6;
 			}
 		}
 		 if (state==6)// State 6 Look for ir under box 3
 		 {
-		   speedCmd=10;
+
 		  if ( IRval==true)
 		  {
 		  	state=14;
@@ -198,7 +198,7 @@ task main(){
 		}
 		if (state==14)// waits distance before flipping arm
 		{
-			if(distInches>75)
+			if(distInches>66)
 				state = 8;
 		}
 		if (state==7)// State 7 look for box 4

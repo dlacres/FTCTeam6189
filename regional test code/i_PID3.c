@@ -16,10 +16,12 @@
 #pragma config(Motor,  mtr_S1_C2_1,     ltBack,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     rtBack,        tmotorTetrix, openLoop, reversed)
 */
+// As a SW programmer, I want to control the motors speed while protecting the motors from burnout.
+//
 #define m1 ltMotor
 #define m2 rtMotor
 //#define m3 rtMotor
-
+#define DEADZONE 2
 #include "i_lowpass.c"
 
 #define Kp .28  // Kp
@@ -116,6 +118,8 @@ int Pid1(int speedCmd){
   	failedPid=true;
 //  	output=0;
   }
+  if (speedCmd<DEADZONE && speedCmd>-DEADZONE)
+  	output=0;
 	return((int)output);
 }
 //---------------------------pid 2-------------------------------//
@@ -151,6 +155,8 @@ int Pid2(int speedCmd){
   if (lpError>ERR_SIZE || failedPid){
   	failedPid=true;
 //  	output=0;
+  if (speedCmd<DEADZONE && speedCmd>-DEADZONE)
+  	output=0;
   }
 
 	return((int)output);

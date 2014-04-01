@@ -6,6 +6,7 @@ task main()
 	while(true)
 	{
 	writeDebugStreamLine("ir=%d",SensorValue[S2] );
+	wait1Msec(500);
 	}
 
 }

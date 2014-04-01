@@ -39,8 +39,8 @@
 // dist, dir, spd
 int path[][]={
 		{30, 0, 75},
-		{38, -45, 75},
-		{88, -45, 75},
+		{38, -45, 100},
+		{70, -45, 75},
 		{70, -45, 75}
 								};
 
@@ -188,8 +188,8 @@ task main(){
 		}
 		if (state==15) // pulls servo arm in
 		{
-			speedCmd=0;
-			if(distInches>57)
+			//speedCmd=0;
+			if(distInches>59)
 			{
 				servo[irArm] = 95;
 				state =5;

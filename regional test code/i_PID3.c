@@ -21,7 +21,7 @@
 #define m1 ltMotor
 #define m2 rtMotor
 //#define m3 rtMotor
-#define DEADZONE 2
+#define DEADZONE 5
 #include "i_lowpass.c"
 
 #define Kp .28  // Kp

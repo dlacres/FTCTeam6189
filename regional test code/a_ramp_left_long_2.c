@@ -1,6 +1,8 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S3, HTServo,  none,     none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S3,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S4,     HTSMUX,         sensorI2CCustom)
 #pragma config(Motor,  motorA,          leftsweeper,   tmotorNXT, openLoop, encoder)
 #pragma config(Motor,  motorB,          light,         tmotorNXT, openLoop, encoder)
@@ -13,8 +15,8 @@
 #pragma config(Motor,  mtr_S1_C3_2,     blockthrower,  tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C4_1,     robotlifter,   tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     blockgrabber,  tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S3_C1_1,    irArm,                tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_2,    servo2,               tServoNone)
+#pragma config(Servo,  srvo_S3_C1_1,    servo1,                tServoStandard)
+#pragma config(Servo,  srvo_S3_C1_2,    irArm,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_5,    servo5,               tServoNone)
@@ -29,14 +31,14 @@
 #include "i_rateLimit.c"
 #include "i_direction.c"
 #include "i_forwardDist.c"
-#include "i_flipperArm_auto.c"
+#include "i_flipperArm_auto.c"//1482 lines of code
 //-------------------Path definition----------------------//
 // dist, dir, spd
 int path[][]={
 		{20, 0, 50},
-		{28, -45, 50},
-		{83, -45, 50},
-		{68, -45, 50}
+		{28, -49, 50},
+		{83, -49, 50},
+		{68, -49, 50}
 								};
 
 int armSetPos = 0;
@@ -48,6 +50,7 @@ int pathIdx=0;
 int speedCmdZ1=0;
 int rightmotors;
 int leftmotors;
+
 
 //*--------------------Foreground---------------------------//
 // Story: As a player, I want the robot to follow a path so i can score autonomous points in a game
@@ -61,20 +64,21 @@ int leftmotors;
 task main(){
 
 	//--------------------INIT Code---------------------------//
-  ForwardDistReset((tMotor)rtMotor, (tMotor)ltMotor);
+ForwardDistReset((tMotor)rtMotor, (tMotor)ltMotor);
 	DirectionReset();
 	nMotorEncoder[blockthrower] = 0;
 	speedCmdZ1=0;
 	pathIdx=0;
+	servo[irArm]=243;
 	delayatruecount=0;
 	int state=0;
 	Pid_Init1();
 	Pid_Init2();
-	servo[irArm]=243;
+
 
 	//--------------------End INIT Code--------------------------//
 
-//  waitForStart(); // Wait for the beginning of autonomous phase.
+  waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int iFrameCnt=0;
 	int timeLeft;
@@ -109,7 +113,7 @@ task main(){
 		}
 		if(state==1)// State 1 Swing out irArm
 		{
-			servo[irArm]=95;
+			servo[irArm]=150;
 			if (distInches>34)
 			{
 
@@ -120,7 +124,7 @@ task main(){
 		{
 
 
-		  if ( IRval)
+		  if ( IRval||SensorValue[IR] == 3||SensorValue[IR] == 2)
 		  {
 			state=12;
 		  	servo[irArm]=243;
@@ -141,7 +145,7 @@ task main(){
 		if (state==3)//state 3 look for box 2 and follow path
 		{
 
-			if (distInches>44)
+			if (distInches>46)
 			{
 				state=4;
 			}
@@ -150,7 +154,7 @@ task main(){
 		if (state==4)//state 4 look for ir under box 2
 		{
 
-		  if ( IRval==true)
+		  if ( IRval==true||SensorValue[IR] == 3)
 		  {
 		  	state=13;
 		  	servo[irArm]=243;
@@ -163,7 +167,7 @@ task main(){
 		}
 		if (state==13) // waits for distance before flipping
 		{
-			if(distInches>52)
+			if(distInches>57)
 			{
 				state = 8;
 			}
@@ -172,7 +176,7 @@ task main(){
 		{
 			if(distInches>57)
 			{
-				servo[irArm] = 95;
+				servo[irArm] = 150;
 				state =5;
 			}
 		}
@@ -186,7 +190,7 @@ task main(){
 		 if (state==6)// State 6 Look for ir under box 3
 		 {
 
-		  if ( IRval==true)
+		  if ( IRval || SensorValue[IR] == 4||SensorValue[IR] == 3||SensorValue[IR] == 2)
 		  {
 		  	state=14;
 		  }
@@ -198,7 +202,7 @@ task main(){
 		}
 		if (state==14)// waits distance before flipping arm
 		{
-			if(distInches>66)
+			if(distInches>69)
 				state = 8;
 		}
 		if (state==7)// State 7 look for box 4
@@ -264,8 +268,8 @@ task main(){
 		//DebugInt("rightencoder",nMotorEncoder[rtMotor]);
 		//DebugInt("leftencoder",nMotorEncoder[ltMotor]);
 		if (iFrameCnt==0)
-			writeDebugStreamLine("i,pthIdx,rbtDist,irval,spdCmd,IR,state");
-		writeDebugStreamLine("%3i,%3i,%4i,%4i,%3i,%3i,%3i",iFrameCnt,pathIdx,distInches,IRval,speedCmd,SensorValue[IR],state);
+			writeDebugStreamLine("i,pthIdx,rbtDist,irval,spdCmd,IR,state, rightencoder, leftencoder");
+		writeDebugStreamLine("%3i,%3i,%4i,%4i,%3i,%3i,%3i, %4i, %4i",iFrameCnt,pathIdx,distInches,IRval,speedCmd,SensorValue[IR],state, nMotorEncoder[rtMotor], nMotorEncoder[ltMotor]);
 		//--------------------------Robot Code--------------------------//
 		// Wait for next itteration
 		iFrameCnt++;

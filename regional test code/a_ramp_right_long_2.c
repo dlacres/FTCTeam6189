@@ -34,26 +34,37 @@
 #include "i_rateLimit.c"
 #include "i_direction.c"
 #include "i_forwardDist.c"
-#include "i_flipperArm_auto.c"
+#include "i_flipperArm_auto.c"//1510 lines of code
 //-------------------Path definition----------------------//
 // dist, dir, spd
 int path[][]={
 		{30, 0, 75},
-		{38, -45, 100},
-		{70, -45, 75},
-		{70, -45, 75}
+		{38, -49, 100},
+		{68, -50, 75},
+		{68, -50, 75}
 								};
-
+int path2[][]={
+		{30, 0, 75},
+		{38, -49, 100},
+		{63, -49, 75},
+		{68, -49, 75},
+		{68, -49, 75}
+							};
 int armSetPos = 0;
 #define SPD 40;
 #define DIST_IDX 0
 #define DIR_IDX 1
 #define SPD_IDX 2
-int pathIdx=0;
+#define servoIn 243
+#define servoOut 115
+int pathIdx=0,path2Idx=0;
 int speedCmdZ1=0;
 int rightmotors;
 int leftmotors;
-
+void initializeRobot()
+{
+servo[irArm]=243;
+}
 //*--------------------Foreground---------------------------//
 // Story: As a player, I want the robot to follow a path so i can score autonomous points in a game
 // [x] Follow path stored in an array
@@ -70,17 +81,17 @@ task main(){
 	DirectionReset();
 	nMotorEncoder[blockthrower] = 0;
 	speedCmdZ1=0;
-	pathIdx=0;
+	pathIdx=0;path2Idx=0;
 	delayatruecount=0;
 	int state=0;
 	Pid_Init1();
 	Pid_Init2();
-	servo[irArm]=243;
+	servo[irArm]=servoIn;
 	long ltMtrEncoderOld=0, rtMtrEncoderOld=0;
 	long ltMtrEncoder,rtMtrEncoder;
 	//--------------------End INIT Code--------------------------//
-
-//  waitForStart(); // Wait for the beginning of autonomous phase.
+initializeRobot();
+  waitForStart(); // Wait for the beginning of autonomous phase.
 
 	int iFrameCnt=0;
 	int timeLeft;
@@ -104,7 +115,7 @@ task main(){
 			rtMtrEncoderOld=rtMtrEncoder;
 		}
 		long  distInches = robotDist/IN2CLK;
-		long  dirDegrees = robotDir/27;
+		long  dirDegrees = robotDir/DEG2CLK;
 
 		// Calculate the speed and direction commands
     int speedCmd = ForwardDist(path[pathIdx][DIST_IDX], robotDist, path[pathIdx][SPD_IDX]);
@@ -116,33 +127,34 @@ task main(){
 		if (abs(path[pathIdx][DIR_IDX] - dirDegrees) < 4 && abs(path[pathIdx][DIST_IDX] - distInches) < 3) pathIdx++;
 
 		// Calculate the IR value
-		IRval = Delayatrue(1, SensorValue[IR] == 1 || SensorValue[IR] == 2);
+		IRval = Delayatrue(1, SensorValue[IR] == 3 || SensorValue[IR] == 4 || SensorValue[IR] == 2);
 
 		if (state==0)// State O Follow Path
 		{
-			if (dirCmd<-45)
+			if (abs(dirDegrees)>34)
 			{
+
 				state=1;
 			}
 		}
 		if(state==1)// State 1 Swing out irArm
 		{
-			servo[irArm]=115;
-			if (distInches>34)
+			servo[irArm]=servoOut;
+			if (distInches>39)
 			{
-
 				state=2;
 			}
 		}
+
 		if (state==2)// state 2 look for ir under box 1
 		{
-		  speedCmd=10;
+//		  speedCmd=10;
 		  // speedCmd=0;
 
 		  if ( IRval)
 		  {
-			state=12;
-		  	servo[irArm]=243;
+				state=12;
+		  	servo[irArm]=servoIn;
 		  }
 		  else
 		  {
@@ -151,33 +163,30 @@ task main(){
 		}
 		if (state==12)//follows path before flipping arm
 		{
-			if(distInches>48)
+			if(distInches>3)
 			{
 				state = 8;
 			}
 		}
 		if (state==3)//state 3 look for box 2 and follow path
 		{
-
 			if (distInches>44)
 			{
 				state=4;
 			}
-
 		}
 		if (state==4)//state 4 look for ir under box 2
 		{
-		  speedCmd=10;
+//		  speedCmd=10;
 		  if ( IRval==true)
 		  {
 		  	state=13;
-		  	servo[irArm]=243;
 		  }
 		  else
 		  {
 		  	state=15;
 		  }
-		  servo[irArm]=243;
+		  servo[irArm]=servoIn;
 		}
 		if (state==13) // waits for distance before flipping
 		{
@@ -191,33 +200,37 @@ task main(){
 			//speedCmd=0;
 			if(distInches>59)
 			{
-				servo[irArm] = 95;
+				servo[irArm] = servoOut;
 				state =5;
 			}
 		}
 		if (state==5)//state 5 look for box 3 and follow path
 		{
-			if (distInches>67)//36
+			if (distInches>61)//36
 			{
 				state=6;
 			}
 		}
 		 if (state==6)// State 6 Look for ir under box 3
 		 {
-		   speedCmd=10;
+//		   speedCmd=10;
 		  if ( IRval==true)
 		  {
 		  	state=14;
+		  	path2Idx=pathIdx;
 		  }
 		  else
 		  {
 		  	state=7;
 		  }
-		    servo[irArm]=243;
+	    servo[irArm]=servoIn;
 		}
 		if (state==14)// waits distance before flipping arm
 		{
-			if(distInches>75)
+			if (abs(path2[path2Idx][DIR_IDX] - dirDegrees) < 4 && abs(path2[path2Idx][DIST_IDX] - distInches) < 3) path2Idx++;
+	    speedCmd = ForwardDist(path2[path2Idx][DIST_IDX], robotDist, path2[path2Idx][SPD_IDX]);
+			dirCmd   = Direction(path2[path2Idx][DIR_IDX], robotDir);
+			if(path2Idx == 3)
 				state = 8;
 		}
 		if (state==7)// State 7 look for box 4
@@ -229,27 +242,25 @@ task main(){
 		}
 		if (state==8)// state 8 flip arm
 		{
-			servo[irArm]=243;
+			servo[irArm]=servoIn;
 			speedCmd=0;
 			dirCmd = 0;
 			armSetPos = 2300;
-				if (abs(armSetPos - armEncoder) <10)
-				{
-
-					state=9;
-				}
-
+			if (abs(armSetPos - armEncoder) <10)
+			{
+				state=9;
+			}
 		}
 		if (state==9)//state 9 lower arm
 		{
 			speedCmd = 0;
 			dirCmd = 0;
 			armSetPos = 0;
-				if (abs(armSetPos - armEncoder) < 400)
-				{
-					pathIdx=3;
-					state=10;
-				}
+			if (abs(armSetPos - armEncoder) < 400)
+			{
+				pathIdx=3;
+				state=10;
+			}
 		}
 		if(state==10)//state 10 follow path
 		{
@@ -262,15 +273,17 @@ task main(){
     //DebugInt("state",state);
     //DebugInt("irval",SensorValue[IR]);
 
-
 		// Calculate when to move to the next path index
 		int s=sizeof(path)/sizeof(path[0])-1;
 		if (pathIdx>s) pathIdx=s; // Protect the path index
+		int s2=sizeof(path2)/sizeof(path2[0])-1;
+		if (path2Idx>s2) path2Idx=s2; // Protect the path index
 
 		// Ramp the command up
 		speedCmd = RateLimit(speedCmd, START_RATE,speedCmdZ1);
 		leftmotors=Pid1(speedCmd+dirCmd);
 		rightmotors=Pid2(speedCmd-dirCmd);
+
 		//rightmotors=speedCmd-dirCmd;
 		//leftmotors=speedCmd+dirCmd;
 		motor[rtBack]=rightmotors;

@@ -118,8 +118,10 @@ int Pid1(int speedCmd){
   	failedPid=true;
 //  	output=0;
   }
-  if (speedCmd<DEADZONE && speedCmd>-DEADZONE)
+  if (speedCmd<DEADZONE && speedCmd>-DEADZONE){
   	output=0;
+  	integral1=0;
+  }
 	return((int)output);
 }
 //---------------------------pid 2-------------------------------//
@@ -155,8 +157,10 @@ int Pid2(int speedCmd){
   if (lpError>ERR_SIZE || failedPid){
   	failedPid=true;
 //  	output=0;
-  if (speedCmd<DEADZONE && speedCmd>-DEADZONE)
+	}
+  if (speedCmd<DEADZONE && speedCmd>-DEADZONE){
   	output=0;
+  	integral2=0;
   }
 
 	return((int)output);

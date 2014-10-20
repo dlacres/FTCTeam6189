@@ -35,7 +35,7 @@
 #include "i_debug.c"
 #include "i_block_there.c"
 #include "i_limit.c"
-#include "i_flipperArm_driver.c"
+#include "i_flipperArm_driver.c"//2698 lines of code
 #define LIGHT_OFF 0
 #define LIGHT_ON_1 1
 #define LIGHT_ON_2 2
@@ -229,7 +229,7 @@ case FLASH:
 		lifterTrigger = false;
 		if (lifterEncoder >10)
 			{
-				lifterSpd = -40;
+				lifterSpd = -60;
 
 			}
 		else
@@ -245,9 +245,9 @@ case FLASH:
 		else if ((joy2Btn(4) && joy2Btn(6)) || lifterTrigger)
 		{
 			lifterTrigger = true;
-			if (lifterEncoder < 9000)
+			if (lifterEncoder < 9450)
 			{
-				lifterSpd = 60;
+				lifterSpd = 70;
 			}
 			else
 			{

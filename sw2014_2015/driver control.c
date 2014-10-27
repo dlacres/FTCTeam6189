@@ -1,6 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     lift,          tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     sweeper,       tmotorTetrix, openLoop)
@@ -16,41 +16,43 @@
 
 task main()
 {
-	servo[clamp]=0;
-while(true)
-{
-	getJoystickSettings(joystick);
-
-/////////Joystick 1//////////
-motor[rtWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
-motor[ltWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
-
-////////Joystick 2//////////
-
-motor[sweeper]=joystick.joy2_y2;
-
-
-motor[lift]=joystick.joy2_y1;
-
-if(joy2Btn(7))
-{
-servo[clamp]=120;
-}
-
-if(joy2Btn(5))
-{
 servo[clamp]=0;
-}
+servo[dump]=-0;
+	while(true)
+	{
+		getJoystickSettings(joystick);
 
-if(joy2Btn(8))
-{
-servo[dump]=0;
-}
+		/////////Joystick 1//////////
 
-if(joy2Btn(6))
-{
-servo[dump]=120;
-}
+		motor[rtWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
+		motor[ltWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
 
-}
+		////////Joystick 2//////////
+
+		motor[sweeper]=joystick.joy2_y2;
+
+
+		motor[lift]=joystick.joy2_y1;
+
+		if(joy2Btn(7))
+		{
+			servo[clamp]=120;
+		}
+
+			if(joy2Btn(5))
+			{
+				servo[clamp]=0;
+			}
+
+				if(joy2Btn(8))
+				{
+					servo[dump]=0;
+				}
+
+					if(joy2Btn(6))
+					{
+						servo[dump]=-100;
+					}
+
+	}
 }

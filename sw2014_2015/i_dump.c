@@ -1,4 +1,4 @@
-/*#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
@@ -14,17 +14,19 @@
 
 void DumpBucket(bool dumpbucket) {
 	if(dumpbucket){
-		servo[dump]=0 ;
+		servo[dump]=40 ;
 	}else{
-		servo[dump]=128 ;
+		servo[dump]=70 ;
 	}
 	return;
 }
 
-/*
+
 task main() {
 	while(true){
-		DumpBucket(true);
+		DumpBucket(false);
+	//servo[dump]=25;
+	//servo[clamp]=25;
 		wait1Msec(50);
 	}
 }//*/

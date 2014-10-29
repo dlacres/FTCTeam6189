@@ -4,19 +4,23 @@
 // As a ROLE I want to WHAT_I_WANT so that VALUE_I_GET
 //
 //======================================================//
-void MySoftwareModule(int a){
+int MySoftwareModule(int myInput){
+	return(myInput)
 }
 // ==================UNIT TEST==========================//
 #ifndef NO_UNIT_TEST
 #include i_debug.c
 int timeLeft=0; // A global variable used to adjust the time it takes to complet the while loop
+int i=0;
 #define FOREGROUND_MS 50 //The while loop takes 50 MS to run. This means the software runs 20 times per second
 task main(){
 	// Initialize variables here //
 	int myInt=0;
-	//Debug2File(); #Send the debug information to the file debug.txt
-	//Debug2NXT();  #Send the debug information to the NXT screen
-	Debug2Stream(); #Send the debug information to the PC Screen
+	int in=0;
+	int out=0;
+	//Debug2File(); //Send the debug information to the file debug.txt
+	//Debug2NXT();  //Send the debug information to the NXT screen
+	Debug2Stream(); //Send the debug information to the PC Screen
 
 	// End of initialize //
 	while(true){
@@ -29,9 +33,15 @@ task main(){
 		// USAGE NOTES:
 		//   The units for a are encoder clicks
 		//   Set #define NO_UNIT_TEST
-		DebugInt("Test",myInt)
-		MySoftwareModule(a);
+		if (i<5) in=0;
+		if (i<10) in=1;
 		
+		out=MySoftwareModule(in);
+		
+		DebugInt("In",in)
+		DebugInt("Out",out)
+		
+		i+=1; // Increment the frame counter for unit test
 		// ------------- Unit code test is done here ---------------//
 		DebugPrint();
 		timeLeft=FOREGROUND_MS-time1[T1]; // Calculate the time used in the foreground

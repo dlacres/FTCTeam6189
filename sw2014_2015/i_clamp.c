@@ -22,7 +22,7 @@ void Clampgoal(bool clampgoal) {
 	}
 	return;
 }
-
+servo[clamp]=0;
 //*
 task main() {
 	while(true){

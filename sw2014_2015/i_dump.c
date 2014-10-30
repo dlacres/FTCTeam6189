@@ -21,7 +21,7 @@ void DumpBucket(bool dumpbucket) {
 	return;
 }
 
-
+servo[dump]=0;
 task main() {
 	while(true){
 		DumpBucket(false);

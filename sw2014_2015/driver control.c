@@ -17,7 +17,7 @@
 task main()
 {
 servo[clamp]=0;
-servo[dump]=-0;
+servo[dump]=0;
 	while(true)
 	{
 		getJoystickSettings(joystick);

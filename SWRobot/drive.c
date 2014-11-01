@@ -14,6 +14,7 @@
 #include "i_PID3.c"
 #include "joystickShaper_orignal.c"
 
+#pragma DebuggerWindows("joystickSimple");
 #pragma DebuggerWindows ("debugStream")// Bring up the debug stream window
 int count=0;
 int timeLeft=0; // A global variable that sticks around each frame

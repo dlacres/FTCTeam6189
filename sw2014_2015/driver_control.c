@@ -14,19 +14,23 @@
 #include "i_clamp.c"
 #include "JoystickDriver.c"
 #include "i_dump.c"
+#pragma DebuggerWindows("JoystickSimple")
 task main()
 {
 servo[clamp]=0;
 servo[dump]=0;
+eraseDisplay();
 	while(true)
 	{
 		getJoystickSettings(joystick);
 
 		/////////Joystick 1//////////
 
+		displayTextLine(1,"%d",joystick.joy1_x2);
+		displayTextLine(2,"%d",joystick.joy1_y2);
+
 		motor[rtWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 		motor[ltWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
-
 		////////Joystick 2//////////
 
 		motor[sweeper]=joystick.joy2_y2;

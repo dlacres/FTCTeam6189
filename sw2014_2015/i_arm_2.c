@@ -32,26 +32,38 @@ task main(){
 	int out=0;
 	//Debug2File(); //Send the debug information to the file debug.txt
 	//Debug2NXT();  //Send the debug information to the NXT screen
-	//Debug2Stream(); //Send the debug information to the PC Screen
+	Debug2Stream(); //Send the debug information to the PC Screen
 
 	// End of initialize //
 	while(true){
 		clearTimer(T1);
 		hogCPU(); //Prevent other tasks from running when this one is.
 		// ------------- Put Unit Test code here -------------------//
-		// xxxxxxx [] Describe test 1 here. Put an X inside of [] when the test passes.
-		// xxxxxxx [] Describe test 2 here. Put an X inside of [] when the test passes.
+		// xxxxxxx [] Lift arm to 12 inches.
+		// xxxxxxx [] Lift arm to 14 inches.
+		// xxxxxxx [] Drop arm to 12 inches.
+		// xxxxxxx [] Drop arm to 0 inches.
 
 		// USAGE NOTES:
 		//   The units for a are encoder clicks
 		//   Set #define NO_UNIT_TEST
-		if (i<5) in=0;
-		if (i<10) in=1;
+		#define SPEED 25
+		#define KD 120
+		if (i<3*20) {
+			RaiseArm(SPEED,12*KD);
+			DebugInt("Speed",SPEED);
+		} else if (i<5*20) {
+			RaiseArm(SPEED,14*KD);
+			DebugInt("Speed",SPEED);
+		}else if (i<7*20) {
+			RaiseArm(-SPEED,12*KD);
+			DebugInt("Speed",-SPEED);
+		} else if (i<10*20) {
+			RaiseArm(-SPEED,0*KD);
+			DebugInt("Speed",-SPEED);
+		}
 
-		//out=MySoftwareModule(in);
-
-		DebugInt("In",in);
-		DebugInt("Out",out);
+		DebugInt("Dist",nMotorEncoder[lift]);
 
 		i+=1; // Increment the frame counter for unit test
 		// ------------- Unit code test is done here ---------------//

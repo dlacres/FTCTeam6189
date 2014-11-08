@@ -26,8 +26,6 @@ eraseDisplay();
 
 		/////////Joystick 1//////////
 
-		displayTextLine(1,"%d",joystick.joy1_x2);
-		displayTextLine(2,"%d",joystick.joy1_y2);
 
 		motor[rtWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 		motor[ltWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;

@@ -17,8 +17,7 @@
 #pragma DebuggerWindows("JoystickSimple")
 task main()
 {
-servo[clamp]=0;
-servo[dump]=0;
+
 eraseDisplay();
 	while(true)
 	{

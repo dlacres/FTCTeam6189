@@ -14,6 +14,7 @@
 #include "i_clamp.c"
 #include "JoystickDriver.c"
 #include "i_dump.c"
+#include "i_arm.c"
 #pragma DebuggerWindows("JoystickSimple")
 task main()
 {
@@ -34,6 +35,23 @@ eraseDisplay();
 
 
 		motor[lift]=joystick.joy2_y1;
+
+			writeDebugStreamLine("%d", nMotorEncoder[lift]);
+
+		/*if(joy2Btn(1))//Position 1: Bottom position
+			{
+			RaiseArm(25,120);
+			}
+
+			if(joy2Btn(2))//Position 2: Smallest rolling goal
+			{
+			RaiseArm(25,120);
+			}
+
+				if(joy2Btn(3))//Position 3: Medium rolling goal
+			{
+			RaiseArm(25,120);
+			}*/
 
 if(joy2Btn(7))
 				{

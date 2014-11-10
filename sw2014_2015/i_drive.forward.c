@@ -52,10 +52,10 @@ task main(){
 		if (i<5) in=0;
 		if (i<10) in=1;
 
-		out=MySoftwareModule(in);
+	Forward(25,9600);
 
-		DebugInt("In",in);
-		DebugInt("Out",out);
+		DebugInt("%d",nMotorEncoder[rtWheelMotor]);
+
 
 		i+=1; // Increment the frame counter for unit test
 		// ------------- Unit code test is done here ---------------//

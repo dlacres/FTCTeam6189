@@ -19,10 +19,18 @@ void RaiseArmInit()
 }
 void RaiseArm(int spd,int dist)
 {
-	if(nMotorEncoder[lift]>dist&&spd>0||nMotorEncoder[lift]<dist&&spd<0)
+	while(true)
+	{
+	if(((nMotorEncoder[lift]>dist)&&(spd>0))||((nMotorEncoder[lift]<dist)&&(spd<0)))
+	{
 		motor[lift]=0;
+		break;
+	}
 	else
+	{
 		motor[lift]=spd;
+	}
+}
 	return;
 }
 // ==================UNIT TEST==========================//

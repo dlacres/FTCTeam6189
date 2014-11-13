@@ -16,7 +16,8 @@
 #include "JoystickDriver.c"
 #include "i_dump.c"
 #include "i_arm.c"
-#pragma DebuggerWindows("JoystickSimple")
+#pragma DebuggerWindows("JoystickGame")
+#pragma DebuggerWindows("Motors")
 task main()
 {
 
@@ -39,17 +40,18 @@ if(joy2Btn(5)&&joy2Btn(4))
 	{
 		motor[lift]=joystick.joy2_y1;
 	}
-		if(joy2Btn(0))//Position 0: Bottom position
+
+		if(joy2Btn(1))//Position 0: Bottom position
 			{
-			RaiseArm(25,60);
+			RaiseArm(-25,60);
 			}
 
-			if(joy2Btn(1))//Position 1: Smallest rolling goal
+			if(joy2Btn(2))//Position 1: Smallest rolling goal
 			{
-			RaiseArm(25,3241);
+			RaiseArm(25,3741);
 			}
 
-				if(joy2Btn(2))//Position 2: Medium rolling goal
+				if(joy2Btn(3))//Position 2: Medium rolling goal
 			{
 			RaiseArm(25,14358);
 			}

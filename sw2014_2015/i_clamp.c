@@ -18,7 +18,7 @@ void Clampgoal(bool clampgoal) {
 	if(clampgoal){
 		servo[clamp]=255 ;
 	}else{
-		servo[clamp]=0 ;
+		servo[clamp]=70 ;
 	}
 	return;
 }

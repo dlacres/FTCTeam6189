@@ -17,7 +17,6 @@
 #include "i_dump.c"
 #include "i_arm.c"
 #pragma DebuggerWindows("JoystickGame")
-#pragma DebuggerWindows("Motors")
 task main()
 {
 
@@ -29,17 +28,16 @@ eraseDisplay();
 		/////////Joystick 1//////////
 
 
-		motor[rtWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
-		motor[ltWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
+		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
+		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 
 		////////Joystick 2//////////
 
 		motor[sweeper]=joystick.joy2_y2;
 
-if(joy2Btn(5)&&joy2Btn(4))
-	{
+
 		motor[lift]=joystick.joy2_y1;
-	}
+
 
 		if(joy2Btn(1))//Position 0: Bottom position
 			{
@@ -48,7 +46,7 @@ if(joy2Btn(5)&&joy2Btn(4))
 
 			if(joy2Btn(2))//Position 1: Smallest rolling goal
 			{
-			RaiseArm(25,3741);
+			RaiseArm(25,5941);
 			}
 
 				if(joy2Btn(3))//Position 2: Medium rolling goal

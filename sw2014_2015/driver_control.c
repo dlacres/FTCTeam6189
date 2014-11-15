@@ -35,9 +35,10 @@ eraseDisplay();
 
 		motor[sweeper]=joystick.joy2_y2;
 
-
+while(joy2Btn(3))
+	{
 		motor[lift]=joystick.joy2_y1;
-
+	}
 
 		if(joy2Btn(1))//Position 0: Bottom position
 			{
@@ -46,13 +47,10 @@ eraseDisplay();
 
 			if(joy2Btn(2))//Position 1: Smallest rolling goal
 			{
-			RaiseArm(25,5941);
+			RaiseArm(25,7900);
 			}
 
-				if(joy2Btn(3))//Position 2: Medium rolling goal
-			{
-			RaiseArm(25,14358);
-			}
+
 
 			writeDebugStreamLine("%d", nMotorEncoder[lift]);
 

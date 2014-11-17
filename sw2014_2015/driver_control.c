@@ -17,10 +17,20 @@
 #include "i_dump.c"
 #include "i_arm.c"
 #pragma DebuggerWindows("JoystickGame")
+
+void initializeRobot()
+{
+servo(dump)=195;
+servo(clamp)=70;
+
+  return;
+}
 task main()
 {
+  initializeRobot();
 
-eraseDisplay();
+  waitForStart();
+
 	while(true)
 	{
 		getJoystickSettings(joystick);

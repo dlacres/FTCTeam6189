@@ -1,4 +1,4 @@
-/*#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
@@ -33,7 +33,7 @@ void Forward(int speed, int distance){
 return;
 }
 // ==================UNIT TEST==========================//
-/*
+
 #ifndef NO_UNIT_TEST
 #include "i_debug.c"
 int timeLeft=0; // A global variable used to adjust the time it takes to complet the while loop
@@ -56,14 +56,14 @@ task main(){
 		// ------------- Put Unit Test code here -------------------//
 		// xxxxxxx [] Describe test 1 here. Put an X inside of [] when the test passes.
 		// xxxxxxx [] Describe test 2 here. Put an X inside of [] when the test passes.
-
+int clicks_ft =1000;
 		// USAGE NOTES:
 		//   The units for a are encoder clicks
 		//   Set #define NO_UNIT_TEST
 		if (i<5) in=0;
 		if (i<10) in=1;
 
-	Forward(-25,-7300);
+	Forward(-25,-1*clicks_ft);
 
 		DebugInt("%d",nMotorEncoder[ltWheelMotor]);
 
@@ -76,4 +76,4 @@ task main(){
 		wait1Msec(timeLeft);// The time other tasks have to run before foreground takes control.
 	}// While Loop
 }// Main Task
-#endif*/
+#endif

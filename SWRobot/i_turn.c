@@ -21,6 +21,11 @@ void Turnright(int speed, int direction){
 		motor[rtWheelMotor]=speed;
 		motor[ltWheelMotor]=-speed;
 	}
+	else
+	{
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
+	}
 	return;
 }
 void Turnleft(int speed, int direction){
@@ -28,6 +33,11 @@ void Turnleft(int speed, int direction){
 	{
 		motor[ltWheelMotor]=speed;
 		motor[rtWheelMotor]=-speed;
+	}
+		else
+	{
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
 	}
 	return;
 }
@@ -42,6 +52,8 @@ task main(){
 	int myInt=0;
 	int in=0;
 	int out=0;
+	nMotorEncoder[rtWheelMotor]=0;
+	nMotorEncoder[ltWheelMotor]=0;
 	//Debug2File(); //Send the debug information to the file debug.txt
 	//Debug2NXT();  //Send the debug information to the NXT screen
 	Debug2Stream(); //Send the debug information to the PC Screen
@@ -60,9 +72,10 @@ task main(){
 		//if (i<5) in=0;
 		//if (i<10) in=1;
 
-		Turnleft(25,500);
+		Turnright(25,900);
 
 		DebugInt("dislt",nMotorEncoder[ltWheelMotor]);
+
 		DebugInt("disrt",nMotorEncoder[rtWheelMotor]);
 
 		i+=1; // Increment the frame counter for unit test

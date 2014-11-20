@@ -5,6 +5,7 @@
 #pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    hook,                 tServoStandard)
+#pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
@@ -15,7 +16,6 @@
 
 task main()
 {
-	servo(hook)=0;
 	while(true)
 	{
 		getJoystickSettings(joystick);
@@ -24,4 +24,18 @@ task main()
 		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
 		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 
+		writeDebugStreamLine("%d", nMotorEncoder[rtWheelMotor]);
+
+		wait1Msec(50);
+
+		/*if (joy1Btn(1))
+		{
+		servo[hook]=20;
+		}
+
+		else
+		{
+		servo[hook]=160;
+		}*/
+}
 }

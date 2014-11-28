@@ -18,24 +18,24 @@ task main()
 {
 	while(true)
 	{
-		getJoystickSettings(joystick);
+	getJoystickSettings(joystick);
 
 
-		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
-		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
+	motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
+	motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 
-		writeDebugStreamLine("%d", nMotorEncoder[rtWheelMotor]);
+	writeDebugStreamLine("%d", nMotorEncoder[rtWheelMotor]);
 
-		wait1Msec(50);
+	wait1Msec(50);
 
-		/*if (joy1Btn(1))
-		{
+	/*if (joy1Btn(1))
+	{
 		servo[hook]=20;
-		}
+	}
 
-		else
-		{
+	else
+	{
 		servo[hook]=160;
-		}*/
+	}*/
 }
 }

@@ -23,13 +23,12 @@ void initializeRobot()
 servo(dump)=195;
 servo(clamp)=70;
 
-  return;
+return;
 }
 task main()
 {
-  initializeRobot();
-
-  waitForStart();
+initializeRobot();
+waitForStart();
 
 	while(true)
 	{
@@ -45,46 +44,45 @@ task main()
 
 		motor[sweeper]=joystick.joy2_y2;
 
-while(joy2Btn(3))
-	{
-		motor[lift]=joystick.joy2_y1;
-	}
-
-		if(joy2Btn(1))//Position 0: Bottom position
+			while(joy2Btn(3))
 			{
-			RaiseArm(-25,120);
+			motor[lift]=joystick.joy2_y1;
 			}
 
-			if(joy2Btn(2))//Position 1: Smallest rolling goal
-			{
-			RaiseArm(25,7900);
-			}
-
-
-
-			writeDebugStreamLine("%d", nMotorEncoder[lift]);
-
-			wait1Msec(50);
-
-			if(joy2Btn(7))
+				if(joy2Btn(1))//Position 0: Bottom position
 				{
-					Clampgoal(true);
+				RaiseArm(-25,120);
 				}
-					else
-					{
-						Clampgoal(false);
-					}
 
-				if(joy2Btn(8))
-				{
-					DumpBucket(true);
-				}
-					else
+					if(joy2Btn(2))//Position 1: Smallest rolling goal
 					{
-						DumpBucket(false);
+					RaiseArm(25,7900);
 					}
 
 
 
+		writeDebugStreamLine("%d", nMotorEncoder[lift]);
+
+		wait1Msec(50);
+
+						if(joy2Btn(7))
+						{
+						Clampgoal(true);
+						}
+
+							else
+							{
+							Clampgoal(false);
+							}
+
+								if(joy2Btn(8))
+								{
+								DumpBucket(true);
+								}
+
+									else
+									{
+									DumpBucket(false);
+									}
 	}
 }

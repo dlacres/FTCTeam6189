@@ -1,18 +1,18 @@
 
-void IrReading(bool Ir(int ir_position))
+void IrReading(bool Infared,int ir_position)
 	{
 		while(true)
 		{
 			if(SensorValue[IR]==ir_position)
 			{
-			Ir=true;
+			Infared=true;
 			}
 
 			else
 			{
-			Ir=false;
+			Infared=false;
 			}
-		{
+		}
 
 		return;
 	}

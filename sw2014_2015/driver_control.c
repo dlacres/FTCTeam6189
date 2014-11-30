@@ -31,14 +31,14 @@ void initializeRobot()
 {
 	servo(dump)=195;
 	servo(clamp)=70;
-	
+
 //	for (int i=0; i<5; i++){
 //		gyroBias = SensorValue[gyroSensor]+gyroBias;
 //		wait1Msec(50);
 //	}
 //	gyroBias=gyroBias/5;
 
-	
+
 	return;
 }
 task main()
@@ -67,8 +67,8 @@ task main()
 
 		motor[sweeper]=joystick.joy2_y2;
 
-		// WARNING - This while loop will prevent all other joystick commands from working.
-		while(joy2Btn(3))
+
+		if(joy2Btn(3))
 		{
 			motor[lift]=joystick.joy2_y1;
 		}

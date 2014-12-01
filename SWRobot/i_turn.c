@@ -34,7 +34,7 @@ void Turnleft(int speed, int direction){
 		motor[ltWheelMotor]=speed;
 		motor[rtWheelMotor]=-speed;
 	}
-		else
+	else
 	{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;

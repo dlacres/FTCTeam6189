@@ -45,8 +45,8 @@ void Pid_Init1(){
 	distanceOld1=0;
 	speedOld1=0;
 	integral1=0.0;
-  nMotorEncoder[m1]=0;  // initialize encoder of motor B
-  nMotorPIDSpeedCtrl[m1] = mtrNoReg;//disable NXT inbuilt PID
+  //nMotorEncoder[m1]=0;  // initialize encoder of motor B
+  //nMotorPIDSpeedCtrl[m1] = mtrNoReg;//disable NXT inbuilt PID
 	nSyncedMotors = synchNone;//disable NXT inbuilt PID
 	failedPid=false;
 	lpZ11=0;
@@ -56,8 +56,8 @@ void Pid_Init2(){
 	distanceOld2=0;
 	speedOld2=0;
 	integral2=0.0;
-  nMotorEncoder[m2]=0;  // initialize encoder of motor B
-  nMotorPIDSpeedCtrl[m2] = mtrNoReg;//disable NXT inbuilt PID
+  //nMotorEncoder[m2]=0;  // initialize encoder of motor B
+  //nMotorPIDSpeedCtrl[m2] = mtrNoReg;//disable NXT inbuilt PID
 	nSyncedMotors = synchNone;//disable NXT inbuilt PID
 	failedPid=false;
 	lpZ21=0;
@@ -96,7 +96,7 @@ int Pid1(int speedCmd){
 	lpSpdCmd=speedCmd;
 
 	//AddToDatalog(0,distance);
-	distance = nMotorEncoder[m1];  // find actual degrees of motor B
+	//distance = nMotorEncoder[m1];  // find actual degrees of motor B
 	speed = distance - distanceOld1; distanceOld1=distance;
 	speedB=(speed+speedOld1)/2;
   accelerationKd = ((float)(speed - speedOld1))*Kd;speedOld1=speed;
@@ -136,7 +136,7 @@ int Pid2(int speedCmd){
 	lpSpdCmd=speedCmd;
 
 	//AddToDatalog(0,distance);
-	distance = nMotorEncoder[m2];  // find actual degrees of motor B
+	//distance = nMotorEncoder[m2];  // find actual degrees of motor B
 	speed = distance - distanceOld2; distanceOld2=distance;
 	speedB=(speed+speedOld2)/2;
   accelerationKd = ((float)(speed - speedOld2))*Kd;speedOld2=speed;

@@ -1,4 +1,4 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+/*#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
@@ -32,9 +32,27 @@ void Forward(int speed, int distance){
 	}
 return;
 }
+
+void Forward2(int speed, int distance){
+	while(true)
+	{
+		if(nMotorEncoder[ltWheelMotor]<distance)
+		{
+		motor[rtWheelMotor]=speed;
+		motor[ltWheelMotor]=speed;
+		}
+		else
+		{
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
+		break;
+		}
+	}
+return;
+}
 // ==================UNIT TEST==========================//
 
-#ifndef NO_UNIT_TEST
+/*#ifndef NO_UNIT_TEST
 #include "i_debug.c"
 int timeLeft=0; // A global variable used to adjust the time it takes to complet the while loop
 int i=0;
@@ -76,4 +94,4 @@ int clicks_ft =1000;
 		wait1Msec(timeLeft);// The time other tasks have to run before foreground takes control.
 	}// While Loop
 }// Main Task
-#endif
+#endif*/

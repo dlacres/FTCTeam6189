@@ -15,8 +15,8 @@
 // As a ROLE I want to WHAT_I_WANT so that VALUE_I_GET
 //
 //======================================================//
-void Turnright(int speed, int direction){
-int	clicks= direction*28;
+bool Turnright(int speed, int direction){
+int	clicks= direction*28;//28 is clicks per digree at speed of 25
 	if(nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor]< clicks)
 	{
 		motor[rtWheelMotor]=speed;
@@ -27,10 +27,10 @@ int	clicks= direction*28;
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
 	}
-	return;
+	return(true);
 }
-void Turnleft(int speed, int direction){
-	int	clicks2= direction*28;
+bool Turnleft(int speed, int direction){
+	int	clicks2= direction*28;//28 is clicks per digree at speed of 25
 	if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks2)
 	{
 		motor[ltWheelMotor]=speed;
@@ -41,7 +41,7 @@ void Turnleft(int speed, int direction){
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
 	}
-	return;
+	return(true);
 }
 // ==================UNIT TEST==========================//
 /*#ifndef NO_UNIT_TEST

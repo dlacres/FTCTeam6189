@@ -25,7 +25,7 @@
 
 int sm = FORWARD;
 bool forward_true;
-
+bool turn_true;
 
 
 task main()
@@ -71,9 +71,37 @@ forward_intizalize();
 	break;
 
 	case DRIVE_POSITION1:
-
+		turn_true=Turnleft(25,90);
+		if(turn_true==true)
+		{
+		sm=STOP;
+		}
 		break;
 
+	case DRIVE_POSITION2:
+		turn_true=Turnright(25,90);
+		if(turn_true==true)
+		{
+		sm=STOP;
+		}
+		break;
+
+	case DRIVE_POSITION3:
+		turn_true=Turnleft(25,180);
+		if(turn_true==true)
+		{
+		sm=STOP;
+		}
+		break;
+
+		case STOP:
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
+		break;
+
+		case IR_0:
+		forward_true=forward(-25,-3500);
+		break;
 		}
 		wait1Msec(100);
 	}

@@ -15,10 +15,17 @@
 // As a ROLE I want to WHAT_I_WANT so that VALUE_I_GET
 //
 //======================================================//
-void forward(int speed, int distance){
-	bool forward_true;
+
+void forward_intizalize()
+	{
+	nMotorEncoder[ltWheelMotor]=0;
+	nMotorEncoder[rtWheelMotor]=0;
+	}
+
+bool forward(int speed, int distance){
 	while(true)
 	{
+
 		if(nMotorEncoder[ltWheelMotor]>distance)
 		{
 		motor[rtWheelMotor]=speed;
@@ -28,14 +35,13 @@ void forward(int speed, int distance){
 		{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
-		forward_true=true;
 		break;
 		}
 	}
-return;
+return(true);
 }
 
-void forward2(int speed, int distance){
+bool forward2(int speed, int distance){
 	while(true)
 	{
 		if(nMotorEncoder[ltWheelMotor]<distance)
@@ -50,7 +56,7 @@ void forward2(int speed, int distance){
 		break;
 		}
 	}
-return;
+return(true);
 }
 // ==================UNIT TEST==========================//
 

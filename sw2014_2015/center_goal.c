@@ -6,7 +6,7 @@
 #pragma config(Motor,  mtr_S1_C2_2,     sweeper,       tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    clamp,                tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    dump,                 tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S1_C3_3,    ir,                   tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
@@ -22,6 +22,7 @@
 #define DRIVE_POSITION3 4
 #define STOP 5
 #define IR_0 6
+#define MOVE_SERVO 7
 
 int sm = FORWARD;
 bool forward_true;
@@ -39,34 +40,35 @@ forward_intizalize();
 		switch(sm)
 		{
 		case FORWARD:
-		 forward_true=forward2(25,3500);
+		servo[ir]=0;
+		 forward_true=forward2(25,4500);
 		  if(forward_true==true)
 		  {
-		  sm=READ_IR;
+		  sm=MOVE_SERVO;
 			}
 		break;
 
 	case READ_IR:
 
-	if(SensorValue[IR]==4)
+	if(servo[ir]==10)
 		{
 		sm=DRIVE_POSITION1;
 		}
 
-	if(SensorValue[IR]==5)
+	if(servo[ir]==25)
 		{
 		sm=DRIVE_POSITION2;
 		}
 
-	if(SensorValue[IR]==6)
+	if(servo[ir]==35)
 		{
 		sm=DRIVE_POSITION3;
 		}
 
-			if(SensorValue[IR]==0)
+		/*	if(SensorValue[IR]==0)
 		{
-		sm=IR_0;
-		}
+		//sm=IR_0;
+		}*/
 
 	break;
 
@@ -100,9 +102,19 @@ forward_intizalize();
 		break;
 
 		case IR_0:
-		forward_true=forward(-25,-3500);
+		sm=READ_IR;
+		break;
+
+		case MOVE_SERVO:
+		servo[ir]=+1;
+
+		if(SensorValue[IR]>3)
+		{
+		sm=READ_IR;
+		}
+
 		break;
 		}
-		wait1Msec(100);
+		wait1Msec(50);
 	}
 }

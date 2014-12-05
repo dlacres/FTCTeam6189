@@ -1,5 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S3,     Gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     lift,          tmotorTetrix, openLoop, encoder)
@@ -21,7 +22,7 @@
 #include "i_dump.c"
 #include "i_arm.c"
 #pragma DebuggerWindows("JoystickGame")
-//#include "i_lookup.c"
+#include "i_lookup.c"
 
 int jstickX;
 int jstickY;
@@ -32,11 +33,11 @@ void initializeRobot()
 	servo(dump)=195;
 	servo(clamp)=70;
 
-//	for (int i=0; i<5; i++){
-//		gyroBias = SensorValue[gyroSensor]+gyroBias;
-//		wait1Msec(50);
-//	}
-//	gyroBias=gyroBias/5;
+	for (int i=0; i<5; i++){
+		gyroBias = SensorValue[gyro]+gyroBias;
+		wait1Msec(50);
+	}
+	gyroBias=gyroBias/5;
 
 
 	return;
@@ -52,9 +53,9 @@ task main()
 
 		/////////Joystick 1//////////
 
-		//jstickX = Lookup1(joystick.joy1_x2); // No gyro
+		jstickX = Lookup1(joystick.joy1_x2); // No gyro
 		//jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[gyroSensor]-gyroBias)/2,5); // Gyro
-		//jstickY = Lookup1(joystick.joy1_y2);
+		jstickY = Lookup1(joystick.joy1_y2);
 
 		// ------- Control the drive motors ----------//
 		//motor[ltMotor]=(jstickY + jstickX);

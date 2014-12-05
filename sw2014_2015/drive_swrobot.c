@@ -1,4 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
@@ -35,14 +36,14 @@ task main()
 		//jstickY = Lookup1(joystick.joy1_y2);
 
 		// ------- Control the drive motors ----------//
-		//motor[ltMotor]=(jstickY + jstickX);
-		//motor[rtMotor]=(jstickY - jstickX);
+		//motor[ltWheelMotor]=(jstickY + jstickX);
+		//motor[rtWheelMotor]=(jstickY - jstickX);
 
 		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
 		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 
 
-writeDebugStreamLine("%d",SensorValue[IR]);
+writeDebugStreamLine("%d,%d",nMotorEncoder[rtWheelMotor],nMotorEncoder[ltWheelMotor]);
 		wait1Msec(50);
 
 		/*if (joy1Btn(1))

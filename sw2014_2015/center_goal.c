@@ -1,4 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     Gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
@@ -7,7 +8,7 @@
 #pragma config(Motor,  mtr_S1_C2_2,     sweeper,       tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    clamp,                tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    dump,                 tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S1_C3_3,    ir,                   tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_6,    servo6,               tServoNone)
@@ -25,24 +26,25 @@
 #define IR_0 6
 #define MOVE_SERVO 7
 
-int sm = FORWARD;
+
+int sm = MOVE_SERVO;
 bool forward_true;
 bool turn_true;
 
-
+int servo_value=40;
 task main()
 {
 forward_intizalize();
 	while(true)
 	{
 
-		writeDebugStreamLine("sm=%d, encoder=%d, ir=%d",sm,nMotorEncoder[ltWheelMotor],SensorValue[IR]);
+		writeDebugStreamLine("sm=%d, encoder=%d, ir=%d,servo=%d",sm,nMotorEncoder[ltWheelMotor],SensorValue[IR],servo[ir]);
 
 		switch(sm)
 		{
 		case FORWARD:
-		servo[ir]=0;
-		 forward_true=forward2(25,4500);
+		 forward_true=forward2(25,4250);
+		  servo_value=40;
 		  if(forward_true==true)
 		  {
 		  sm=MOVE_SERVO;
@@ -51,17 +53,17 @@ forward_intizalize();
 
 	case READ_IR:
 
-	if(servo[ir]==10)
+	if(servo[ir]==172)//156
 		{
 		sm=DRIVE_POSITION1;
 		}
 
-	if(servo[ir]==25)
+	if(servo[ir]==228)//228
 		{
 		sm=DRIVE_POSITION2;
 		}
 
-	if(servo[ir]==35)
+	if(servo[ir]==252)//244
 		{
 		sm=DRIVE_POSITION3;
 		}
@@ -107,9 +109,10 @@ forward_intizalize();
 		break;
 
 		case MOVE_SERVO:
-		servo[ir]=+1;
+		servo_value = servo_value+4;
+		servo[ir]=servo_value;
 
-		if(SensorValue[IR]>3)
+		if(SensorValue[ir]<5&&SensorValue[ir]!=0)
 		{
 		sm=READ_IR;
 		}

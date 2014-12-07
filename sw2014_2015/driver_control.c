@@ -1,6 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
-#pragma config(Sensor, S3,     Gyro,           sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S3,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     lift,          tmotorTetrix, openLoop, encoder)
@@ -23,6 +23,7 @@
 #include "i_arm.c"
 #pragma DebuggerWindows("JoystickGame")
 #include "i_lookup.c"
+#include "i_deadZone.c"
 
 int jstickX;
 int jstickY;
@@ -53,16 +54,15 @@ task main()
 
 		/////////Joystick 1//////////
 
-		jstickX = Lookup1(joystick.joy1_x2); // No gyro
-		//jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[gyroSensor]-gyroBias)/2,5); // Gyro
+		jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[gyro]-gyroBias)/2,5); // Gyro
 		jstickY = Lookup1(joystick.joy1_y2);
 
 		// ------- Control the drive motors ----------//
-		//motor[ltMotor]=(jstickY + jstickX);
-		//motor[rtMotor]=(jstickY - jstickX);
 
-		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
-		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
+		motor[ltWheelMotor]=(jstickY + jstickX);
+		motor[rtWheelMotor]=(jstickY - jstickX);
+
+
 
 		////////Joystick 2//////////
 

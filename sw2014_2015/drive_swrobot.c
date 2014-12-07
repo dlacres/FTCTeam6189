@@ -1,12 +1,12 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     IR,             sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S3,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Motor,  mtr_S1_C1_1,     rtWheelMotor,  tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     ltWheelMotor,  tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     motorF,        tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorTetrix, openLoop, encoder)
-#pragma config(Servo,  srvo_S1_C3_1,    hook,                 tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_2,    servo2,               tServoNone)
+#pragma config(Motor,  mtr_S1_C2_1,     lift,          tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     sweeper,       tmotorTetrix, openLoop, encoder)
+#pragma config(Servo,  srvo_S1_C3_1,    clamp,                tServoStandard)
+#pragma config(Servo,  srvo_S1_C3_2,    dump,                 tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
@@ -19,28 +19,47 @@
 
 
 #include "JoystickDriver.c"
-//#include "i_lookup.c"
+#include "i_lookup.c"
+#include "i_deadZone.c"
 
 #pragma DebuggerWindows("joystickSimple");
 
 int jstickX;
 int jstickY;
+int gyroBias=0;
+
+void initializeRobot()
+{
+	servo(dump)=195;
+	servo(clamp)=70;
+
+	for (int i=0; i<5; i++){
+		gyroBias = SensorValue[gyro]+gyroBias;
+		wait1Msec(50);
+	}
+	gyroBias=gyroBias/5;
+
+
+	return;
+}
 
 task main()
 {
+	initializeRobot();
+
 	while(true)
 	{
   	getJoystickSettings(joystick);
 
-		//jstickX = Lookup1(joystick.joy1_x2);
-		//jstickY = Lookup1(joystick.joy1_y2);
+
+		jstickY = Lookup1(joystick.joy1_y2);
+		jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[gyro]-gyroBias)/2,5); // Gyro
+
 
 		// ------- Control the drive motors ----------//
-		//motor[ltWheelMotor]=(jstickY + jstickX);
-		//motor[rtWheelMotor]=(jstickY - jstickX);
+		motor[ltWheelMotor]=(jstickY + jstickX);
+		motor[rtWheelMotor]=(jstickY - jstickX);
 
-		motor[rtWheelMotor]=(joystick.joy1_y2-joystick.joy1_x2)/2;
-		motor[ltWheelMotor]=(joystick.joy1_y2+joystick.joy1_x2)/2;
 
 
 writeDebugStreamLine("%d,%d",nMotorEncoder[rtWheelMotor],nMotorEncoder[ltWheelMotor]);

@@ -31,7 +31,11 @@ int gyroBias=0;
 
 void initializeRobot()
 {
-	servo(dump)=195;
+
+
+	RaiseArmInit();
+
+	servo(dump)=150;
 	servo(clamp)=70;
 
 	for (int i=0; i<5; i++){
@@ -50,6 +54,7 @@ task main()
 
 	while(true)
 	{
+		writeDebugStreamLine("%d",(jstickY + jstickX));
 		getJoystickSettings(joystick);
 
 		/////////Joystick 1//////////
@@ -69,20 +74,38 @@ task main()
 		motor[sweeper]=joystick.joy2_y2;
 
 
-		if(joy2Btn(3))
+		if( nMotorEncoder[lift]<10050 && joystick.joy2_y1 > 0)
 		{
+
 			motor[lift]=joystick.joy2_y1;
 		}
 
-		if(joy2Btn(1))//Position 0: Bottom position
+		if( nMotorEncoder[lift]>0 && joystick.joy2_y1 < 0)
 		{
-			RaiseArm(-25,120);
+
+			motor[lift]=joystick.joy2_y1;
 		}
 
-		if(joy2Btn(2))//Position 1: Smallest rolling goal
-		{
-			RaiseArm(25,7900);
-		}
+			/*if(joy2Btn(0))//Position 0: Bottom position
+			{
+			RaiseArm(-25,400);
+			}
+
+			if(joy2Btn(1))//Position 1: Medium rolling goal
+			{
+			RaiseArm(25,6274);
+			}
+
+			if(joy2Btn(2))//Position 2: Large rolling goal
+			{
+			RaiseArm(25,7171);
+			}
+
+			if(joy2Btn(3))//Position 3:Center goal
+			{
+			RaiseArm(25,9639);
+			}*/
+
 
 		writeDebugStreamLine("%d", nMotorEncoder[lift]);
 

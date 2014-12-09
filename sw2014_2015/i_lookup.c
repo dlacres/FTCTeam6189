@@ -4,8 +4,8 @@
 // Between 115 and 128 the slope is 2.
 int table_1[][]={
 		{0, 0},
-		{3, 0},
-		{5, 3},
+		{5, 0},
+		{8, 3},
 		{60, 40},
 		{100, 80},
 						};
@@ -15,11 +15,12 @@ int i,num,den;
 
 int Lookup1(int in){
 	int out = 0;
+	int absoluteIn=abs(in);
 	int s=sizeof(table_1)/sizeof(table_1[0])-1;
 
 	// Find the x region we are in
 	for (i=0; i<s-1; ++i){
-		if (table_1[i][x]<=in && table_1[i+1][x]>in)
+		if (table_1[i][x]<=absoluteIn && table_1[i+1][x]>absoluteIn)
 			break;
 	}
 	num=table_1[i+1][y]-table_1[i][y];

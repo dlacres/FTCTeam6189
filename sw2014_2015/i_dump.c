@@ -16,9 +16,9 @@
 
 void DumpBucket(bool dumpbucket) {
 	if(dumpbucket){
-		servo[dump]=70 ;
+		servo[dump]=255 ;
 	}else{
-		servo[dump]=195 ;
+		servo[dump]=150;
 	}
 	return;
 }

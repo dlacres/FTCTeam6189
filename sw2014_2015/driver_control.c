@@ -73,19 +73,22 @@ task main()
 
 		motor[sweeper]=joystick.joy2_y2;
 
-
-		if( nMotorEncoder[lift]<10050 && joystick.joy2_y1 > 0)
+		//motor[lift]=joystick.joy2_y1/2;
+		if( nMotorEncoder[lift]<14550 && joystick.joy2_y1 >= 0)
 		{
-
-			motor[lift]=joystick.joy2_y1;
+			motor[lift]=joystick.joy2_y1/2;
+			writeDebugStreamLine("%d,%d 1", nMotorEncoder[lift],joystick.joy2_y1);
 		}
-
-		if( nMotorEncoder[lift]>0 && joystick.joy2_y1 < 0)
+		else if( nMotorEncoder[lift]>0 && joystick.joy2_y1 <= 0)
 		{
-
 			motor[lift]=joystick.joy2_y1;
+			writeDebugStreamLine("%d,%d 2", nMotorEncoder[lift],joystick.joy2_y1);
 		}
-
+		else
+		{
+			motor[lift]=0;
+			writeDebugStreamLine("%d,%d 3", nMotorEncoder[lift],joystick.joy2_y1);
+    }
 			/*if(joy2Btn(0))//Position 0: Bottom position
 			{
 			RaiseArm(-25,400);
@@ -107,7 +110,7 @@ task main()
 			}*/
 
 
-		writeDebugStreamLine("%d", nMotorEncoder[lift]);
+
 
 		if(joy2Btn(7))
 		{

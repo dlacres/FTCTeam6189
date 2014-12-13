@@ -4,8 +4,8 @@
 // Between 115 and 128 the slope is 2.
 int table_1[][]={
 		{0, 0},
-		{5, 0},
-		{8, 3},
+		{3, 0},
+		{5, 3},
 		{60, 40},
 		{100, 80},
 						};
@@ -25,8 +25,12 @@ int Lookup1(int in){
 	}
 	num=table_1[i+1][y]-table_1[i][y];
 	den=table_1[i+1][x]-table_1[i][x];
-	out=(num*in)/den + table_1[i][y] - (num*table_1[i][x])/den;
+	out=(num*absoluteIn)/den + table_1[i][y] - (num*table_1[i][x])/den;
 	//out = (int)((float)(table_1[i+1][y]-table_1[i][y])/((float)(table_1[i+1][x]-table_1[i][x])))*(float)in;
+	if(in<0)
+	{
+	out=-out;
+	}
 
 	return(out);
 }

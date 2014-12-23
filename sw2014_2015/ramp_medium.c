@@ -17,7 +17,7 @@ void initializeRobot()
 {
 servo(dump)=195;
 servo(clamp)=70;
-servo[score]=120;
+servo[score]=60;
 
   return;
 }
@@ -31,10 +31,12 @@ servo[score]=120;
 #define STOP 6
 
 int sm = FORWARD;
+int forward_true;
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
 #include "i_score.c"
+#include "i_clamp.c"
 #pragma DebuggerWindows("JoystickGame")
 
 task main()
@@ -65,16 +67,28 @@ task main()
 			}
 		break;
 
-  case AUTO_SCORE:
+  	case AUTO_SCORE:
 
-  SCORE();
-  if(servo[score]=>120)
-	{
+  	Auto_Score();
+  	if(Auto_Score())
+		{
 		sm=GRAB;
-	}
+		}
+
+		case GRAB:
+
+		Clampgoal(true);
+
+		wait1Msec(1000);
+
+		sm=TURN;
+
+		break;
+
+		case TURN:
 
 
-
+		break;
   	}
 	}
 }

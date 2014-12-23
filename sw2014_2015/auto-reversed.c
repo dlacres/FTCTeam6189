@@ -29,7 +29,7 @@ task main()
 
   waitForStart();
 
-forward2(50,7600);
+forward(50,7600);
 
 
 

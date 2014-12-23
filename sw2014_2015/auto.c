@@ -29,7 +29,7 @@ task main()
 
   waitForStart();
 
-forward(-50,-7600);
+backward(50,7600);
 
 
 

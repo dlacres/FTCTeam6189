@@ -22,14 +22,14 @@ void forward_intizalize()
 	nMotorEncoder[rtWheelMotor]=0;
 	}
 
-bool forward(int speed, int distance){
+bool backward(int speed, int distance){
 	while(true)
 	{
 
-		if(nMotorEncoder[ltWheelMotor]>distance)
+		if(nMotorEncoder[ltWheelMotor]>-distance)
 		{
-		motor[rtWheelMotor]=speed;
-		motor[ltWheelMotor]=speed;
+		motor[rtWheelMotor]=-speed;
+		motor[ltWheelMotor]=-speed;
 		}
 		else
 		{
@@ -41,7 +41,7 @@ bool forward(int speed, int distance){
 return(true);
 }
 
-bool forward2(int speed, int distance){
+bool forward(int speed, int distance){
 	while(true)
 	{
 		if(nMotorEncoder[ltWheelMotor]<distance)

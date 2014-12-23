@@ -42,7 +42,7 @@ forward_intizalize();
 		switch(sm)
 		{
 		case FORWARD:
-		 forward_true=forward2(25,4250);
+		 forward_true=forward(25,4250);
 		  servo_value=40;
 		  if(forward_true==true)
 		  {

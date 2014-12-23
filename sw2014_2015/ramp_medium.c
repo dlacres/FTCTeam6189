@@ -27,7 +27,7 @@ servo[score]=60;
 #define AUTO_SCORE 2
 #define GRAB 3
 #define TURN 4
-#define Backward 5
+#define BACKWARD 5
 #define STOP 6
 
 int sm = FORWARD;
@@ -37,6 +37,8 @@ int forward_true;
 #include "i_forward.c"
 #include "i_score.c"
 #include "i_clamp.c"
+#include "i_turn.c"
+
 #pragma DebuggerWindows("JoystickGame")
 
 task main()
@@ -51,7 +53,7 @@ task main()
 		{
 		case FORWARD:
 
-		 forward_true=forward2(50,4250);
+		 forward_true=forward(50,4250);
 		  if(forward_true==true)
 		  {
 		  sm=FORWARD_SLOW;
@@ -60,7 +62,7 @@ task main()
 
 		case FORWARD_SLOW:
 
-		 forward_true=forward2(15,4250);
+		 forward_true=forward(15,4250);
 		  if(forward_true==true)
 		  {
 		  sm=AUTO_SCORE;
@@ -87,6 +89,29 @@ task main()
 
 		case TURN:
 
+		Turnleft(25,40);
+
+		if(Turnleft(25,40)==true)
+		{
+		sm=BACKWARD;
+		}
+
+		break;
+
+		case BACKWARD:
+		backward(25,16000);
+
+		if(backward(25,16000)==true)
+		{
+		sm=STOP;
+		}
+
+		break;
+
+		case STOP:
+
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
 
 		break;
   	}

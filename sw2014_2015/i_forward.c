@@ -16,7 +16,7 @@
 //
 //======================================================//
 
-void forward_intizalize()
+void forward_initialize()
 	{
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;

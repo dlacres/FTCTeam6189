@@ -30,7 +30,7 @@ int	clicks= direction*28;//28 is clicks per digree at speed of 25
 	return(true);
 }
 bool Turnleft(int speed, int direction){
-	int	clicks2= direction*28;//28 is clicks per digree at speed of 25
+	long	clicks2= direction*28;//28 is clicks per digree at speed of 25
 	if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks2)
 	{
 		motor[ltWheelMotor]=speed;

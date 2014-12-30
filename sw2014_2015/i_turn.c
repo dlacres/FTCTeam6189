@@ -16,6 +16,11 @@
 //
 //======================================================//
 bool Turnright(int speed, int direction){
+
+	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+ 	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
+ 	writeDebugStreamLine("difference=%d", nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor]);
+
 int	clicks= direction*28;//28 is clicks per digree at speed of 25
 	if(nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor]< clicks)
 	{
@@ -30,8 +35,13 @@ int	clicks= direction*28;//28 is clicks per digree at speed of 25
 	return(true);
 }
 bool Turnleft(int speed, int direction){
+
+	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+ 	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
+ 	writeDebugStreamLine("difference=%d", nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]);
+
 	long	clicks2= direction*28;//28 is clicks per digree at speed of 25
-	if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks2)
+	if((nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor])< clicks2)
 	{
 		motor[ltWheelMotor]=speed;
 		motor[rtWheelMotor]=-speed;

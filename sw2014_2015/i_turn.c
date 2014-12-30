@@ -15,41 +15,51 @@
 // As a ROLE I want to WHAT_I_WANT so that VALUE_I_GET
 //
 //======================================================//
-bool Turnright(int speed, int direction){
+bool Turnright(int speed, int direction)
+{
 
-	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
- 	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
- 	writeDebugStreamLine("difference=%d", nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor]);
+int	clicks= direction*40;//40 is clicks per digree at speed of 25
 
-int	clicks= direction*28;//28 is clicks per digree at speed of 25
-	if(nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor]< clicks)
+	while(true)
 	{
+		if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks)
+		{
 		motor[rtWheelMotor]=speed;
 		motor[ltWheelMotor]=-speed;
-	}
-	else
-	{
+		}
+		else
+		{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
+		break;
+		}
 	}
+
 	return(true);
 }
+
 bool Turnleft(int speed, int direction){
 
-	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+	long	clicks2= direction*40;//40 is clicks per digree at speed of 25
+
+	while(true)
+	{
+			writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
  	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
  	writeDebugStreamLine("difference=%d", nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]);
 
-	long	clicks2= direction*28;//28 is clicks per digree at speed of 25
-	if((nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor])< clicks2)
-	{
+//		if((nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor])< clicks2)
+		if((nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor])< clicks2)
+		{
 		motor[ltWheelMotor]=speed;
 		motor[rtWheelMotor]=-speed;
-	}
-	else
-	{
+		}
+		else
+		{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
+		break;
+		}
 	}
 	return(true);
 }

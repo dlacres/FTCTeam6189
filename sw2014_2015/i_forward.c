@@ -17,46 +17,57 @@
 //======================================================//
 
 void forward_initialize()
-	{
+{
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
-	}
+}
 
 bool backward(int speed, int distance){
+
+	nMotorEncoder[ltWheelMotor]=0;
+	nMotorEncoder[rtWheelMotor]=0;
+
 	while(true)
 	{
+		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 
-		if(nMotorEncoder[ltWheelMotor]>-distance)
+//		if((nMotorEncoder[ltWheelMotor])>-distance)
+		if(-(nMotorEncoder[ltWheelMotor])>-distance)
 		{
-		motor[rtWheelMotor]=-speed;
-		motor[ltWheelMotor]=-speed;
+			motor[rtWheelMotor]=-speed;
+			motor[ltWheelMotor]=-speed;
 		}
 		else
 		{
-		motor[rtWheelMotor]=0;
-		motor[ltWheelMotor]=0;
-		break;
+			motor[rtWheelMotor]=0;
+			motor[ltWheelMotor]=0;
+			break;
 		}
 	}
-return(true);
+	return(true);
 }
 
 bool forward(int speed, int distance){
+
+	nMotorEncoder[ltWheelMotor]=0;
+	nMotorEncoder[rtWheelMotor]=0;
+
 	while(true)
 	{
-		if(nMotorEncoder[ltWheelMotor]<distance)
+		if(-(nMotorEncoder[ltWheelMotor])<distance)
 		{
-		motor[rtWheelMotor]=speed;
-		motor[ltWheelMotor]=speed;
+			motor[rtWheelMotor]=speed;
+			motor[ltWheelMotor]=speed;
 		}
 		else
 		{
-		motor[rtWheelMotor]=0;
-		motor[ltWheelMotor]=0;
-		break;
+			motor[rtWheelMotor]=0;
+			motor[ltWheelMotor]=0;
+			break;
 		}
 	}
-return(true);
+	return(true);
 }
 // ==================UNIT TEST==========================//
 
@@ -66,40 +77,40 @@ int timeLeft=0; // A global variable used to adjust the time it takes to complet
 int i=0;
 #define FOREGROUND_MS 50 //The while loop takes 50 MS to run. This means the software runs 20 times per second
 task main(){
-	nMotorEncoder[ltWheelMotor]=0;
-	// Initialize variables here //
-	int myInt=0;
-	int in=0;
-	int out=0;
-	//Debug2File(); //Send the debug information to the file debug.txt
-	//Debug2NXT();  //Send the debug information to the NXT screen
-	Debug2Stream(); //Send the debug information to the PC Screen
+nMotorEncoder[ltWheelMotor]=0;
+// Initialize variables here //
+int myInt=0;
+int in=0;
+int out=0;
+//Debug2File(); //Send the debug information to the file debug.txt
+//Debug2NXT();  //Send the debug information to the NXT screen
+Debug2Stream(); //Send the debug information to the PC Screen
 
-	// End of initialize //
-	while(true){
-		clearTimer(T1);
-		hogCPU(); //Prevent other tasks from running when this one is.
-		// ------------- Put Unit Test code here -------------------//
-		// xxxxxxx [] Describe test 1 here. Put an X inside of [] when the test passes.
-		// xxxxxxx [] Describe test 2 here. Put an X inside of [] when the test passes.
+// End of initialize //
+while(true){
+clearTimer(T1);
+hogCPU(); //Prevent other tasks from running when this one is.
+// ------------- Put Unit Test code here -------------------//
+// xxxxxxx [] Describe test 1 here. Put an X inside of [] when the test passes.
+// xxxxxxx [] Describe test 2 here. Put an X inside of [] when the test passes.
 int clicks_ft =1000;
-		// USAGE NOTES:
-		//   The units for a are encoder clicks
-		//   Set #define NO_UNIT_TEST
-		if (i<5) in=0;
-		if (i<10) in=1;
+// USAGE NOTES:
+//   The units for a are encoder clicks
+//   Set #define NO_UNIT_TEST
+if (i<5) in=0;
+if (i<10) in=1;
 
-	Forward(-25,-1*clicks_ft);
+Forward(-25,-1*clicks_ft);
 
-		DebugInt("%d",nMotorEncoder[ltWheelMotor]);
+DebugInt("%d",nMotorEncoder[ltWheelMotor]);
 
 
-		i+=1; // Increment the frame counter for unit test
-		// ------------- Unit code test is done here ---------------//
-		DebugPrint();
-		timeLeft=FOREGROUND_MS-time1[T1]; // Calculate the time used in the foreground
-		releaseCPU(); // Let other tasks run now.
-		wait1Msec(timeLeft);// The time other tasks have to run before foreground takes control.
-	}// While Loop
+i+=1; // Increment the frame counter for unit test
+// ------------- Unit code test is done here ---------------//
+DebugPrint();
+timeLeft=FOREGROUND_MS-time1[T1]; // Calculate the time used in the foreground
+releaseCPU(); // Let other tasks run now.
+wait1Msec(timeLeft);// The time other tasks have to run before foreground takes control.
+}// While Loop
 }// Main Task
 #endif*/

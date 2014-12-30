@@ -66,18 +66,11 @@ task main()
 
 		case TURN_1:
 
-		Turnleft(25,45);
+		Turnleft(25,180);
 
-		wait1Msec(3000);
+		forward(10,2500);
 
-		forward(50,50);
-
-		wait1Msec(2000);
-
-		if(Turnleft(25,180)==true)
-		{
-		sm=BACKWARD_2;
-		}
+		sm=AUTO_SCORE;
 
   	case AUTO_SCORE:
 
@@ -99,7 +92,7 @@ task main()
 
 		case TURN_2:
 
-		Turnleft(25,90);
+		Turnleft(10,5);
 
 		if(Turnleft(25,40)==true)
 		{

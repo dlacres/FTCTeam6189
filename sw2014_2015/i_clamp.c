@@ -17,11 +17,11 @@
 bool Clampgoal(bool clampgoal) {
 	if(clampgoal)
 		{
-		servo[clamp]=200 ;
+		servo[clamp]=70 ;
 		}
 	else
 	{
-		servo[clamp]=70 ;
+		servo[clamp]=140 ;
 	}
 	return(true);
 }

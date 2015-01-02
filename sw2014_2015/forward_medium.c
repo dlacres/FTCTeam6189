@@ -35,8 +35,8 @@ int forward_true;
 void initializeRobot()
 {
 servo(dump)=195;
-servo(clamp)=70;
-servo[score]=60;
+servo(clamp)=0;
+servo[score]=120;
 
 forward_initialize();
 
@@ -57,17 +57,16 @@ task main()
 		{
 		case FORWARD:
 
-		 forward_true=forward(50,10500);
-		  if(forward_true==true)
-		  {
+		 forward_true=forward(50,8500);
+
 		  sm=AUTO_SCORE;
-			}
+
 		break;
 
 
   	case AUTO_SCORE:
 
-  	//Auto_Score();
+  	Auto_Score();
   	if(Auto_Score())
 		{
 			sm=GRAB;
@@ -78,7 +77,7 @@ task main()
 
 		case GRAB:
 
-			Clampgoal(true);
+			servo[clamp]=70;
 
 			count+=1;
 
@@ -92,7 +91,7 @@ task main()
 
 		case TURN:
 
-			//Turnleft(10,5);
+			Turnleft(10,5);
 
 			if(Turnleft(25,40)==true)
 			{
@@ -102,7 +101,7 @@ task main()
 		break;
 
 		case BACKWARD:
-		//backward(25,16000);
+		backward(25,16000);
 
 		if(backward(25,16000)==true)
 		{
@@ -115,6 +114,7 @@ task main()
 
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
+		servo[clamp]=100;
 
 		break;
   	}

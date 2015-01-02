@@ -36,9 +36,8 @@ void initializeRobot()
 	RaiseArmInit();
 
 	servo(dump)=150;
-	servo(clamp)=70;
-	servo(score)=120;
-	servoChangeRate[score];
+	servo(clamp)=140;
+	servo(score)=170;
 
 	for (int i=0; i<5; i++){
 		gyroBias = SensorValue[gyro]+gyroBias;
@@ -70,7 +69,6 @@ task main()
 		motor[rtWheelMotor]=(jstickY - jstickX);
 
 
-		servo[score]=(joystick.joy1_y1)+128;
 		////////Joystick 2//////////
 
 		motor[sweeper]=joystick.joy2_y2;

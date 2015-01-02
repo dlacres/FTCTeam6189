@@ -27,8 +27,7 @@ bool backward(int speed, int distance){
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
 
-	while(true)
-	{
+
 		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
 		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 
@@ -37,15 +36,15 @@ bool backward(int speed, int distance){
 		{
 			motor[rtWheelMotor]=-speed;
 			motor[ltWheelMotor]=-speed;
+				return(false);
 		}
 		else
 		{
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
-			break;
+				return(true);
 		}
-	}
-	return(true);
+
 }
 
 bool forward(int speed, int distance){
@@ -53,21 +52,19 @@ bool forward(int speed, int distance){
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
 
-	while(true)
-	{
 		if(-(nMotorEncoder[ltWheelMotor])<distance)
 		{
 			motor[rtWheelMotor]=speed;
 			motor[ltWheelMotor]=speed;
+			return(false);
 		}
 		else
 		{
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
-			break;
+			return(true);
 		}
-	}
-	return(true);
+
 }
 // ==================UNIT TEST==========================//
 

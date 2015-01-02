@@ -37,7 +37,7 @@ void initializeRobot()
 
 	servo(dump)=150;
 	servo(clamp)=70;
-	servo(score)=110;
+	servo(score)=120;
 	servoChangeRate[score];
 
 	for (int i=0; i<5; i++){

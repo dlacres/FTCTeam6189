@@ -15,13 +15,17 @@
 //#include "JoystickDriver.c"
 
 bool Clampgoal(bool clampgoal) {
-	if(clampgoal){
+	if(clampgoal)
+		{
 		servo[clamp]=200 ;
-	}else{
+		}
+	else
+	{
 		servo[clamp]=70 ;
 	}
 	return(true);
 }
+
 
 
 /*task main() {

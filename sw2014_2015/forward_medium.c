@@ -53,11 +53,11 @@ task main()
 
   while(true)
   {
-  		switch(sm)
+    switch(sm)
 		{
 		case FORWARD:
 
-		 forward_true=forward(50,8500);
+		  forward(50,8500);
 
 		  sm=AUTO_SCORE;
 
@@ -70,7 +70,6 @@ task main()
   	if(Auto_Score())
 		{
 			sm=GRAB;
-			count=0;
 		}
 
 		break;
@@ -79,13 +78,10 @@ task main()
 
 			servo[clamp]=70;
 
-			count+=1;
+			wait1Msec(1000);
 
-			if(count>21)
-			{
 			sm=TURN;
-			count=0;
-			}
+
 
 		break;
 

@@ -72,6 +72,8 @@ task main()
 
 		sm=AUTO_SCORE;
 
+		break;
+
   	case AUTO_SCORE:
 
   	Auto_Score();

@@ -24,7 +24,7 @@
 #define STOP 6
 
 int sm = BACKWARD_1;
-int backward_true;
+
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
@@ -35,7 +35,7 @@ int backward_true;
 void initializeRobot()
 {
 servo(dump)=195;
-servo(clamp)=70;
+servo(clamp)=0;
 servo[score]=60;
 
 forward_initialize();
@@ -57,11 +57,10 @@ task main()
 		{
 		case BACKWARD_1:
 
-		 backward_true=backward(50,8500);
-		  if(backward_true==true)
-		  {
+		 backward(50,8500);
+
 		  sm=TURN_1;
-			}
+
 		break;
 
 		case TURN_1:
@@ -84,7 +83,7 @@ task main()
 
 		case GRAB:
 
-		Clampgoal(true);
+			servo[clamp]=70;
 
 		wait1Msec(1000);
 
@@ -94,22 +93,19 @@ task main()
 
 		case TURN_2:
 
-		Turnleft(10,5);
+		Turnleft(25,5);
 
-		if(Turnleft(25,40)==true)
-		{
 		sm=BACKWARD_2;
-		}
+
 
 		break;
 
 		case BACKWARD_2:
+
 		backward(25,16000);
 
-		if(backward(25,16000)==true)
-		{
 		sm=STOP;
-		}
+
 
 		break;
 

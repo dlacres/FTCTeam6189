@@ -24,7 +24,7 @@
 
 
 int sm = FORWARD;
-int forward_true;
+
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
@@ -87,12 +87,11 @@ task main()
 
 		case TURN:
 
-			Turnleft(10,5);
+			Turnleft(25,5);
 
-			if(Turnleft(25,40)==true)
-			{
+
 			sm=BACKWARD;
-			}
+
 
 		break;
 

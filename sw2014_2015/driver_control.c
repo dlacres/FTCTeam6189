@@ -35,7 +35,7 @@ void initializeRobot()
 
 	RaiseArmInit();
 
-	servo(dump)=150;
+	servo(dump)=125;
 	servo(clamp)=140;
 	servo(score)=170;
 

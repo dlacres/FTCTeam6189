@@ -19,9 +19,9 @@ bool Auto_Score()
 {
 	servo[score]=240;
 
-	wait1Msec(1000);
+	wait1Msec(500);
 
-	servo[score]=120;
+	servo[score]=170;
 
 return(true);
 }

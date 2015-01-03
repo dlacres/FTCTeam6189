@@ -34,7 +34,7 @@ int sm = FORWARD;
 
 void initializeRobot()
 {
-servo(dump)=195;
+servo(dump)=150;
 servo(clamp)=0;
 servo[score]=120;
 
@@ -57,7 +57,9 @@ task main()
 		{
 		case FORWARD:
 
-		  forward(50,8500);
+		  forward(75,8500);
+
+		  forward(15,1950);
 
 		  sm=AUTO_SCORE;
 
@@ -87,7 +89,7 @@ task main()
 
 		case TURN:
 
-			Turnleft(25,5);
+			Turnleft(25,45);
 
 
 			sm=BACKWARD;
@@ -96,9 +98,9 @@ task main()
 		break;
 
 		case BACKWARD:
-		backward(25,16000);
+		backward(25,6000);
 
-		if(backward(25,16000)==true)
+		if(backward(25,6000)==true)
 		{
 		sm=STOP;
 		}
@@ -109,7 +111,7 @@ task main()
 
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
-		servo[clamp]=100;
+		servo[clamp]=140;
 
 		break;
   	}

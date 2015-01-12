@@ -35,12 +35,12 @@ void initializeRobot()
 
 	RaiseArmInit();
 
-	servo(dump)=125;
-	servo(clamp)=140;
+	servo(dump)=100;
+	servo(clamp)=180;
 	servo(score)=170;
 
 	for (int i=0; i<5; i++){
-		gyroBias = SensorValue[gyro]+gyroBias;
+		gyroBias = SensorValue[Gyro]+gyroBias;
 		wait1Msec(50);
 	}
 	gyroBias=gyroBias/5;
@@ -60,7 +60,7 @@ task main()
 
 		/////////Joystick 1//////////
 
-		jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[gyro]-gyroBias)/2,5); // Gyro
+		jstickX = Lookup1(joystick.joy1_x2) - DeadZone((SensorValue[Gyro]-gyroBias)/2,5); // Gyro
 		jstickY = Lookup1(joystick.joy1_y2);
 
 		// ------- Control the drive motors ----------//

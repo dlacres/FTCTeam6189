@@ -24,7 +24,9 @@
 
 
 int sm = FORWARD;
-
+int LtDist=nMotorEncoder[ltWheelMotor];
+int RtDist=nMotorEncoder[rtWheelMotor];
+int turn=(LtDist-RtDist)/10;
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"

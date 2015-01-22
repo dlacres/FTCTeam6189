@@ -27,6 +27,11 @@ bool backward(int speed, int distance){
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
 
+int LtDist=nMotorEncoder[ltWheelMotor];
+int RtDist=nMotorEncoder[rtWheelMotor];
+int turn=(LtDist-RtDist)/10;
+int XCmd=(LtDist-RtDist)/10;
+int YCmd=-speed;
 
 		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
 		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
@@ -35,8 +40,8 @@ bool backward(int speed, int distance){
 //		if((nMotorEncoder[ltWheelMotor])>-distance)
 		if(-(nMotorEncoder[ltWheelMotor])>-distance)
 		{
-			motor[rtWheelMotor]=-speed;
-			motor[ltWheelMotor]=-speed;
+			motor[rtWheelMotor]=YCmd-XCmd;
+			motor[ltWheelMotor]=YCmd+XCmd;
 		}
 		else
 		{
@@ -50,6 +55,12 @@ bool backward(int speed, int distance){
 
 bool forward(int speed, int distance){
 
+	int LtDist=nMotorEncoder[ltWheelMotor];
+	int RtDist=nMotorEncoder[rtWheelMotor];
+	int turn=(LtDist-RtDist)/10;
+	int XCmd=(LtDist-RtDist)/10;
+	int YCmd=speed;
+
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
 
@@ -58,8 +69,8 @@ bool forward(int speed, int distance){
 
 		if(-(nMotorEncoder[ltWheelMotor])<distance)
 		{
-			motor[rtWheelMotor]=speed;
-			motor[ltWheelMotor]=speed;
+			motor[rtWheelMotor]=YCmd-XCmd;
+			motor[ltWheelMotor]=YCmd+XCmd;
 		}
 		else
 		{

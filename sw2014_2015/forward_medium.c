@@ -24,9 +24,7 @@
 
 
 int sm = FORWARD;
-/*int LtDist=nMotorEncoder[ltWheelMotor];
-int RtDist=nMotorEncoder[rtWheelMotor];
-int turn=(LtDist-RtDist)/10;*/
+
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
@@ -41,6 +39,7 @@ servo(clamp)=0;
 servo[score]=120;
 
 forward_initizalize();
+
 
   return;
 }
@@ -59,9 +58,12 @@ task main()
 		{
 		case FORWARD:
 
-		  forward(75,8500);
+		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 
-		  forward(15,1950);
+		  forward(0,8500);
+
+		  forward(0,1950);
 
 		  sm=AUTO_SCORE;
 

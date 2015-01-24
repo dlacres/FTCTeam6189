@@ -61,11 +61,14 @@ task main()
 		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
 		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 
-		  forward(0,8500);
+		  forward(70,8500);
 
-		  forward(0,1950);
+		  forward(20,1950);
 
+		  if( forward(0,1950)==true)
+		  {
 		  sm=AUTO_SCORE;
+			}
 
 		break;
 
@@ -95,9 +98,10 @@ task main()
 
 			Turnleft(25,25);
 
-
+			if(Turnleft(25,25)==true)
+			{
 			sm=BACKWARD;
-
+			}
 
 		break;
 

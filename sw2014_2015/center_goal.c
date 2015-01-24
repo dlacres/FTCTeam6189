@@ -27,7 +27,7 @@
 #define MOVE_SERVO 7
 
 
-int sm = FORWARD;
+int sm=MOVE_SERVO;
 bool forward_true;
 bool turn_true;
 

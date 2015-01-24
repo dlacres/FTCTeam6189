@@ -20,22 +20,20 @@ bool Turnright(int speed, int direction)
 
 int	clicks= direction*40;//40 is clicks per digree at speed of 25
 
-	while(true)
-	{
 		if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks)
 		{
 		motor[rtWheelMotor]=speed;
 		motor[ltWheelMotor]=-speed;
+		return(false);
 
 		}
 		else
 		{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
-		break;
+		return(true);
 		}
-	}
-	return(true);
+
 }
 
 bool Turnleft(int speed, int direction){
@@ -46,22 +44,19 @@ bool Turnleft(int speed, int direction){
 			writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
  	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
  	writeDebugStreamLine("difference=%d", nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]);
-	while(true)
-	{
-//		if((nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor])< clicks2)
+
 		if((nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor])< clicks2)
 		{
 		motor[ltWheelMotor]=speed;
 		motor[rtWheelMotor]=-speed;
+		return(false);
 		}
 		else
 		{
 		motor[rtWheelMotor]=0;
 		motor[ltWheelMotor]=0;
-		break;
+		return(true);
 		}
-	}
-return(true);
 }
 // ==================UNIT TEST==========================//
 /*#ifndef NO_UNIT_TEST

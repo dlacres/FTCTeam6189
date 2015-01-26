@@ -22,6 +22,8 @@
 #define BACKWARD 4
 #define STOP 5
 
+int InitializeValue;
+int TargetValue;
 
 int sm = FORWARD;
 
@@ -48,6 +50,7 @@ forward_initizalize();
 
 task main()
 {
+	InitializeValue=nMotorEncoder[ltWheelMotor];
   initializeRobot();
 
   waitForStart();
@@ -61,14 +64,14 @@ task main()
 		writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
 		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 
-		  forward(70,8500);
+		TargetValue=InitializeValue+8500;
 
-		  forward(20,1950);
+		  forward(20,8500);
 
-		  if( forward(0,1950)==true)
+		  /*if( forward(20,1950)==true)
 		  {
 		  sm=AUTO_SCORE;
-			}
+			}*/
 
 		break;
 

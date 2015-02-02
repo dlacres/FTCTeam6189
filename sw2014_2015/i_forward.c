@@ -29,8 +29,9 @@ bool backward(int speed, int distance){
 
 	case ENCODER_SET:
 
-	TargetValue=InitializeValue+distance;
-	InitializeValue=nMotorEncoder[ltWheelMotor];
+nMotorEncoder[ltWheelMotor]=0;
+nMotorEncoder[rtWheelMotor]=0;
+
 	sm2=MOVE;
 
 	break;
@@ -67,15 +68,17 @@ bool backward(int speed, int distance){
 	}
 }
 
-bool forward(int speed, int distance){
+bool forward(int speed, int distance)
+{
 
 	switch(sm2)
 	{
 
 	case ENCODER_SET:
 
-	TargetValue=InitializeValue+distance;
-	InitializeValue=nMotorEncoder[ltWheelMotor];
+nMotorEncoder[ltWheelMotor]=0;
+nMotorEncoder[rtWheelMotor]=0;
+
 	sm2=MOVE;
 
 	break;

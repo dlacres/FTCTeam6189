@@ -69,6 +69,8 @@ task main()
 
 		  forward(20,8500);
 
+
+
 		  if( forward(20,1950)==true)
 		  {
 		  sm=AUTO_SCORE;

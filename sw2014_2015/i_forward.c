@@ -24,60 +24,20 @@ void forward_initizalize()
 
 bool backward(int speed, int distance){
 
-	switch(sm2)
-	{
-
-	case ENCODER_SET:
-
-nMotorEncoder[ltWheelMotor]=0;
-nMotorEncoder[rtWheelMotor]=0;
-
-	sm2=MOVE;
-
-	break;
-
-
-	case MOVE:
-
-
+	bool hit_distance=false;
 	int LtDist=nMotorEncoder[ltWheelMotor];
 	int RtDist=nMotorEncoder[rtWheelMotor];
 	int turn=(LtDist-RtDist)/10;
 	int XCmd=(LtDist-RtDist)*10;
 	int YCmd=-speed;
 
-	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
-	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
-	writeDebugStreamLine("turn=%d", turn);
-
-		if(-(TargetValue)>-distance)
-		{
-			motor[rtWheelMotor]=YCmd-XCmd;
-			motor[ltWheelMotor]=YCmd+XCmd;
-			return(false);
-		}
-		else
-		{
-			motor[rtWheelMotor]=0;
-			motor[ltWheelMotor]=0;
-			return(true);
-		}
-
-		break;
-
-	}
-}
-
-bool forward(int speed, int distance)
-{
-
 	switch(sm2)
 	{
 
 	case ENCODER_SET:
 
-nMotorEncoder[ltWheelMotor]=0;
-nMotorEncoder[rtWheelMotor]=0;
+	nMotorEncoder[ltWheelMotor]=0;
+	nMotorEncoder[rtWheelMotor]=0;
 
 	sm2=MOVE;
 
@@ -86,30 +46,72 @@ nMotorEncoder[rtWheelMotor]=0;
 
 	case MOVE:
 
-	int LtDist=nMotorEncoder[ltWheelMotor];
-	int RtDist=nMotorEncoder[rtWheelMotor];
+	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
+	writeDebugStreamLine("turn=%d", turn);
 
-	int turn=(LtDist-RtDist);
-	int XCmd=(LtDist-RtDist)/7;
-	int YCmd=speed;
-
-	writeDebugStreamLine("x=%d", XCmd);
-
-		if((nMotorEncoder[ltWheelMotor])<TargetValue)
+		if(-(ltWheelMotor)>-distance)
 		{
-			motor[rtWheelMotor]=YCmd+XCmd;
-			motor[ltWheelMotor]=YCmd-XCmd;
-				return(false);
+			motor[rtWheelMotor]=YCmd-XCmd;
+			motor[ltWheelMotor]=YCmd+XCmd;
+			hit_distance=false;
 		}
 		else
 		{
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
-			return(true);
+			hit_distance=true;
+		}
+
+		break;
+
+	}
+	return(hit_distance);
+}
+
+bool forward(int speed, int distance)
+{
+	bool hit_distance=false;
+	int LtDist=nMotorEncoder[ltWheelMotor];
+	int RtDist=nMotorEncoder[rtWheelMotor];
+	int turn=(LtDist-RtDist);
+	int XCmd=(LtDist-RtDist)/7;
+	int YCmd=speed;
+
+
+	switch(sm2)
+	{
+
+	case ENCODER_SET:
+
+	nMotorEncoder[ltWheelMotor]=0;
+	nMotorEncoder[rtWheelMotor]=0;
+
+	sm2=MOVE;
+
+	break;
+
+
+	case MOVE:
+
+		writeDebugStreamLine("x=%d", XCmd);
+
+		if((nMotorEncoder[ltWheelMotor])<distance)
+		{
+			motor[rtWheelMotor]=YCmd+XCmd;
+			motor[ltWheelMotor]=YCmd-XCmd;
+			hit_distance=false;
+		}
+		else
+		{
+			motor[rtWheelMotor]=0;
+			motor[ltWheelMotor]=0;
+			hit_distance=true;
 		}
 
 		break;
 	}
+	return(hit_distance);
 }
 // ==================UNIT TEST==========================//
 

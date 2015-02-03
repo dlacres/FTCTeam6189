@@ -24,6 +24,7 @@
 #pragma DebuggerWindows("JoystickGame")
 #include "i_lookup.c"
 #include "i_deadZone.c"
+#include "i_forward.c"
 
 int jstickX;
 int jstickY;

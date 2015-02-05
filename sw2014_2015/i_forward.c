@@ -28,7 +28,7 @@ bool backward(int speed, int distance){
 	int LtDist=nMotorEncoder[ltWheelMotor];
 	int RtDist=nMotorEncoder[rtWheelMotor];
 	int turn=(LtDist-RtDist)/10;
-	int XCmd=(LtDist-RtDist)*10;
+	int XCmd=(LtDist-RtDist)*0;
 	int YCmd=-speed;
 
 	switch(sm2)
@@ -50,7 +50,7 @@ bool backward(int speed, int distance){
 	writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
 	writeDebugStreamLine("turn=%d", turn);
 
-		if(-(ltWheelMotor)>-distance)
+		if((nMotorEncoder[ltWheelMotor])<distance)
 		{
 			motor[rtWheelMotor]=YCmd-XCmd;
 			motor[ltWheelMotor]=YCmd+XCmd;
@@ -61,6 +61,7 @@ bool backward(int speed, int distance){
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
 			hit_distance=true;
+			sm2=ENCODER_SET;
 		}
 
 		break;
@@ -75,7 +76,7 @@ bool forward(int speed, int distance)
 	int LtDist=nMotorEncoder[ltWheelMotor];
 	int RtDist=nMotorEncoder[rtWheelMotor];
 	int turn=(LtDist-RtDist);
-	int XCmd=(LtDist-RtDist)/7;
+	int XCmd=(LtDist-RtDist)/10;
 	int YCmd=speed;
 
 
@@ -94,12 +95,13 @@ bool forward(int speed, int distance)
 
 	case MOVE:
 
-		writeDebugStreamLine("x=%d", XCmd);
+		writeDebugStreamLine("x=%d, y=%d", XCmd, YCmd);
+		writeDebugStreamLine("rt input=%d, lt input=%d", YCmd-XCmd, YCmd+XCmd);
 
-		if((nMotorEncoder[ltWheelMotor])<distance)
+		if(-(nMotorEncoder[ltWheelMotor])<distance)
 		{
-			motor[rtWheelMotor]=YCmd+XCmd;
-			motor[ltWheelMotor]=YCmd-XCmd;
+			motor[rtWheelMotor]=YCmd-XCmd;
+			motor[ltWheelMotor]=YCmd+XCmd;
 			hit_distance=false;
 		}
 		else
@@ -107,6 +109,7 @@ bool forward(int speed, int distance)
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
 			hit_distance=true;
+			sm2=ENCODER_SET;
 		}
 
 		break;

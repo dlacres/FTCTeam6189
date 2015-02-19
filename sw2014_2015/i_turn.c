@@ -22,8 +22,8 @@ int	clicks= direction*40;//40 is clicks per digree at speed of 25
 
 		if(nMotorEncoder[ltWheelMotor]-nMotorEncoder[rtWheelMotor]< clicks)
 		{
-		motor[rtWheelMotor]=speed;
-		motor[ltWheelMotor]=-speed;
+		motor[rtWheelMotor]=-speed;
+		motor[ltWheelMotor]=speed;
 		return(false);
 
 		}
@@ -47,8 +47,8 @@ bool Turnleft(int speed, int direction){
 
 		if((nMotorEncoder[rtWheelMotor]-nMotorEncoder[ltWheelMotor])< clicks2)
 		{
-		motor[ltWheelMotor]=speed;
-		motor[rtWheelMotor]=-speed;
+		motor[ltWheelMotor]=-speed;
+		motor[rtWheelMotor]=speed;
 		return(false);
 		}
 		else

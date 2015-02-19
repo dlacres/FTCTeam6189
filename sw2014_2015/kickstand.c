@@ -36,7 +36,7 @@ void initializeRobot()
 {
 servo(dump)=100;
 servo(clamp)=0;
-servo[score]=120;
+servo[score]=230;
 
 forward_initizalize();
 
@@ -57,10 +57,11 @@ task main()
 		{
 
 		case FORWARD:
-
+		writeDebugStreamLine("%d",SensorValue[IR]);
 		if (forward(50,4000)==true)
 		{
-
+		wait1Msec(1000);
+		writeDebugStreamLine("%d",SensorValue[IR]);
 		sm=IR;
 		}
 
@@ -68,17 +69,19 @@ task main()
 
 		case IR:
 
+		writeDebugStreamLine("%d",SensorValue[IR]);
+
 		if (SensorValue[IR]==3)
 		{
 		sm=POSITION_1;
 		}
 
-		if (SensorValue[IR]==5)
+		if (SensorValue[IR]==5||SensorValue[IR]==4)
 		{
 		sm=POSITION_2;
 		}
 
-		if (SensorValue[IR]==7)
+		if (SensorValue[IR]==7||SensorValue[IR]==6)
 		{
 		sm=POSITION_3;
 		}
@@ -87,7 +90,7 @@ task main()
 
 		case POSITION_1:
 
-		Turnright(25,180);
+		Turnright(25,90);
 
 		break;
 
@@ -99,7 +102,7 @@ task main()
 
 		case POSITION_3:
 
-		backward(25,4000);
+		backward(25,1000);
 
 		break;
 

@@ -18,6 +18,16 @@
 #define POSITION_1 2
 #define POSITION_2 3
 #define POSITION_3 4
+#define FORWARD_2 5
+#define STOP 6
+#define POSITION_2_PH_1 7
+#define POSITION_2_PH_2 8
+#define POSITION_2_PH_3 9
+#define POSITION_2_PH_4 10
+#define POSITION_3_PH_1 11
+#define POSITION_3_PH_2 12
+#define POSITION_3_PH_3 13
+#define POSITION_3_PH_4 14
 
 int sm = FORWARD;
 
@@ -61,7 +71,7 @@ task main()
 		if (forward(50,4000)==true)
 		{
 		wait1Msec(1000);
-		writeDebugStreamLine("%d",SensorValue[IR]);
+		//servo[score]=230;
 		sm=IR;
 		}
 
@@ -90,23 +100,125 @@ task main()
 
 		case POSITION_1:
 
-		Turnright(25,90);
+		if(Turnright(25,70)==true)
+		{
+		sm=FORWARD_2;
+		}
 
 		break;
 
 		case POSITION_2:
 
-		Turnleft(25,180);
+	if (backward(50,500)==true)
+	{
+	sm=POSITION_2_PH_1;
+	}
 
 		break;
 
 		case POSITION_3:
 
-		backward(25,1000);
+	if (backward(50,500)==true)
+	{
+	sm=POSITION_3_PH_1;
+	}
+
+
+		break;
+
+		case FORWARD_2:
+
+		if(forward(50,2000)==true)
+		{
+		sm=STOP;
+
+		}
+
+		break;
+
+		case STOP:
+
+		motor[rtWheelMotor]=0;
+		motor[ltWheelMotor]=0;
+
+		break;
+
+		case POSITION_2_PH_1:
+
+		if(Turnright(25,80)==true)
+		{
+			sm=POSITION_2_PH_2;
+		}
 
 		break;
 
 
+		case POSITION_2_PH_2:
+
+		if(forward(50,1000)==true)
+		{
+			sm=POSITION_2_PH_3;
 		}
+
+		break;
+
+		case POSITION_2_PH_3:
+
+		if(Turnleft(25,95)==true)
+		{
+			sm=POSITION_2_PH_4;
+		}
+
+		break;
+
+		case POSITION_2_PH_4:
+
+		if(forward(50,4000)==true)
+		{
+			sm=STOP;
+		}
+
+		break;
+
+
+		case POSITION_3_PH_1:
+
+		if(Turnright(25,80)==true)
+		{
+			sm=POSITION_3_PH_2;
+		}
+
+		break;
+
+		case POSITION_3_PH_2:
+
+		if(forward(50,3500)==true)
+		{
+			sm=POSITION_3_PH_3;
+		}
+
+		break;
+
+		case POSITION_3_PH_3:
+
+		// Turnleft(25,110) LINES UP FOR GRABING GOAL
+		if(Turnleft(25,180)==true)
+		{
+			sm=POSITION_3_PH_4;
+		}
+
+		break;
+
+		case POSITION_3_PH_4:
+
+		if(forward(50,4000)==true)
+		{
+			sm=STOP;
+		}
+
+		break;
+
+		}
+	wait1Msec(50);
 	}
 }

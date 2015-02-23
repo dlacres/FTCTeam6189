@@ -24,7 +24,7 @@ void forward_initizalize()
 
 bool backward(int speed, int distance){
 
-	bool hit_distance=false;
+	bool hit_distance;
 	int LtDist=nMotorEncoder[ltWheelMotor];
 	int RtDist=nMotorEncoder[rtWheelMotor];
 	int turn=(LtDist-RtDist)/10;
@@ -38,6 +38,7 @@ bool backward(int speed, int distance){
 
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
+  hit_distance=false;
 
 	sm2=MOVE;
 
@@ -72,7 +73,7 @@ bool backward(int speed, int distance){
 
 bool forward(int speed, int distance)
 {
-	bool hit_distance=false;
+	bool hit_distance;
 	int LtDist=nMotorEncoder[ltWheelMotor];
 	int RtDist=nMotorEncoder[rtWheelMotor];
 	int turn=(LtDist-RtDist);
@@ -85,8 +86,11 @@ bool forward(int speed, int distance)
 
 	case ENCODER_SET:
 
+	writeDebugStreamLine("Encoder=%d,state=%d,state2=%d",nMotorEncoder[ltWheelMotor],sm,sm2);
+
 	nMotorEncoder[ltWheelMotor]=0;
 	nMotorEncoder[rtWheelMotor]=0;
+	hit_distance=false;
 
 	sm2=MOVE;
 
@@ -95,8 +99,9 @@ bool forward(int speed, int distance)
 
 	case MOVE:
 
-		writeDebugStreamLine("x=%d, y=%d", XCmd, YCmd);
-		writeDebugStreamLine("rt input=%d, lt input=%d", YCmd-XCmd, YCmd+XCmd);
+//		writeDebugStreamLine("x=%d, y=%d", XCmd, YCmd);
+//		writeDebugStreamLine("rt input=%d, lt input=%d", YCmd-XCmd, YCmd+XCmd);
+		writeDebugStreamLine("Encoder=%d,state=%d,state2=%d",nMotorEncoder[ltWheelMotor],sm,sm2);
 
 		if(-(nMotorEncoder[ltWheelMotor])<distance)
 		{
@@ -108,8 +113,8 @@ bool forward(int speed, int distance)
 		{
 			motor[rtWheelMotor]=0;
 			motor[ltWheelMotor]=0;
-			hit_distance=true;
 			sm2=ENCODER_SET;
+			hit_distance=true;
 		}
 
 		break;

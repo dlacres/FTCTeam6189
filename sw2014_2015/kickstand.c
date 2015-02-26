@@ -67,11 +67,11 @@ task main()
 		{
 
 		case FORWARD:
+		servo[score]=230;
 		writeDebugStreamLine("%d",SensorValue[IR]);
 		if (forward(50,4000)==true)
 		{
 		wait1Msec(1000);
-		//servo[score]=230;
 		sm=IR;
 		}
 

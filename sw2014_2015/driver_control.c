@@ -73,15 +73,20 @@ task main()
 
 		motor[sweeper]=joystick.joy2_y2;
 
-		//motor[lift]=joystick.joy2_y1/2;
-		if( nMotorEncoder[lift]<14550 && joystick.joy2_y1 >= 0)
+		if(joy2Btn(6)&&joy2Btn(5))
 		{
-			motor[lift]=joystick.joy2_y1/2;
+		motor[lift]=DeadZone((joystick.joy2_y1)/2,5);
+		}
+
+
+		if( nMotorEncoder[lift]<14050 && joystick.joy2_y1 >= 0)
+		{
+			motor[lift]=DeadZone((joystick.joy2_y1)/2,5);
 			writeDebugStreamLine("%d,%d 1", nMotorEncoder[lift],joystick.joy2_y1);
 		}
 		else if( nMotorEncoder[lift]>0 && joystick.joy2_y1 <= 0)
 		{
-			motor[lift]=joystick.joy2_y1;
+			motor[lift]=DeadZone((joystick.joy2_y1)/2,5);
 			writeDebugStreamLine("%d,%d 2", nMotorEncoder[lift],joystick.joy2_y1);
 		}
 		else

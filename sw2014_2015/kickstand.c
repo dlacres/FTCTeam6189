@@ -28,6 +28,7 @@
 #define POSITION_3_PH_2 12
 #define POSITION_3_PH_3 13
 #define POSITION_3_PH_4 14
+#define POSITION_1_PH_1 15
 
 int sm = FORWARD;
 
@@ -46,7 +47,7 @@ void initializeRobot()
 {
 servo(dump)=100;
 servo(clamp)=0;
-servo[score]=230;
+servo[score]=120;
 
 forward_initizalize();
 
@@ -100,6 +101,15 @@ task main()
 
 		case POSITION_1:
 
+		if(forward(25,250)==true)
+		{
+		sm=POSITION_1_PH_1;
+		}
+
+		break;
+
+			case POSITION_1_PH_1:
+
 		if(Turnright(25,70)==true)
 		{
 		sm=FORWARD_2;
@@ -128,7 +138,7 @@ task main()
 
 		case FORWARD_2:
 
-		if(forward(50,2000)==true)
+		if(forward(50,3000)==true)
 		{
 		sm=STOP;
 
@@ -164,7 +174,7 @@ task main()
 
 		case POSITION_2_PH_3:
 
-		if(Turnleft(25,95)==true)
+		if(Turnleft(25,75)==true)
 		{
 			sm=POSITION_2_PH_4;
 		}
@@ -183,7 +193,7 @@ task main()
 
 		case POSITION_3_PH_1:
 
-		if(Turnright(25,80)==true)
+		if(Turnright(25,70)==true)
 		{
 			sm=POSITION_3_PH_2;
 		}
@@ -192,7 +202,7 @@ task main()
 
 		case POSITION_3_PH_2:
 
-		if(forward(50,3500)==true)
+		if(forward(50,2850)==true)
 		{
 			sm=POSITION_3_PH_3;
 		}
@@ -201,8 +211,8 @@ task main()
 
 		case POSITION_3_PH_3:
 
-		// Turnleft(25,110) LINES UP FOR GRABING GOAL
-		if(Turnleft(25,180)==true)
+
+		if(Turnleft(25,100)==true)
 		{
 			sm=POSITION_3_PH_4;
 		}

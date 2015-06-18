@@ -24,7 +24,7 @@
 #define BACKWARD_2 7
 #define DELAY 8
 
-int sm = FORWARD_1;
+int sm = DELAY;
 
 
 #define ENCODER_SET 1
@@ -32,7 +32,7 @@ int sm = FORWARD_1;
 
 int sm2 = ENCODER_SET;
 
-int count =0;
+int count = 0;
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
@@ -68,6 +68,16 @@ task main()
     switch(sm)
 		{
 
+		case DELAY:
+
+		count++;
+
+		if (count>=200)
+		{
+		sm=FORWARD_1;
+		}
+
+		break;
 
 		case FORWARD_1:
 
@@ -133,7 +143,7 @@ task main()
 
 		if(SensorValue[Color]==9||SensorValue[Color]==2)
 		{
-		sm=STOP;
+		sm=BACKWARD_2;
 		}
 
 		break;
@@ -149,7 +159,7 @@ task main()
 
 				case BACKWARD_2:
 
-		if(backward(25,1000)==true)
+		if(backward(15,500)==true)
 		{
 		sm=STOP;
 		}

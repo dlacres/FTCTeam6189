@@ -29,6 +29,9 @@
 #define POSITION_3_PH_3 13
 #define POSITION_3_PH_4 14
 #define POSITION_1_PH_1 15
+#define DELAY_1 16
+#define DELAY_2 17
+#define DELAY_3 18
 
 int sm = FORWARD;
 
@@ -36,6 +39,7 @@ int sm = FORWARD;
 #define MOVE 1
 
 int sm2 = ENCODER_SET;
+int count =0;
 
 #include "JoystickDriver.c"  //Include file to "handle" the Bluetooth messages.
 #include "i_forward.c"
@@ -66,6 +70,39 @@ task main()
   {
     switch(sm)
 		{
+
+		case DELAY_1:
+
+		count++;
+
+		if (count>=300)
+		{
+		sm=FORWARD_2;
+		}
+
+		break;
+
+		case DELAY_2:
+
+		count++;
+
+		if (count>=300)
+		{
+		sm=POSITION_2_PH_2;
+		}
+
+		break;
+
+		case DELAY_3:
+
+		count++;
+
+		if (count>=300)
+		{
+		sm=POSITION_3_PH_2;
+		}
+
+		break;
 
 		case FORWARD:
 		servo[score]=230;
@@ -110,16 +147,16 @@ task main()
 
 			case POSITION_1_PH_1:
 
-		if(Turnright(25,70)==true)
+		if(Turnright(25,65)==true)
 		{
-		sm=FORWARD_2;
+		sm=DELAY_1;
 		}
 
 		break;
 
 		case POSITION_2:
 
-	if (backward(50,500)==true)
+	if (backward(25,500)==true)
 	{
 	sm=POSITION_2_PH_1;
 	}
@@ -128,7 +165,7 @@ task main()
 
 		case POSITION_3:
 
-	if (backward(50,500)==true)
+	if (backward(25,500)==true)
 	{
 	sm=POSITION_3_PH_1;
 	}
@@ -138,7 +175,7 @@ task main()
 
 		case FORWARD_2:
 
-		if(forward(50,3000)==true)
+		if(forward(25,3000)==true)
 		{
 		sm=STOP;
 
@@ -157,7 +194,7 @@ task main()
 
 		if(Turnright(25,80)==true)
 		{
-			sm=POSITION_2_PH_2;
+			sm=DELAY_2;
 		}
 
 		break;
@@ -165,7 +202,7 @@ task main()
 
 		case POSITION_2_PH_2:
 
-		if(forward(50,1000)==true)
+		if(forward(25,1000)==true)
 		{
 			sm=POSITION_2_PH_3;
 		}
@@ -174,7 +211,7 @@ task main()
 
 		case POSITION_2_PH_3:
 
-		if(Turnleft(25,50)==true)
+		if(Turnleft(25,55)==true)
 		{
 			sm=POSITION_2_PH_4;
 		}
@@ -183,7 +220,7 @@ task main()
 
 		case POSITION_2_PH_4:
 
-		if(forward(50,4000)==true)
+		if(forward(25,4000)==true)
 		{
 			sm=STOP;
 		}
@@ -195,14 +232,14 @@ task main()
 
 		if(Turnright(25,70)==true)
 		{
-			sm=POSITION_3_PH_2;
+			sm=DELAY_3;
 		}
 
 		break;
 
 		case POSITION_3_PH_2:
 
-		if(forward(50,2850)==true)
+		if(forward(25,2850)==true)
 		{
 			sm=POSITION_3_PH_3;
 		}
@@ -212,7 +249,7 @@ task main()
 		case POSITION_3_PH_3:
 
 
-		if(Turnleft(25,70)==true)
+		if(Turnleft(25,80)==true)
 		{
 			sm=POSITION_3_PH_4;
 		}

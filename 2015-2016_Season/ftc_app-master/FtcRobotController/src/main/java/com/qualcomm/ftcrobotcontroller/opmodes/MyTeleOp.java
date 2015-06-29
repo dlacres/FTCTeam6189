@@ -49,22 +49,28 @@ public class MyTeleOp extends OpMode {
 	 * Also, as the claw servo approaches 0, the claw opens up (drops the game element).
 	 */
 	// TETRIX VALUES.
-	final static double ARM_MIN_RANGE  = 0.20;
-	final static double ARM_MAX_RANGE  = 0.90;
-	final static double CLAW_MIN_RANGE  = 0.20;
-	final static double CLAW_MAX_RANGE  = 0.7;
+	final static double ARM_MIN_RANGE  = 0.0;
+	final static double ARM_MAX_RANGE  = 0.9;
+	final static double CLAW_MIN_RANGE  = 0.0;
+	final static double CLAW_MAX_RANGE  = 0.9;
 
 	// position of the arm servo.
 	double armPosition;
 
-	// amount to change the arm servo position.
-	double armDelta = 0.1;
+	// down position
+	double armSetPosition1 = 0.1;
+
+	// up position
+	double armSetPosition2 = 0.8;
 
 	// position of the claw servo
 	double clawPosition;
 
-	// amount to change the claw servo position by
-	double clawDelta = 0.1;
+	// down position
+	double clawSetPosition1 = 0.1;
+
+	// up position
+	double clawSetPosition2 = 0.8;
 
 	DcMotor motorRight;
 	DcMotor motorLeft;
@@ -156,22 +162,22 @@ public class MyTeleOp extends OpMode {
 		if (gamepad1.a) {
 			// if the A button is pushed on gamepad1, increment the position of
 			// the arm servo.
-			armPosition += armDelta;
+			armPosition = armSetPosition1;
 		}
 
 		if (gamepad1.y) {
 			// if the Y button is pushed on gamepad1, decrease the position of
 			// the arm servo.
-			armPosition -= armDelta;
+			armPosition = armSetPosition2;
 		}
 
 		// update the position of the claw
 		if (gamepad1.x) {
-			clawPosition += clawDelta;
+			clawPosition = clawSetPosition1;
 		}
 
 		if (gamepad1.b) {
-			clawPosition -= clawDelta;
+			clawPosition = clawSetPosition2;
 		}
 
         // clip the position values so that they never exceed their allowed range.

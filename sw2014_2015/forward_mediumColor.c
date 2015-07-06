@@ -65,6 +65,9 @@ task main()
 
   while(true)
   {
+  	writeDebugStreamLine("right=%d", nMotorEncoder[rtWheelMotor]);
+		writeDebugStreamLine("left=%d", nMotorEncoder[ltWheelMotor]);
+		writeDebugStreamLine("sm=%d", sm);
     switch(sm)
 		{
 

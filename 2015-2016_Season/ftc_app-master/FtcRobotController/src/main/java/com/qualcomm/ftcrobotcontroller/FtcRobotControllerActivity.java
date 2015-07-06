@@ -83,7 +83,7 @@ import java.io.FileNotFoundException;
 public class FtcRobotControllerActivity extends Activity {
 
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
-  private static final boolean USE_MOCK_HARDWARE_FACTORY = false;
+  private static final boolean USE_MOCK_HARDWARE_FACTORY = true;
   private static final int NUM_GAMEPADS = 2;
 
   protected static final String VIEW_LOGS_ACTION = "com.qualcomm.ftcrobotcontroller.VIEW_LOGS";
@@ -376,12 +376,12 @@ public class FtcRobotControllerActivity extends Activity {
     ServoController sc = dm.createUsbServoController(new SerialNumber("SC"));
 
     HardwareMap hwMap = new HardwareMap();
-    hwMap.dcMotor.put("left", new DcMotor(mc, 1));
-    hwMap.dcMotor.put("right", new DcMotor(mc, 2));
-    hwMap.dcMotor.put("flag", new DcMotor(mc2, 1));
-    hwMap.dcMotor.put("arm", new DcMotor(mc2, 2));
-    hwMap.servo.put("a", new Servo(sc, 1));
-    hwMap.servo.put("b", new Servo(sc, 6));
+    hwMap.dcMotor.put("motor_1", new DcMotor(mc, 1));
+    hwMap.dcMotor.put("motor_2", new DcMotor(mc, 2));
+    //hwMap.dcMotor.put("flag", new DcMotor(mc2, 1));
+    //hwMap.dcMotor.put("arm", new DcMotor(mc2, 2));
+    hwMap.servo.put("servo_1", new Servo(sc, 1));
+    hwMap.servo.put("servo_6", new Servo(sc, 6));
 
     hwMap.appContext = this;
 

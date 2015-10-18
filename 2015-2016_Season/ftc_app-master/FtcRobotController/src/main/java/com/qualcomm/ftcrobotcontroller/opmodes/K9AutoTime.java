@@ -74,7 +74,7 @@ public class K9AutoTime extends OpMode {
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
 	 */
 	@Override
-	public void start() {
+	public void init() {
 
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name.
@@ -163,7 +163,7 @@ public class K9AutoTime extends OpMode {
 		/*
 		 * read the light sensor.
 		 */
-		reflection = reflectedLight.getLightLevel();
+		//reflection = reflectedLight.getLightLevel();
 		
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using

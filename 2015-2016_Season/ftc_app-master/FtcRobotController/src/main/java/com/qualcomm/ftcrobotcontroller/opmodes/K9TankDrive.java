@@ -84,7 +84,7 @@ public class K9TankDrive extends OpMode {
 	 * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
 	 */
 	@Override
-	public void start() {
+	public void init() {
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name. Note
 		 * that the names of the devices must match the names used when you
@@ -224,19 +224,26 @@ public class K9TankDrive extends OpMode {
 		
 		// get the corresponding index for the scaleInput array.
 		int index = (int) (dVal * 16.0);
+		
+		// index should be positive.
 		if (index < 0) {
 			index = -index;
-		} else if (index > 16) {
+		}
+
+		// index cannot exceed size of array minus 1.
+		if (index > 16) {
 			index = 16;
 		}
-		
+
+		// get value from the array.
 		double dScale = 0.0;
 		if (dVal < 0) {
 			dScale = -scaleArray[index];
 		} else {
 			dScale = scaleArray[index];
 		}
-		
+
+		// return scaled value.
 		return dScale;
 	}
 

@@ -42,33 +42,21 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class MyTeleOp extends OpMode {
+public class CompetitionTeleop extends OpMode {
 
-  // position of the claw servo
-  double clawPosition;
 
-  // amount to change the claw servo position by
-  double clawDelta = 0.01;
-
-  // position of the wrist servo
-  double wristPosition;
-
-  // amount to change the wrist servo position by
-  double wristDelta = 0.01;
 
   DcMotorController.DeviceMode devMode;
-  DcMotorController wheelController;
-  DcMotor motorRight;
-  DcMotor motorLeft;
-  DcMotorController wheelController2;
-  DcMotor motorRight2;
-  DcMotor motorLeft2;
+  DcMotorController DriveTrain;
+  DcMotor MotorLeft;
+  DcMotor MotorRight;
+  DcMotorController TrackMovement;
+  DcMotor TrackLeftRight;
+  DcMotor TrackUpDown;
 
-  DcMotorController Arm;
-  DcMotor LiftMotor;
+  DcMotorController TrackMovement2;
+  DcMotor TrackInOut;
 
-  Servo claw;
-  Servo wrist;
 
   int numOpLoops = 1;
 
@@ -79,18 +67,18 @@ public class MyTeleOp extends OpMode {
   @Override
   public void init() {
 
-    motorRight = hardwareMap.dcMotor.get("motor_2");
-    motorRight2 = hardwareMap.dcMotor.get("motor_4");
-    motorLeft2 = hardwareMap.dcMotor.get("motor_3");
-    motorLeft = hardwareMap.dcMotor.get("motor_1");
+    MotorLeft = hardwareMap.dcMotor.get("MotorLeft");
+    MotorRight = hardwareMap.dcMotor.get("MotorRight");
+    TrackLeftRight = hardwareMap.dcMotor.get("TrackLeftRight");
+    TrackUpDown = hardwareMap.dcMotor.get("TrackUpDown");
+    TrackInOut = hardwareMap.dcMotor.get("TrackInOut");
 
 
 
-    //claw = hardwareMap.servo.get("servo_6"); // channel 6
-    //wrist = hardwareMap.servo.get("servo_1"); // channel 1
 
-    wheelController = hardwareMap.dcMotorController.get("wheels");
-    wheelController2 = hardwareMap.dcMotorController.get("wheels2");
+    DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
+    TrackMovement = hardwareMap.dcMotorController.get("TrackMovement");
+    TrackMovement2 = hardwareMap.dcMotorController.get("TrackMovement2");
   }
 
   /*
@@ -107,13 +95,12 @@ public class MyTeleOp extends OpMode {
 
     // set the mode
     // Nxt devices start up in "write" mode by default, so no need to switch device modes here.
-    motorLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-    motorRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-    motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-    motorRight2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    MotorLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    MotorRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    TrackInOut.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    TrackLeftRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    TrackUpDown.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
 
-    //wristPosition = 0.6;
-    //clawPosition = 0.5;
   }
 
   /*
@@ -132,149 +119,114 @@ public class MyTeleOp extends OpMode {
      * Gamepad 1 controls the motors via the left stick, and it controls the wrist/claw via the a,b,
      * x, y buttons
      */
-
-      if (gamepad1.dpad_left) {
+      /*if (gamepad1.dpad_left) {
         // Nxt devices start up in "write" mode by default, so no need to switch modes here.
-        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        MotorLeft.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        MotorRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+
       }
       if (gamepad1.dpad_right) {
         // Nxt devices start up in "write" mode by default, so no need to switch modes here.
-        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorRight.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-      }
+        MotorLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        MotorRight.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+      }*/
 
-      // throttle:  left_stick_y ranges from -1 to 1, where -1 is full up,  and 1 is full down
-      // direction: left_stick_x ranges from -1 to 1, where -1 is full left and 1 is full right
+
+
+      /*float right = -gamepad1.right_stick_y;
+      float left = gamepad1.left_stick_y;
+
+
+       //clip the right/left values so that the values never exceed +/- 1
+
+      MotorRight.setPower(right);
+      MotorLeft.setPower(left);*/
+
+
       float throttle = -gamepad1.left_stick_y;
       float direction = gamepad1.left_stick_x;
 
       direction= (float)scaleInput(direction);
 
-      float right = throttle - direction;
-      float left = throttle + direction;
+      float right = throttle + direction;
+      float left = direction - throttle;
 
 
       // clip the right/left values so that the values never exceed +/- 1
       right = Range.clip(right, -1, 1);
       left = Range.clip(left, -1, 1);
 
-
-
-
       // write the values to the motors
-      motorRight.setPower(right);
-      motorLeft.setPower(left);
-      motorRight2.setPower(right);
-      motorLeft2.setPower(left);
 
-      //float LiftPower=gamepad1.left_stick_y;
-      //LiftMotor.setPower(LiftPower);
+      MotorRight.setPower(right);
+      MotorLeft.setPower(left);
 
-      // update the position of the wrist
-      /*if (gamepad1.a) {
-        wristPosition -= wristDelta;
-      }
 
-      if (gamepad1.y) {
-        wristPosition += wristDelta;
-      }
-
-      // update the position of the claw
-      if (gamepad1.x) {
-        clawPosition -= clawDelta;
-      }
-
-      if (gamepad1.b) {
-        clawPosition += clawDelta;
-      }
-
-      // clip the position values so that they never exceed 0..1
-      wristPosition = Range.clip(wristPosition, 0, 1);
-      clawPosition = Range.clip(clawPosition, 0, 1);
-
-      // write position values to the wrist and claw servo
-      wrist.setPosition(wristPosition);
-      claw.setPosition(clawPosition);*/
 
     /*
      * Gamepad 2
      *
-     * Gamepad controls the motors via the right trigger as a throttle, left trigger as reverse, and
-     * the left stick for direction. This type of control is sometimes referred to as race car mode.
 
-
-      // we only want to process gamepad2 if someone is using one of it's analog inputs. If you always
-      // want to process gamepad2, remove this check
-      if (gamepad2.atRest() == false) {
-
-        // throttle is taken directly from the right trigger, the right trigger ranges in values from
-        // 0 to 1
-        throttle = gamepad2.right_trigger;
-
-        // if the left trigger is pressed, go in reverse
-        if (gamepad2.left_trigger != 0.0) {
-          throttle = -gamepad2.left_trigger;
-        }
-
-        // assign throttle to the left and right motors
-        right = throttle;
-        left = throttle;
-
-        // now we need to apply steering (direction). The left stick ranges from -1 to 1. If it is
-        // negative we want to slow down the left motor. If it is positive we want to slow down the
-        // right motor.
-        if (gamepad2.left_stick_x < 0) {
-          // negative value, stick is pulled to the left
-          left = left * (1 + gamepad2.left_stick_x);
-        }
-        if (gamepad2.left_stick_x > 0) {
-          // positive value, stick is pulled to the right
-          right = right * (1 - gamepad2.left_stick_x);
-        }
-
-        // write the values to the motor. This will over write any values placed while processing gamepad1
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
       }*/
+
+      //Control Tracks going up down left right using right stick of gamepad 2
+      float trackUpDown = gamepad2.right_stick_y;
+      float trackLeftRight = gamepad2.right_stick_x;
+
+      float TrackLeftRightPower = Range.clip(trackLeftRight, -1, 1);
+      float TrackUpDownPower = Range.clip(trackUpDown, -1, 1);
+
+      TrackUpDown.setPower(TrackUpDownPower);
+      TrackLeftRight.setPower(TrackLeftRightPower);
+
+      //Control Tracks to pick up cubes
+      float trackInOut=gamepad2.left_stick_y;
+
+      float TrackInOutPower = Range.clip(trackInOut, -1, 1);
+
+      TrackInOut.setPower(TrackInOutPower);
+
     }
 
       // To read any values from the NXT controllers, we need to switch into READ_ONLY mode.
       // It takes time for the hardware to switch, so you can't switch modes within one loop of the
       // op mode. Every 17th loop, this op mode switches to READ_ONLY mode, and gets the current power.
-      if (numOpLoops % 17 == 0) {
+      /*if (numOpLoops % 17 == 0) {
         // Note: If you are using the NxtDcMotorController, you need to switch into "read" mode
         // before doing a read, and into "write" mode before doing a write. This is because
         // the NxtDcMotorController is on the I2C interface, and can only do one at a time. If you are
         // using the USBDcMotorController, there is no need to switch, because USB can handle reads
         // and writes without changing modes. The NxtDcMotorControllers start up in "write" mode.
         // This method does nothing on USB devices, but is needed on Nxt devices.
-        wheelController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        TrackMovement.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        TrackMovement2.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
       }
 
       // Every 17 loops, switch to read mode so we can read data from the NXT device.
       // Only necessary on NXT devices.
-      if (wheelController.getMotorControllerDeviceMode() == DcMotorController.DeviceMode.READ_ONLY) {
+      if (DriveTrain.getMotorControllerDeviceMode() == DcMotorController.DeviceMode.READ_ONLY) {
 
         // Update the reads after some loops, when the command has successfully propagated through.
-        telemetry.addData("Text", "free flow text");
-        telemetry.addData("left motor", motorLeft.getPower());
-        telemetry.addData("right motor", motorRight.getPower());
-        telemetry.addData("RunMode: ", motorLeft.getChannelMode().toString());
+        telemetry.addData("Telemetry", "Data");
+        telemetry.addData("left motor", MotorLeft.getPower());
+        telemetry.addData("right motor", MotorRight.getPower());
+        telemetry.addData("Tracks In out: ", TrackInOut.getPower());
+        telemetry.addData("Tracks Up Down: ", TrackUpDown.getPower());
+        telemetry.addData("Tracks Left Right: ", TrackLeftRight.getPower());
+
 
         // Only needed on Nxt devices, but not on USB devices
-        wheelController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        TrackMovement.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        TrackMovement2.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
         // Reset the loop
         numOpLoops = 0;
       }
 
       // Update the current devMode
-      devMode = wheelController.getMotorControllerDeviceMode();
+      devMode = DriveTrain.getMotorControllerDeviceMode();*/
       numOpLoops++;
       }
 
@@ -283,6 +235,7 @@ public class MyTeleOp extends OpMode {
   private boolean allowedToWrite(){
     return (devMode == DcMotorController.DeviceMode.WRITE_ONLY);
   }
+
 
   double scaleInput(double dVal)  {
     double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,

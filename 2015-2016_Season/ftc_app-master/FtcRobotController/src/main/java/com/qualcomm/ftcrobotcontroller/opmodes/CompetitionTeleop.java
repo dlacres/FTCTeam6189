@@ -34,7 +34,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -44,7 +43,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class CompetitionTeleop extends OpMode {
 
-
+  //double armPosition;
 
   DcMotorController.DeviceMode devMode;
   DcMotorController DriveTrain;
@@ -56,6 +55,10 @@ public class CompetitionTeleop extends OpMode {
 
   DcMotorController TrackMovement2;
   DcMotor TrackInOut;
+
+  /*Servo arm;
+  ServoController Servo;
+  Servo arm2;*/
 
 
   int numOpLoops = 1;
@@ -72,13 +75,16 @@ public class CompetitionTeleop extends OpMode {
     TrackLeftRight = hardwareMap.dcMotor.get("TrackLeftRight");
     TrackUpDown = hardwareMap.dcMotor.get("TrackUpDown");
     TrackInOut = hardwareMap.dcMotor.get("TrackInOut");
-
+      /*arm = hardwareMap.servo.get("PreLoaded");
+      arm2 = hardwareMap.servo.get("ZipLine");*/
 
 
 
     DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
     TrackMovement = hardwareMap.dcMotorController.get("TrackMovement");
     TrackMovement2 = hardwareMap.dcMotorController.get("TrackMovement2");
+    //Servo=hardwareMap.servoController.get("Servo");
+
   }
 
   /*
@@ -100,7 +106,8 @@ public class CompetitionTeleop extends OpMode {
     TrackInOut.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     TrackLeftRight.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     TrackUpDown.setChannelMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-
+    //armPosition = 0.0;
+    //arm.setPosition(armPosition);
   }
 
   /*
@@ -133,14 +140,12 @@ public class CompetitionTeleop extends OpMode {
 
 
 
-      /*float right = -gamepad1.right_stick_y;
-      float left = gamepad1.left_stick_y;
+
 
 
        //clip the right/left values so that the values never exceed +/- 1
 
-      MotorRight.setPower(right);
-      MotorLeft.setPower(left);*/
+
 
 
       float throttle = -gamepad1.left_stick_y;
@@ -170,8 +175,8 @@ public class CompetitionTeleop extends OpMode {
       }*/
 
       //Control Tracks going up down left right using right stick of gamepad 2
-      float trackUpDown = gamepad2.right_stick_y;
-      float trackLeftRight = gamepad2.right_stick_x;
+      float trackUpDown = -(gamepad2.right_stick_y)/2;
+      float trackLeftRight = -(gamepad2.right_stick_x)/2;
 
       float TrackLeftRightPower = Range.clip(trackLeftRight, -1, 1);
       float TrackUpDownPower = Range.clip(trackUpDown, -1, 1);
@@ -180,11 +185,25 @@ public class CompetitionTeleop extends OpMode {
       TrackLeftRight.setPower(TrackLeftRightPower);
 
       //Control Tracks to pick up cubes
+
       float trackInOut=gamepad2.left_stick_y;
 
       float TrackInOutPower = Range.clip(trackInOut, -1, 1);
 
       TrackInOut.setPower(TrackInOutPower);
+
+      /*if(gamepad1.a)
+      {
+
+        armPosition=0.5;
+      }
+
+      if(gamepad1.b)
+      {
+        armPosition=0.0;
+      }
+
+        arm.setPosition(armPosition);*/
 
     }
 

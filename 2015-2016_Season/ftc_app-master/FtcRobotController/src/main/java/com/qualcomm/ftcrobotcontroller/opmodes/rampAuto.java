@@ -45,17 +45,22 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 public class rampAuto extends OpMode {
 
   DcMotorController.DeviceMode devMode;
-  DcMotorController wheelController;
-  DcMotor motorRight;
-  DcMotor motorLeft;
-  DcMotorController wheelController2;
-  DcMotor motorRight2;
-  DcMotor motorLeft2;
+  DcMotorController DriveTrain;
+  DcMotor MotorLeft;
+  DcMotor MotorRight;
+  DcMotorController TrackMovement;
+  DcMotor TrackLeftRight;
+  DcMotor TrackUpDown;
+
+  DcMotorController TrackMovement2;
+  DcMotor TrackInOut;
 
   int motorRightCurrentEncoder;
   int motorLeftCurrentEncoder;
   int motorRightTargetEncoder;
   int motorLeftTargetEncoder;
+  int motorLeftSpeed;
+  int motorRightSpeed;
 
   DcMotorController.RunMode motorRightRunMode;
   DcMotorController.RunMode motorLeftRunMode;
@@ -67,11 +72,15 @@ public class rampAuto extends OpMode {
     STATE_ZERO,
     STATE_ONE,
     STATE_TWO,
-    STATE_THREE
+    STATE_THREE,
+    State_FOUR,
+    State_FIVE,
+    State_SIX,
+    State_SEVEN
   }
-
-  int firstTarget = 1440*6;
- // int secondTarget = 0;
+  //140 encoder clicks per inch when going straight.
+  int firstTarget = -140*48;
+  int secondTarget = 180*10;
 
   /**
    * Constructor
@@ -88,22 +97,26 @@ public class rampAuto extends OpMode {
   public void init() {
 
     state = State.STATE_ZERO;
+    MotorLeft = hardwareMap.dcMotor.get("MotorLeft");
+    MotorRight = hardwareMap.dcMotor.get("MotorRight");
+    TrackLeftRight = hardwareMap.dcMotor.get("TrackLeftRight");
+    TrackUpDown = hardwareMap.dcMotor.get("TrackUpDown");
+    TrackInOut = hardwareMap.dcMotor.get("TrackInOut");
 
-    motorRight = hardwareMap.dcMotor.get("motor_2");
-    motorRight2 = hardwareMap.dcMotor.get("motor_4");
-    motorLeft2 = hardwareMap.dcMotor.get("motor_3");
-    motorLeft = hardwareMap.dcMotor.get("motor_1");
 
-    wheelController = hardwareMap.dcMotorController.get("wheels");
-    wheelController2 = hardwareMap.dcMotorController.get("wheels2");
+
+
+    DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
+    TrackMovement = hardwareMap.dcMotorController.get("TrackMovement");
+    TrackMovement2 = hardwareMap.dcMotorController.get("TrackMovement2");
     devMode = DcMotorController.DeviceMode.WRITE_ONLY;
-
+    MotorRight.setDirection(DcMotor.Direction.REVERSE);
 
 
     // set the mode
     // Nxt devices start up in "write" mode by default, so no need to switch device modes here.
-    motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-    motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    MotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    MotorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
 
     motorLeftRunMode = DcMotorController.RunMode.RUN_USING_ENCODERS;
     motorRightRunMode = DcMotorController.RunMode.RUN_USING_ENCODERS;
@@ -125,9 +138,10 @@ public class rampAuto extends OpMode {
         case STATE_ZERO:
           if (motorRightRunMode != DcMotorController.RunMode.RESET_ENCODERS ||
               motorLeftRunMode != DcMotorController.RunMode.RESET_ENCODERS) {
-            motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-            motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-          } else {
+            MotorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+            MotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+          } else
+          {
             state = State.STATE_ONE;
           }
           break;
@@ -135,41 +149,102 @@ public class rampAuto extends OpMode {
         case STATE_ONE:
           if (bothEncodersZero() &&
               motorsInCorrectMode(DcMotorController.RunMode.RUN_TO_POSITION)) {
-            motorLeft.setTargetPosition(firstTarget);
-            motorRight.setTargetPosition(firstTarget);
+            MotorLeft.setTargetPosition(firstTarget);
+            MotorRight.setTargetPosition(firstTarget);
             state = State.STATE_TWO;
           } else {
-            motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-            motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            MotorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            MotorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
           }
           break;
 
         case STATE_TWO:
 
 
-          motorLeft.setPower(1.0);
-          motorRight.setPower(1.0);
-          motorLeft2.setPower(1.0);
-          motorRight2.setPower(1.0);
+          MotorLeft.setPower(-0.5);
+          MotorRight.setPower(-0.5);
+
+
 
           if (motorLeftTargetEncoder == firstTarget && motorRightTargetEncoder == firstTarget) {
-            state = State.STATE_THREE;
+          state = State.STATE_THREE;
           }
           break;
 
         case STATE_THREE:
-          if (withinMarginOfError(firstTarget, motorLeftCurrentEncoder) &&
-              withinMarginOfError(firstTarget, motorRightCurrentEncoder)) {
+          if ( (motorRightCurrentEncoder < firstTarget) && (motorLeftCurrentEncoder < firstTarget))
+          {
 
-            motorLeft.setPower(0.0);
-            motorRight.setPower(0.0);
-            motorLeft2.setPower(0.0);
-            motorRight2.setPower(0.0);
+            MotorLeft.setPower(0.0);
+            MotorRight.setPower(0.0);
+            state = State.State_FOUR;
 
           }
 
+          else
+          {
+            MotorLeft.setPower(-0.5);
+            MotorRight.setPower(-0.5);
+          }
 
           break;
+
+        case State_FOUR:
+          if (motorRightRunMode != DcMotorController.RunMode.RESET_ENCODERS ||
+                  motorLeftRunMode != DcMotorController.RunMode.RESET_ENCODERS) {
+            MotorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+            MotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+          } else
+          {
+            state = State.State_FIVE;
+          }
+          break;
+
+        case State_FIVE:
+          if (bothEncodersZero() &&
+                  motorsInCorrectMode(DcMotorController.RunMode.RUN_TO_POSITION)) {
+            MotorLeft.setTargetPosition(-secondTarget);
+            MotorRight.setTargetPosition(secondTarget);
+            state = State.State_SIX;
+          } else {
+            MotorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            MotorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+          }
+          break;
+
+        case State_SIX:
+
+
+          MotorLeft.setPower(-0.5);
+          MotorRight.setPower(0.5);
+
+
+
+          if (motorLeftTargetEncoder == -firstTarget && motorRightTargetEncoder == firstTarget) {
+            state = State.State_SEVEN;
+          }
+          break;
+
+        case State_SEVEN:
+          if (motorRightCurrentEncoder<-secondTarget &&motorLeftCurrentEncoder>secondTarget)
+          {
+
+            MotorLeft.setPower(0.0);
+            MotorRight.setPower(0.0);
+            //state = State.State_FOUR;
+
+          }
+
+          else
+          {
+            MotorLeft.setPower(-0.5);
+            MotorRight.setPower(0.5);
+          }
+
+          break;
+
+
+
       }
     }
 
@@ -183,7 +258,7 @@ public class rampAuto extends OpMode {
       // using the USBDcMotorController, there is no need to switch, because USB can handle reads
       // and writes without changing modes. The NxtDcMotorControllers start up in "write" mode.
       // This method does nothing on USB devices, but is needed on Nxt devices.
-      wheelController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+      DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
     }
 
     // If we've switched to read mode, we can read data from the NXT device.
@@ -191,37 +266,37 @@ public class rampAuto extends OpMode {
     if (devMode == DcMotorController.DeviceMode.READ_ONLY) {
 
       // Update the reads after some loops, when the command has successfully propagated through.
-      telemetry.addData("motorLeft Power", motorLeft.getPower());
-      telemetry.addData("motorRight power", motorRight.getPower());
+      telemetry.addData("motorLeft Power", MotorLeft.getPower());
+      telemetry.addData("motorRight power", MotorRight.getPower());
 
-      motorRightCurrentEncoder = motorRight.getCurrentPosition();
-      motorLeftCurrentEncoder = motorLeft.getCurrentPosition();
+      motorRightCurrentEncoder = MotorRight.getCurrentPosition();
+      motorLeftCurrentEncoder = MotorLeft.getCurrentPosition();
 
       telemetry.addData("right curr enc", motorRightCurrentEncoder);
       telemetry.addData("left curr enc", motorLeftCurrentEncoder);
 
-      motorRightRunMode = motorRight.getChannelMode();
-      motorLeftRunMode = motorLeft.getChannelMode();
+      motorRightRunMode = MotorRight.getChannelMode();
+      motorLeftRunMode = MotorLeft.getChannelMode();
 
       telemetry.addData("right runmode", "right runmode: " + motorRightRunMode.toString());
       telemetry.addData("left runmode", "left runmode: " + motorLeftRunMode.toString());
 
-      motorLeftTargetEncoder = motorLeft.getTargetPosition();
-      motorRightTargetEncoder = motorRight.getTargetPosition();
+      motorLeftTargetEncoder = MotorLeft.getTargetPosition();
+      motorRightTargetEncoder = MotorRight.getTargetPosition();
 
       telemetry.addData("right target", motorRightTargetEncoder);
       telemetry.addData("left target", motorLeftTargetEncoder);
       telemetry.addData("state", state);
 
       // Only needed on Nxt devices, but not on USB devices
-      wheelController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+      DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
       // Reset the loop
       numOpLoops = 0;
     }
 
     // Update the current devMode
-    devMode = wheelController.getMotorControllerDeviceMode();
+    devMode = DriveTrain.getMotorControllerDeviceMode();
     numOpLoops++;
 
   }
@@ -233,13 +308,14 @@ public class rampAuto extends OpMode {
   @Override
   public void stop() {
     if (allowedToWrite()) {
-      motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-      motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+      MotorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+      MotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
   }
 
-  private boolean allowedToWrite(){
+  private boolean allowedToWrite()
+  {
     return (devMode == DcMotorController.DeviceMode.WRITE_ONLY);
   }
 

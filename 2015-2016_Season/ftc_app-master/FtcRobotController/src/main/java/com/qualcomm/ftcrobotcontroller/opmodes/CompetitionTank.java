@@ -132,7 +132,7 @@ public class CompetitionTank extends OpMode {
 
 
       float right = gamepad1.right_stick_y;
-      float left = gamepad1.left_stick_y;
+      float left = -gamepad1.left_stick_y;
 
 
        //clip the right/left values so that the values never exceed +/- 1

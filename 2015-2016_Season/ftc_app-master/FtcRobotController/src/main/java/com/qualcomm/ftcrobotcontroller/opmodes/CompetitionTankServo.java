@@ -107,7 +107,7 @@ public class CompetitionTankServo extends OpMode {
     TrackMovement2.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-    ArmFlipper.setPosition(0);
+    ArmFlipper.setPosition(0.8);
 
   }
 
@@ -141,8 +141,8 @@ public class CompetitionTankServo extends OpMode {
 
 
 
-      float right = gamepad1.right_stick_y;
-      float left = gamepad1.left_stick_y;
+      float right = -gamepad1.right_stick_y;
+      float left = -gamepad1.left_stick_y;
 
 
        //clip the right/left values so that the values never exceed +/- 1
@@ -161,7 +161,7 @@ public class CompetitionTankServo extends OpMode {
 
     if(gamepad1.a)
     {
-      ArmFlipper.setPosition(1);
+      ArmFlipper.setPosition(0.9);
     }
 
       if(gamepad1.b)

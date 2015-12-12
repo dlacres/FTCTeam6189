@@ -78,13 +78,13 @@ public class lowZone extends OpMode {
     STATE_ONE,
     STATE_TWO,
     STATE_THREE,
-    State_FOUR,
+    STATE_FOUR,
     State_FIVE,
     State_SIX,
     State_SEVEN
   }
   //140 encoder clicks per inch when going straight.
-  int firstTarget = -140*115;
+  int firstTarget = -140*124;
  // int secondTarget = 0;
 
   /**
@@ -151,7 +151,7 @@ public class lowZone extends OpMode {
             MotorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
           } else
           {
-            ArmFlipper.setPosition(0.5);
+            //ArmFlipper.setPosition(0.7);
             state = State.STATE_ONE;
           }
           break;
@@ -171,38 +171,38 @@ public class lowZone extends OpMode {
         case STATE_TWO:
 
 
-          MotorLeft.setPower(-0.5);
-          MotorRight.setPower(-0.5);
+          MotorLeft.setPower(-0.7);
+          MotorRight.setPower(-0.7);
           TrackUpDown.setPower(0.07);
 
 
 
-          if (motorLeftTargetEncoder == firstTarget && motorRightTargetEncoder == firstTarget) {
+          if ((motorLeftTargetEncoder == firstTarget) && (motorRightTargetEncoder == firstTarget))
+          {
           state = State.STATE_THREE;
           }
           break;
 
         case STATE_THREE:
-          if (motorRightCurrentEncoder<firstTarget &&motorLeftCurrentEncoder<firstTarget)
+          if ((motorRightCurrentEncoder <= firstTarget) && (motorLeftCurrentEncoder <= firstTarget))
           {
-
+            state = State.STATE_FOUR;
             MotorLeft.setPower(0.0);
             MotorRight.setPower(0.0);
             TrackUpDown.setPower(0);
-            state = State.State_FOUR;
+
 
 
           }
 
           else
           {
-            MotorLeft.setPower(-0.5);
-            MotorRight.setPower(-0.5);
+            MotorLeft.setPower(-0.7);
+            MotorRight.setPower(-0.7);
           }
-
           break;
 
-        case State_FOUR:
+        case STATE_FOUR:
 
           ArmFlipper.setPosition(0);
 
@@ -214,7 +214,7 @@ public class lowZone extends OpMode {
     // To read any values from the NXT controllers, we need to switch into READ_ONLY mode.
     // It takes time for the hardware to switch, so you can't switch modes within one loop of the
     // op mode. Every 17th loop, this op mode switches to READ_ONLY mode.
-    if (numOpLoops % 17 == 0) {
+    if (numOpLoops % 25 == 0) {
       // Note: If you are using the NxtDcMotorController, you need to switch into "read" mode
       // before doing a read, and into "write" mode before doing a write. This is because
       // the NxtDcMotorController is on the I2C interface, and can only do one at a time. If you are

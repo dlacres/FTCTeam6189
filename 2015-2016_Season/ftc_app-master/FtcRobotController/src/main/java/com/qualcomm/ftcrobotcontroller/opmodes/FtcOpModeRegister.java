@@ -56,12 +56,12 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("NullOp", NullOp.class);
-    manager.register("CompetitionTeleop", CompetitionTeleop.class);
-    manager.register("CompetitionTank", CompetitionTank.class);
-    manager.register("rampAuto", rampAuto.class);
+    //manager.register("CompetitionTeleop", CompetitionTeleop.class);
+    //manager.register("CompetitionTank", CompetitionTank.class);
+    //manager.register("rampAuto", rampAuto.class);
     manager.register("lowZoneAuto",lowZone.class);
     manager.register("TankServo",CompetitionTankServo.class);
-    manager.register("SoftwareTeleop",SoftwareTeleop.class);
+    //manager.register("SoftwareTeleop",SoftwareTeleop.class);
 
 
     //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);

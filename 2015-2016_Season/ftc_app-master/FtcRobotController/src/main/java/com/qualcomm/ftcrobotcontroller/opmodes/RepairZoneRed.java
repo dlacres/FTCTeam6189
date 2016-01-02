@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.hardware.ServoController;
  * Very simple op mode that demonstrates a state machine with the NXT motor controllers.
  * Should move forward, and then move backwards to its original location.
  */
-public class lowZone extends OpMode {
+public class RepairZoneRed extends OpMode {
 
   DcMotorController.DeviceMode devMode;
   DcMotorController DriveTrain;
@@ -91,14 +91,14 @@ public class lowZone extends OpMode {
     State_SEVEN
   }
   //140 encoder clicks per inch when going straight.
-  int firstTarget = -140 * 96;
-  int secondTarget = -1500;
-  int thirdTarget = -140 * 36;
+  int firstTarget = -140 * 105;
+  int secondTarget = -1200;
+  int thirdTarget = -140 * 23;
 
   /**
    * Constructor
    */
-  public lowZone() {
+  public RepairZoneRed() {
 
   }
 
@@ -212,7 +212,7 @@ public class lowZone extends OpMode {
 
           case STATE_TWO:
 
-            ArmFlipper.setPosition(0);
+            //ArmFlipper.setPosition(0);
 
             break;
 

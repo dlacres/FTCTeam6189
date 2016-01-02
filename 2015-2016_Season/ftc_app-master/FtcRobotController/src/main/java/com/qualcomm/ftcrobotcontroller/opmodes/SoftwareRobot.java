@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class CompetitionTankServo extends OpMode {
+public class SoftwareRobot extends OpMode {
 
 
 
@@ -51,16 +51,9 @@ public class CompetitionTankServo extends OpMode {
   DcMotorController DriveTrain;
   DcMotor MotorLeft;
   DcMotor MotorRight;
-  DcMotorController TrackMovement;
-  DcMotor TrackLeftRight;
-  DcMotor TrackUpDown;
 
-  DcMotorController TrackMovement2;
-  DcMotor TrackInOut;
 
-  Servo ArmFlipper;
-  Servo PauletteTrigger;
-  ServoController ServoController;
+
 
 
   int numOpLoops = 1;
@@ -74,20 +67,13 @@ public class CompetitionTankServo extends OpMode {
 
     MotorLeft = hardwareMap.dcMotor.get("MotorLeft");
     MotorRight = hardwareMap.dcMotor.get("MotorRight");
-    TrackLeftRight = hardwareMap.dcMotor.get("TrackLeftRight");
-    TrackUpDown = hardwareMap.dcMotor.get("TrackUpDown");
-    TrackInOut = hardwareMap.dcMotor.get("TrackInOut");
+
 
 
 
 
     DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
-    TrackMovement = hardwareMap.dcMotorController.get("TrackMovement");
-    TrackMovement2 = hardwareMap.dcMotorController.get("TrackMovement2");
 
-    ServoController= hardwareMap.servoController.get("ServoController");
-    ArmFlipper=hardwareMap.servo.get("ArmFlipper");
-    PauletteTrigger=hardwareMap.servo.get("PauletteTrigger");
   }
 
   /*
@@ -105,12 +91,9 @@ public class CompetitionTankServo extends OpMode {
     // set the mode
     // Nxt devices start up in "write" mode by default, so no need to switch device modes here.
 
-    TrackMovement.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-    TrackMovement2.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     DriveTrain.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-    ArmFlipper.setPosition(0.8);
-    PauletteTrigger.setPosition(0);
+
 
   }
 
@@ -144,8 +127,8 @@ public class CompetitionTankServo extends OpMode {
 
 
 
-      float right = (gamepad1.right_stick_y);
-      float left = -(gamepad1.left_stick_y);
+      float right = (gamepad1.right_stick_y)/30;
+      float left = -(gamepad1.left_stick_y)/30;
 
 
        //clip the right/left values so that the values never exceed +/- 1
@@ -162,15 +145,7 @@ public class CompetitionTankServo extends OpMode {
 
       // write the values to the motors
 
-    if(gamepad1.a)
-    {
-      ArmFlipper.setPosition(0.9);
-    }
 
-      if(gamepad1.b)
-      {
-        ArmFlipper.setPosition(0);
-      }
 
 
 
@@ -180,32 +155,8 @@ public class CompetitionTankServo extends OpMode {
 
       }*/
 
-      //Control Tracks going up down left right using right stick of gamepad 2
-      float trackUpDown = -(gamepad2.right_stick_y)/3;
-      float trackLeftRight = -(gamepad2.right_stick_x)/3;
-
-      float TrackLeftRightPower = Range.clip(trackLeftRight, -1, 1);
-      float TrackUpDownPower = Range.clip(trackUpDown, -1, 1);
-
-      TrackUpDown.setPower(TrackUpDownPower);
-      TrackLeftRight.setPower(TrackLeftRightPower);
-
       //Control Tracks to pick up cubes
-      float trackInOut=gamepad2.left_stick_y;
 
-      float TrackInOutPower = Range.clip(trackInOut, -1, 1);
-
-      TrackInOut.setPower(TrackInOutPower);
-
-      if(gamepad2.a)
-      {
-        PauletteTrigger.setPosition(0.9);
-      }
-
-      if(gamepad2.b)
-      {
-        PauletteTrigger.setPosition(0);
-      }
 
 
 

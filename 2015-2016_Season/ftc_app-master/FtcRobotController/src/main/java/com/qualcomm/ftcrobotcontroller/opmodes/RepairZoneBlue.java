@@ -44,7 +44,7 @@ import com.qualcomm.robotcore.hardware.ServoController;
  * Very simple op mode that demonstrates a state machine with the NXT motor controllers.
  * Should move forward, and then move backwards to its original location.
  */
-public class lowZone extends OpMode {
+public class RepairZoneBlue extends OpMode {
 
   DcMotorController.DeviceMode devMode;
   DcMotorController DriveTrain;
@@ -91,14 +91,14 @@ public class lowZone extends OpMode {
     State_SEVEN
   }
   //140 encoder clicks per inch when going straight.
-  int firstTarget = -140 * 96;
-  int secondTarget = -1500;
-  int thirdTarget = -140 * 36;
+  int firstTarget = -140 * 81;
+  int secondTarget = -1200;
+  int thirdTarget = -140 * 39;
 
   /**
    * Constructor
    */
-  public lowZone() {
+  public RepairZoneBlue() {
 
   }
 
@@ -195,8 +195,8 @@ public class lowZone extends OpMode {
           case STATE_ONE:
 
 
-            motorLeftTargetEncoder = secondTarget + firstTarget;
-            motorRightTargetEncoder = secondTarget - firstTarget;
+            motorLeftTargetEncoder = secondTarget - firstTarget;
+            motorRightTargetEncoder = secondTarget + firstTarget;
 
             // if((motorLeftCurrentEncoder<=motorLeftTargetEncoder)&&(motorRightCurrentEncoder>=motorRightTargetEncoder))
             if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder)) {
@@ -204,22 +204,22 @@ public class lowZone extends OpMode {
               MotorRight.setPower(0.0);
               state_mach = State.STATE_THREE;
             } else {
-              MotorLeft.setPower(-0.7);
-              MotorRight.setPower(0.7);
+              MotorLeft.setPower(0.7);
+              MotorRight.setPower(-0.7);
             }
 
             break;
 
           case STATE_TWO:
 
-            ArmFlipper.setPosition(0);
+            //ArmFlipper.setPosition(0);
 
             break;
 
           case STATE_THREE:
 
-            motorLeftTargetEncoder = secondTarget + firstTarget + thirdTarget;
-            motorRightTargetEncoder = secondTarget - firstTarget + thirdTarget;
+            motorLeftTargetEncoder = secondTarget - firstTarget + thirdTarget;
+            motorRightTargetEncoder = secondTarget + firstTarget + thirdTarget;
 
             if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder)) {
               MotorLeft.setPower(0.0);

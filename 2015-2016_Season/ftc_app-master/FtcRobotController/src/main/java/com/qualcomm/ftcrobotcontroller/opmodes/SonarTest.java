@@ -31,20 +31,50 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-
-
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 /**
  * TeleOp Mode
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class CompetitionTankServo extends TeleopRobotHardware {
+public class SonarTest extends OpMode {
 
 
 
+
+  UltrasonicSensor Sonar;
+
+
+
+
+  int numOpLoops = 1;
+
+  /*
+   * Code to run when the op mode is first enabled goes here
+   * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#init()
+   */
+  @Override
+  public void init() {
+
+  Sonar=hardwareMap.ultrasonicSensor.get("Sonar");
+  }
+
+  /*
+   * Code that runs repeatedly when the op mode is first enabled goes here
+   * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#init_loop()
+   */
+  @Override
+  public void init_loop() {
+
+
+
+
+
+  }
 
   /*
    * This method will be called repeatedly in a loop
@@ -76,14 +106,7 @@ public class CompetitionTankServo extends TeleopRobotHardware {
 
 
 
-      float right = (gamepad1.right_stick_y);
-      float left = -(gamepad1.left_stick_y);
 
-
-       //clip the right/left values so that the values never exceed +/- 1
-
-      MotorRight.setPower(right);
-      MotorLeft.setPower(left);
 
 
 
@@ -94,38 +117,9 @@ public class CompetitionTankServo extends TeleopRobotHardware {
 
       // write the values to the motors
 
-    if(gamepad1.a)
-    {
-      PauletteFlipper.setPosition(0.9);
-    }
-
-      if(gamepad1.b)
-      {
-        PauletteFlipper.setPosition(0);
-      }
-
-
-      if(gamepad1.left_bumper)
-      {
-        ArmFlipperLeft.setPosition(0);
-      }
-
-      if(gamepad1.left_trigger > 0)
-      {
-        ArmFlipperLeft.setPosition(0.5);
-      }
 
 
 
-      if(gamepad1.right_trigger > 0)
-      {
-        ArmFlipperRight.setPosition(0.5);
-      }
-
-      if(gamepad1.right_bumper)
-      {
-        ArmFlipperRight.setPosition(1);
-      }
 
     /*
      * Gamepad 2
@@ -133,91 +127,13 @@ public class CompetitionTankServo extends TeleopRobotHardware {
 
       }*/
 
+      //Control Tracks to pick up cubes
 
 
-      //Control Tracks going up down left right using right stick of gamepad 2
-      if(Mode==0)
-      {
-        float trackUpDown = -(gamepad2.right_stick_y)/3;
 
 
-        float TrackUpDownPower = Range.clip(trackUpDown, -1, 1);
 
-        TrackUpDown.setPower(TrackUpDownPower);
-      }
-
-      else if (Mode==1)
-      {
-        float trackUpDown = -(gamepad2.right_stick_y);
-
-
-        float TrackUpDownPower = Range.clip(trackUpDown, -1, 1);
-
-        TrackUpDown.setPower(TrackUpDownPower);
-      }
-
-        if(gamepad2.dpad_down)
-        {
-          LinearSlidePower2 = 0.1f;
-          LinearSlide2.setPower(LinearSlidePower2);
-        }
-      else if(gamepad2.dpad_up)
-      {
-        LinearSlidePower2 = -0.1f;
-        LinearSlide2.setPower(LinearSlidePower2);
-      }
-      else
-      {
-        LinearSlidePower2 = 0.0f;
-        LinearSlide2.setPower(LinearSlidePower2);
-      }
-
-      if(gamepad2.y)
-      {
-        LinearSlidePower = 1;
-        LinearSlide.setPower(LinearSlidePower);
-      }
-      else if(gamepad2.a)
-      {
-        LinearSlidePower = -1;
-        LinearSlide.setPower(LinearSlidePower);
-      }
-      else
-      {
-        LinearSlidePower = 0;
-        LinearSlide.setPower(LinearSlidePower);
-      }
-
-      if(gamepad2.left_trigger > 0)
-      {
-      Winch.setPower(1);
-      }
-     else if(gamepad2.right_trigger > 0)
-      {
-        Winch.setPower(-1);
-      }
-      else
-      {
-        Winch.setPower(0);
-      }
-
-
-      if (gamepad2.left_bumper)
-      {
-        Plow.setPosition(0.1);
-      }
-
-      if (gamepad2.right_bumper)
-      {
-        Plow.setPosition(0.9);
-      }
     telemetry.addData("Sonar : ", Sonar.getUltrasonicLevel());
-    telemetry.addData("LinearSlidePower : ", LinearSlidePower);
-    telemetry.addData("LinearSlidePower2 : ", LinearSlidePower2);
-
-
-
-
 
     // To read any values from the NXT controllers, we need to switch into READ_ONLY mode.
     // It takes time for the hardware to switch, so you can't switch modes within one loop of the
@@ -260,15 +176,14 @@ public class CompetitionTankServo extends TeleopRobotHardware {
     }*/
 
     // Update the current devMode
-    devMode = DriveTrain.getMotorControllerDeviceMode();
-    numOpLoops++;
+
   }
 
 
   // If the device is in either of these two modes, the op mode is allowed to write to the HW.
-  private boolean allowedToWrite(){
-    return (devMode == DcMotorController.DeviceMode.WRITE_ONLY);
-  }
+ // private boolean allowedToWrite(){
+ //   return (devMode == DcMotorController.DeviceMode.WRITE_ONLY);
+  //}
 
 
   double scaleInput(double dVal)  {

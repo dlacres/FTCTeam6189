@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 /**
  * NxtEncoderOp
@@ -50,26 +51,27 @@ public class RepairZoneRed extends OpMode {
   DcMotorController DriveTrain;
   DcMotor MotorLeft;
   DcMotor MotorRight;
-  DcMotorController TrackMovement;
-  DcMotor TrackLeftRight;
-  DcMotor TrackUpDown;
+  DcMotorController DriveTrainEncoder;
 
-  DcMotorController TrackMovement2;
-  DcMotor TrackInOut;
+
+
 
   DcMotor MotorLeftEncoder;
   DcMotor MotorRightEncoder;
-  DcMotorController DriveTrainEncoder;
 
-  DcMotorController TrackMovementEncoder;
-  DcMotor TrackLeftRightEncoder;
-  DcMotor TrackUpDownEncoder;
 
-  Servo ArmFlipper;
+
+
+  Servo ArmFlipperRight;
+  Servo ArmFlipperLeft;
+  Servo PauletteFlipper;
+  Servo Plow;
   ServoController ServoController;
+  UltrasonicSensor Sonar;
 
-  int motorRightCurrentEncoder;
-  int motorLeftCurrentEncoder;
+
+  //int motorRightCurrentEncoder;
+  //int motorLeftCurrentEncoder;
   int motorRightTargetEncoder;
   int motorLeftTargetEncoder;
 
@@ -91,9 +93,9 @@ public class RepairZoneRed extends OpMode {
     State_SEVEN
   }
   //140 encoder clicks per inch when going straight.
-  int firstTarget = -140 * 105;
-  int secondTarget = -1200;
-  int thirdTarget = -140 * 23;
+  int firstTarget = 140 * 90;
+  int secondTarget = 1200;
+  int thirdTarget = 140 * 23;
 
   /**
    * Constructor
@@ -109,30 +111,32 @@ public class RepairZoneRed extends OpMode {
   @Override
   public void init() {
 
-    state_mach = State.STATE_ZERO;
+    state_mach = State.State_SEVEN;
     MotorLeft = hardwareMap.dcMotor.get("MotorLeft");
     MotorRight = hardwareMap.dcMotor.get("MotorRight");
-    TrackLeftRight = hardwareMap.dcMotor.get("TrackLeftRight");
-    TrackUpDown = hardwareMap.dcMotor.get("TrackUpDown");
-    TrackInOut = hardwareMap.dcMotor.get("TrackInOut");
-    MotorLeftEncoder=hardwareMap.dcMotor.get("MotorLeftEncoder");
-    MotorRightEncoder=hardwareMap.dcMotor.get("MotorRightEncoder");
-    TrackUpDownEncoder = hardwareMap.dcMotor.get("TrackUpDownEncoder");
-    TrackLeftRightEncoder = hardwareMap.dcMotor.get("TrackLeftRightEncoder");
+    MotorLeftEncoder = hardwareMap.dcMotor.get("LinearSlide");
+    MotorRightEncoder = hardwareMap.dcMotor.get("TrackUpDown");
+
+    MotorLeftEncoder=hardwareMap.dcMotor.get("TrackUpDown");
+    MotorRightEncoder=hardwareMap.dcMotor.get("LinearSlide");
+
 
 
     DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
-    TrackMovement = hardwareMap.dcMotorController.get("TrackMovement");
-    TrackMovement2 = hardwareMap.dcMotorController.get("TrackMovement2");
-    ServoController= hardwareMap.servoController.get("ServoController");
-    DriveTrainEncoder=hardwareMap.dcMotorController.get("DriveTrainEncoder");
-    TrackMovementEncoder =hardwareMap.dcMotorController.get("TrackMovementEncoder");
+    DriveTrainEncoder = hardwareMap.dcMotorController.get("TrackMovement");
 
-    ArmFlipper=hardwareMap.servo.get("ArmFlipper");
+
+    ServoController = hardwareMap.servoController.get("ServoController");
+    ArmFlipperRight = hardwareMap.servo.get("ArmFlipperRight");
+    ArmFlipperLeft = hardwareMap.servo.get("ArmFlipperLeft");
+    PauletteFlipper = hardwareMap.servo.get("PauletteFlipper");
+    Plow = hardwareMap.servo.get("Plow");
+    Sonar = hardwareMap.ultrasonicSensor.get("Sonar");
 
     MotorRight.setDirection(DcMotor.Direction.REVERSE);
     MotorRightEncoder.setDirection(DcMotor.Direction.REVERSE);
-
+    MotorLeft.setDirection(DcMotor.Direction.REVERSE);
+    //MotorLeftEncoder.setDirection(DcMotor.Direction.REVERSE);
 
     MotorRightEncoder.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     MotorLeftEncoder.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -142,8 +146,10 @@ public class RepairZoneRed extends OpMode {
     // Nxt devices start up in "write" mode by default, so no need to switch device modes here.
 
 
-    ArmFlipper.setPosition(0.9);
-
+    PauletteFlipper.setPosition(0.9);
+    ArmFlipperLeft.setPosition(0);
+    ArmFlipperRight.setPosition(1);
+    Plow.setPosition(0.1);
   }
 
   /*
@@ -166,7 +172,7 @@ public class RepairZoneRed extends OpMode {
     if(NumLoop == 12) {
 
       DriveTrainEncoder.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-      TrackMovementEncoder.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
     }
 
       if (NumLoop >= 14) {
@@ -177,17 +183,19 @@ public class RepairZoneRed extends OpMode {
           case STATE_ZERO:
 
 
-            MotorLeft.setPower(-0.7);
-            MotorRight.setPower(-0.7);
+            MotorLeft.setPower(0.7);
+            MotorRight.setPower(0.7);
 
             //if((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder)&&(MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder))
-            if ((MotorLeftEncoder.getCurrentPosition() <= firstTarget) && (MotorRightEncoder.getCurrentPosition() <= firstTarget)) {
+            if ((MotorLeftEncoder.getCurrentPosition() >= firstTarget) && (MotorRightEncoder.getCurrentPosition() >= firstTarget)) {
               MotorLeft.setPower(0.0);
               MotorRight.setPower(0.0);
               state_mach = State.STATE_ONE;
-            } else {
-              MotorLeft.setPower(-0.7);
-              MotorRight.setPower(-0.7);
+            }
+            else
+            {
+              MotorLeft.setPower(0.7);
+              MotorRight.setPower(0.7);
             }
 
             break;
@@ -199,7 +207,7 @@ public class RepairZoneRed extends OpMode {
             motorRightTargetEncoder = secondTarget - firstTarget;
 
             // if((motorLeftCurrentEncoder<=motorLeftTargetEncoder)&&(motorRightCurrentEncoder>=motorRightTargetEncoder))
-            if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder)) {
+            if ((MotorLeftEncoder.getCurrentPosition() >= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() >= motorRightTargetEncoder)) {
               MotorLeft.setPower(0.0);
               MotorRight.setPower(0.0);
               state_mach = State.STATE_THREE;
@@ -221,16 +229,27 @@ public class RepairZoneRed extends OpMode {
             motorLeftTargetEncoder = secondTarget + firstTarget + thirdTarget;
             motorRightTargetEncoder = secondTarget - firstTarget + thirdTarget;
 
-            if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder)) {
+            //if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder))
+            if(Sonar.getUltrasonicLevel()<25)
+            {
               MotorLeft.setPower(0.0);
               MotorRight.setPower(0.0);
               state_mach = State.STATE_TWO;
-            } else {
-              MotorLeft.setPower(-0.7);
-              MotorRight.setPower(-0.7);
             }
 
+            else
+            {
+              MotorLeft.setPower(0.4);
+              MotorRight.setPower(0.4);
+            }
             break;
+
+          case State_SEVEN:
+            Plow.setPosition(0.9);
+            state_mach = State.STATE_ZERO;
+
+            break;
+
         }
         telemetry.addData("Telemetry", "Data");
         telemetry.addData("right curr enc", MotorRightEncoder.getCurrentPosition());
@@ -255,7 +274,7 @@ public class RepairZoneRed extends OpMode {
    */
   @Override
   public void stop() {
-    ArmFlipper.setPosition(0);
+    PauletteFlipper.setPosition(0);
 
   }
 

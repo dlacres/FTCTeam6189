@@ -85,6 +85,7 @@ public class MRGyroTest extends LinearOpMode {
       if(gamepad1.a && gamepad1.b)  {
         // reset heading.
         sensorGyro.resetZAxisIntegrator();
+
       }
 
       // get the x, y, and z values (rate of change of angle).

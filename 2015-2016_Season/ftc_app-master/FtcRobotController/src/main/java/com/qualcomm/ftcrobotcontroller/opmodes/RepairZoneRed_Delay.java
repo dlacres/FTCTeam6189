@@ -35,10 +35,10 @@ import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * NxtEncoderOp
@@ -46,17 +46,19 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
  * Very simple op mode that demonstrates a state machine with the NXT motor controllers.
  * Should move forward, and then move backwards to its original location.
  */
-public class RepairZoneBlue extends OpMode {
+public class RepairZoneRed_Delay extends OpMode {
 
   DcMotorController.DeviceMode devMode;
   DcMotorController DriveTrain;
   DcMotor MotorLeft;
   DcMotor MotorRight;
+  DcMotorController DriveTrainEncoder;
+
+
 
 
   DcMotor MotorLeftEncoder;
   DcMotor MotorRightEncoder;
-  DcMotorController DriveTrainEncoder;
 
 
 
@@ -68,11 +70,9 @@ public class RepairZoneBlue extends OpMode {
   ServoController ServoController;
   UltrasonicSensor Sonar;
 
-
-
-
-  int motorRightCurrentEncoder;
-  int motorLeftCurrentEncoder;
+  private ElapsedTime runtime = new ElapsedTime();
+  //int motorRightCurrentEncoder;
+  //int motorLeftCurrentEncoder;
   int motorRightTargetEncoder;
   int motorLeftTargetEncoder;
 
@@ -80,6 +80,7 @@ public class RepairZoneBlue extends OpMode {
   DcMotorController.RunMode motorLeftRunMode;
 
   int NumLoop = 0;
+  int DelayCount = 0;
 
 
   State state_mach;
@@ -94,14 +95,14 @@ public class RepairZoneBlue extends OpMode {
     State_SEVEN
   }
   //140 encoder clicks per inch when going straight.
-  int firstTarget = 140 * 81;
+  int firstTarget = 140 * 90;
   int secondTarget = 1200;
-  int thirdTarget = 140 * 39;
+  int thirdTarget = 140 * 23;
 
   /**
    * Constructor
    */
-  public RepairZoneBlue() {
+  public RepairZoneRed_Delay() {
 
   }
 
@@ -115,14 +116,16 @@ public class RepairZoneBlue extends OpMode {
     state_mach = State.State_SEVEN;
     MotorLeft = hardwareMap.dcMotor.get("MotorLeft");
     MotorRight = hardwareMap.dcMotor.get("MotorRight");
+    MotorLeftEncoder = hardwareMap.dcMotor.get("LinearSlide");
+    MotorRightEncoder = hardwareMap.dcMotor.get("TrackUpDown");
+
     MotorLeftEncoder=hardwareMap.dcMotor.get("TrackUpDown");
     MotorRightEncoder=hardwareMap.dcMotor.get("LinearSlide");
 
 
+
     DriveTrain = hardwareMap.dcMotorController.get("DriveTrain");
     DriveTrainEncoder = hardwareMap.dcMotorController.get("TrackMovement");
-
-
 
 
     ServoController = hardwareMap.servoController.get("ServoController");
@@ -134,7 +137,8 @@ public class RepairZoneBlue extends OpMode {
 
     MotorRight.setDirection(DcMotor.Direction.REVERSE);
     MotorRightEncoder.setDirection(DcMotor.Direction.REVERSE);
-
+    MotorLeft.setDirection(DcMotor.Direction.REVERSE);
+    //MotorLeftEncoder.setDirection(DcMotor.Direction.REVERSE);
 
     MotorRightEncoder.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     MotorLeftEncoder.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -144,12 +148,11 @@ public class RepairZoneBlue extends OpMode {
     // Nxt devices start up in "write" mode by default, so no need to switch device modes here.
 
 
-
     PauletteFlipper.setPosition(0.9);
     ArmFlipperLeft.setPosition(0);
     ArmFlipperRight.setPosition(1);
     Plow.setPosition(0.1);
-
+    runtime.reset();
   }
 
   /*
@@ -172,9 +175,14 @@ public class RepairZoneBlue extends OpMode {
     if(NumLoop == 12) {
 
       DriveTrainEncoder.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
     }
 
-      if (NumLoop >= 14) {
+      if (NumLoop >= 14)
+      {
+
+      if(runtime.time() >= 5)
+      {
 
         switch (state_mach) {
 
@@ -209,8 +217,8 @@ public class RepairZoneBlue extends OpMode {
               MotorRight.setPower(0.0);
               state_mach = State.STATE_THREE;
             } else {
-              MotorLeft.setPower(0.7);
-              MotorRight.setPower(-0.7);
+              MotorLeft.setPower(-0.7);
+              MotorRight.setPower(0.7);
             }
 
             break;
@@ -227,14 +235,13 @@ public class RepairZoneBlue extends OpMode {
             motorRightTargetEncoder = secondTarget - firstTarget + thirdTarget;
 
             //if ((MotorLeftEncoder.getCurrentPosition() <= motorLeftTargetEncoder) && (MotorRightEncoder.getCurrentPosition() <= motorRightTargetEncoder))
-            if(Sonar.getUltrasonicLevel()<25)
-            {
+            if (Sonar.getUltrasonicLevel() < 25) {
               MotorLeft.setPower(0.0);
               MotorRight.setPower(0.0);
               state_mach = State.STATE_TWO;
             } else {
-              MotorLeft.setPower(0.7);
-              MotorRight.setPower(0.7);
+              MotorLeft.setPower(0.4);
+              MotorRight.setPower(0.4);
             }
 
             break;
@@ -242,16 +249,21 @@ public class RepairZoneBlue extends OpMode {
           case State_SEVEN:
             Plow.setPosition(0.9);
             state_mach = State.STATE_ZERO;
+
             break;
+
         }
+      }
         telemetry.addData("Telemetry", "Data");
         telemetry.addData("right curr enc", MotorRightEncoder.getCurrentPosition());
         telemetry.addData("left curr enc", MotorLeftEncoder.getCurrentPosition());
         telemetry.addData("state", state_mach);
+        telemetry.addData("Time", runtime.time());
+        telemetry.addData("Tim",getRuntime());
       }
 
 
-
+    DelayCount++;
     NumLoop++;
     }//end of loop
 
@@ -267,6 +279,7 @@ public class RepairZoneBlue extends OpMode {
    */
   @Override
   public void stop() {
+    PauletteFlipper.setPosition(0);
 
   }
 

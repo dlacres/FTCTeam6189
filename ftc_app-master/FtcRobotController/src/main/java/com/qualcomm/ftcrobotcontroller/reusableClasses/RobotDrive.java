@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class RobotDrive {
 
-    scaleInput myscaleInput;
-    private DcMotor rightMotor;
-    private DcMotor leftMotor;
+
+    DcMotor rightMotor;
+    DcMotor leftMotor;
 
 
 
@@ -18,7 +18,6 @@ public class RobotDrive {
     {
         leftMotor = left;
         rightMotor = right;
-        myscaleInput = new scaleInput();
     }
 
     public void arcadeDrive(float forwardSpeed, float turnRate)
@@ -34,8 +33,6 @@ public class RobotDrive {
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
 
-        rightspd = (float)myscaleInput.scaleValue(rightspd);
-        leftspd =  (float)myscaleInput.scaleValue(leftspd);
 
         // write the values to the motors
         leftMotor.setPower(leftspd);
@@ -53,8 +50,6 @@ public class RobotDrive {
         // scale the joystick value to make it easier to control
         // the robot more precisely at slower speeds.
 
-        rightSpd = (float)myscaleInput.scaleValue(rightSpd);
-        leftSpd =  (float)myscaleInput.scaleValue(leftSpd);
 
         // write the values to the motors
         leftMotor.setPower(leftSpd);

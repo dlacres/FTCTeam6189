@@ -109,6 +109,8 @@ public class FtcRobotControllerActivity extends Activity {
   protected FtcEventLoop eventLoop;
   protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
 
+  protected static FTCVuforia vuforia;
+
   protected class RobotRestarter implements Restarter {
 
     public void requestRestart() {
@@ -203,6 +205,8 @@ public class FtcRobotControllerActivity extends Activity {
         textGamepad, textOpMode, textErrorMessage, textDeviceName);
     callback = updateUI.new Callback();
 
+    vuforia = new FTCVuforia(this);
+
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -242,16 +246,20 @@ public class FtcRobotControllerActivity extends Activity {
   @Override
   protected void onResume() {
     super.onResume();
+    vuforia.resumeVuforia();
   }
 
   @Override
   public void onPause() {
     super.onPause();
+    vuforia.pauseVuforia();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
+
+
 
     if (controllerService != null) unbindService(connection);
 
@@ -424,4 +432,9 @@ public class FtcRobotControllerActivity extends Activity {
       }
     });
   }
+
+  public static FTCVuforia getVuforia() {
+    return vuforia;
+  }
+
 }

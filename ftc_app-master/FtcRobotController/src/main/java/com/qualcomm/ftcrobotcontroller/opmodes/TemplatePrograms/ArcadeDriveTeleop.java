@@ -31,15 +31,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms;
 
+
 import com.qualcomm.ftcrobotcontroller.reusableClasses.RobotDrive;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * TeleOp Mode
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class ArcadeDriveTeleop extends RobotHardware {
+public class ArcadeDriveTeleop extends OpMode {
 
 	/*
 	 * Note: the configuration of the servos is such that
@@ -49,7 +51,10 @@ public class ArcadeDriveTeleop extends RobotHardware {
 	// TETRIX VALUES.
 
 
+	DcMotor motorRight;
+	DcMotor motorLeft;
 
+	RobotDrive myRobotDrive;
 
 
 	/**
@@ -67,6 +72,9 @@ public class ArcadeDriveTeleop extends RobotHardware {
 	@Override
 	public void init() {
 
+		motorLeft = hardwareMap.dcMotor.get("motor_1");
+		motorRight = hardwareMap.dcMotor.get("motor_2");
+		myRobotDrive = new RobotDrive(hardwareMap.dcMotor.get("motor_2"),hardwareMap.dcMotor.get("motor_1"));
 
 		/*
 		 * Use the hardwareMap to get the dc motors and servos by name. Note
@@ -103,8 +111,8 @@ public class ArcadeDriveTeleop extends RobotHardware {
 		 * wrist/claw via the a,b, x, y buttons
 		 */
 
-		myRobotDrive.arcadeDrive(gamepad1.left_stick_y,gamepad1.left_stick_x);
 
+		myRobotDrive.arcadeDrive(gamepad1.left_stick_y, gamepad1.left_stick_x);
 
 
 

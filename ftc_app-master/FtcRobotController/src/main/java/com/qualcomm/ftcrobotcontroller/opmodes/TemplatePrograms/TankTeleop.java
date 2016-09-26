@@ -34,6 +34,9 @@ package com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms;
 
 
 import com.qualcomm.ftcrobotcontroller.opmodes.FirstResqSeason.TeleopRobotHardware;
+import com.qualcomm.ftcrobotcontroller.reusableClasses.RobotDrive;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.util.Range;
 
@@ -42,10 +45,22 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  * Enables control of the robot via the gamepad
  */
-public class TankTeleop extends RobotHardware {
+public class TankTeleop extends OpMode {
 
 
+  DcMotor motorRight;
+  DcMotor motorLeft;
 
+  RobotDrive myRobotDrive;
+
+  @Override
+  public void init()
+  {
+    motorLeft = hardwareMap.dcMotor.get("motor_1");
+    motorRight = hardwareMap.dcMotor.get("motor_2");
+    myRobotDrive = new RobotDrive(hardwareMap.dcMotor.get("motor_2"),hardwareMap.dcMotor.get("motor_1"));
+
+  }
   /*
    * This method will be called repeatedly in a loop
    * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#loop()
@@ -76,8 +91,8 @@ public class TankTeleop extends RobotHardware {
 
 
 
-      myRobotDrive.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_y);
 
+    myRobotDrive.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_y);
 
 
 

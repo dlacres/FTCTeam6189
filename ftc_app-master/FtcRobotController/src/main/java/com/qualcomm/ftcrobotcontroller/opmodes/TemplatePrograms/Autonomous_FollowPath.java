@@ -32,7 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms;
 
 import com.qualcomm.ftcrobotcontroller.reusableClasses.followPath;
+import com.qualcomm.ftcrobotcontroller.reusableClasses.limit;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import java.lang.Math;
@@ -43,9 +46,14 @@ import java.lang.Math;
  * Very simple op mode that demonstrates a state machine with the NXT motor controllers.
  * Should move forward, and then move backwards to its original location.
  */
-public class Autonomous_FollowPath extends RobotHardware {
+public class Autonomous_FollowPath extends OpMode {
 
-  followPath myFollowPath;
+    followPath myFollowPath;
+    limit myLimit;
+
+    DcMotor motorRight;
+    DcMotor motorLeft;
+    Servo hammer;
 
   State state_mach;
   public enum State {
@@ -89,8 +97,15 @@ public class Autonomous_FollowPath extends RobotHardware {
   @Override
   public void init() {
 
+      motorLeft = hardwareMap.dcMotor.get("motor_1");
+      motorRight = hardwareMap.dcMotor.get("motor_2");
+
+      motorRight.setDirection(DcMotor.Direction.REVERSE);
+
+      hammer = hardwareMap.servo.get("servo_1");
+
     state_mach = State.STATE_ZERO;
-    //myFollowPath = new followPath(hardwareMap.dcMotor.get("motor_2"),hardwareMap.dcMotor.get("motor_1"));
+    myFollowPath = new followPath(hardwareMap.dcMotor.get("motor_2"),hardwareMap.dcMotor.get("motor_1"));
 
     myFollowPath.DirectionReset();
     myFollowPath.encoderReset();

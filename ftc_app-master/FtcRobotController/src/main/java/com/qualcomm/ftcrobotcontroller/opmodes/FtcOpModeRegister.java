@@ -31,6 +31,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+
+import com.qualcomm.ftcrobotcontroller.opmodes.KnowledgeShare.FreshmanOrientationAutonomous;
+import com.qualcomm.ftcrobotcontroller.opmodes.KnowledgeShare.FreshmanOrientationTeleop;
 import com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms.ArcadeDriveTeleop;
 import com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms.Autonomous_FollowPath;
 import com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms.TankTeleop;
@@ -59,9 +62,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
     manager.register("NullOp", NullOp.class);
-    manager.register("Arcade Drive", ArcadeDriveTeleop.class);
-    manager.register("Tank Drive ", TankTeleop.class);
-    manager.register("Follow Path Auto", Autonomous_FollowPath.class);
+    manager.register("Teleop", FreshmanOrientationTeleop.class);
+    manager.register("Auto", FreshmanOrientationAutonomous.class);
+
 
 
     /*manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);

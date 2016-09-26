@@ -1,6 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.reusableClasses;
 
-import com.qualcomm.ftcrobotcontroller.opmodes.TemplatePrograms.RobotHardware;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 

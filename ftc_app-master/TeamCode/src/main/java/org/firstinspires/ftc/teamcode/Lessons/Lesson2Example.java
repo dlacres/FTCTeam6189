@@ -32,7 +32,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode.Lessons;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -53,11 +52,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-public class Template extends OpMode
+public class Lesson2Example extends OpMode
 {
     /* Declare OpMode members. */
     HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
     private ElapsedTime runtime = new ElapsedTime();
+
+
 
     /*
     This is where you declare variables such as motors, servos, sensors, and other variables like ints.
@@ -70,6 +71,8 @@ public class Template extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
+
+        robot.init(hardwareMap);
 
     /*
     This is where you put init code, such as reseting variables or setting up motors, servos, and sensors with the hardware map
@@ -97,6 +100,10 @@ public class Template extends OpMode
     @Override
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
+
+
+        robot.rightMotor.setTargetPosition(200);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 

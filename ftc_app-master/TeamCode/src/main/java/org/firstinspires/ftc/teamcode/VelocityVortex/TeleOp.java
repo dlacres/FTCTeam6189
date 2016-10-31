@@ -30,13 +30,15 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode.Lessons;
+package org.firstinspires.ftc.teamcode.VelocityVortex;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -51,16 +53,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Disabled
-@TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-
-public class Lesson2Example extends OpMode
+//@Disabled
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+public class TeleOp extends OpMode
 {
     /* Declare OpMode members. */
-    HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
+    //HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
     private ElapsedTime runtime = new ElapsedTime();
+    RobotDrive robotDrive ;
+    HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
 
 
+
+    double forkLiftPower;
+    double linearSlidePower;
 
     /*
     This is where you declare variables such as motors, servos, sensors, and other variables like ints.
@@ -75,6 +81,13 @@ public class Lesson2Example extends OpMode
         telemetry.addData("Status", "Initialized");
 
         robot.init(hardwareMap);
+
+
+        robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
+
+
+        linearSlidePower = 0;
+
 
     /*
     This is where you put init code, such as reseting variables or setting up motors, servos, and sensors with the hardware map
@@ -103,10 +116,44 @@ public class Lesson2Example extends OpMode
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
 
+        //gamepad1
 
-        robot.rightMotor.setTargetPosition(200);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightMotor.setPower(0.25);
+        robotDrive.arcadeDrive(gamepad1.left_stick_y,gamepad1.left_stick_x);
+
+        if(gamepad1.right_bumper)//Beacon Servo Controls
+        {
+            robot.buttonRight.setPosition(1);
+        }
+        if(gamepad1.left_bumper)
+        {
+            robot.buttonLeft.setPosition(1);
+        }
+
+        if(gamepad1.a)//sweeper controls
+        {
+            robot.Sweeper.setPower(0.5);
+        }
+        else if(gamepad1.b)
+        {
+            robot.Sweeper.setPower(-0.5);
+        }
+        else
+        {
+            robot.Sweeper.setPower(0);
+        }//end sweeper controls
+
+        //gamepad2
+
+        linearSlidePower = gamepad2.left_stick_y;
+        linearSlidePower = Range.clip(linearSlidePower, -1,1);
+        robot.linearSlide.setPower(linearSlidePower);
+
+        forkLiftPower = gamepad2.right_stick_y;
+        forkLiftPower = Range.clip(forkLiftPower, -1,1);
+        robot.forkLift.setPower(forkLiftPower);
+
+        telemetry.addData("Color Sensor:",robot.colorSensor.blue());
+        telemetry.update();
 
 
 

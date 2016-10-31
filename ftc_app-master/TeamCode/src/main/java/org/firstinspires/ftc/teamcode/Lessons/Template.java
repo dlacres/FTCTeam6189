@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-
+@Disabled
 @TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
 public class Template extends OpMode
 {
@@ -70,6 +70,7 @@ public class Template extends OpMode
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
+        robot.init(hardwareMap);
 
     /*
     This is where you put init code, such as reseting variables or setting up motors, servos, and sensors with the hardware map
@@ -97,7 +98,6 @@ public class Template extends OpMode
     @Override
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
-
 
 
         /*

@@ -38,6 +38,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
+
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -52,15 +54,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 @Disabled
-@TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-
-public class Lesson2Example extends OpMode
+@TeleOp(name="Driver Control", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+public class DriverControl extends OpMode
 {
     /* Declare OpMode members. */
     HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
     private ElapsedTime runtime = new ElapsedTime();
+    RobotDrive robotDrive ;
 
-
+   // DcMotor leftMotor;
+    //DcMotor  rightMotor;
 
     /*
     This is where you declare variables such as motors, servos, sensors, and other variables like ints.
@@ -74,7 +77,11 @@ public class Lesson2Example extends OpMode
     public void init() {
         telemetry.addData("Status", "Initialized");
 
+       // leftMotor   = hardwareMap.dcMotor.get("motorLeft");
+       // rightMotor  = hardwareMap.dcMotor.get("motorRight");
         robot.init(hardwareMap);
+        robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
+
 
     /*
     This is where you put init code, such as reseting variables or setting up motors, servos, and sensors with the hardware map
@@ -104,10 +111,8 @@ public class Lesson2Example extends OpMode
         telemetry.addData("Status", "Running: " + runtime.toString());
 
 
-        robot.rightMotor.setTargetPosition(200);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightMotor.setPower(0.25);
 
+        robotDrive.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_y);
 
 
         /*

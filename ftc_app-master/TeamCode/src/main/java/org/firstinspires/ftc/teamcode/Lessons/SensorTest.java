@@ -32,12 +32,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode.Lessons;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
+import org.firstinspires.ftc.teamcode.VelocityVortex.HardwareCompetitionRobot;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -52,14 +53,20 @@ import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Disabled
+//@Disabled
 @TeleOp(name="Sensor Test", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
 public class SensorTest extends OpMode
 {
     /* Declare OpMode members. */
-    HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
+    //HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
+    HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
     private ElapsedTime runtime = new ElapsedTime();
     RobotDrive robotDrive ;
+
+    int i;
+    int BlueCount;
+    int RedCount;
+
 
    // DcMotor leftMotor;
     //DcMotor  rightMotor;
@@ -78,8 +85,13 @@ public class SensorTest extends OpMode
 
        // leftMotor   = hardwareMap.dcMotor.get("motorLeft");
        // rightMotor  = hardwareMap.dcMotor.get("motorRight");
+        //robot.init(hardwareMap);
+        //robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
+
         robot.init(hardwareMap);
-        robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
+        i = 0;
+        RedCount = 0;
+        BlueCount = 0;
 
 
     /*
@@ -111,11 +123,41 @@ public class SensorTest extends OpMode
 
 
 
-        robotDrive.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_y);
+        //robotDrive.tankDrive(gamepad1.left_stick_y,gamepad1.right_stick_y);
 
-        telemetry.addData("Distance Sensor:",robot.distanceSensor.getLightDetected());
-        telemetry.addData("color Sensor",robot.colorSensor.blue());
+       /* if (i < 20)
+        {
+            RedCount = robot.colorSensor.red() + RedCount;
+            BlueCount = robot.colorSensor.blue() + BlueCount;
+            i++;
+        }
+        else if (i == 20)
+        {
+            if (RedCount > BlueCount)
+            {
+                telemetry.addData("Beacon:", "Red");
+            }
+            if (RedCount < BlueCount)
+            {
+                telemetry.addData("Beacon:", "Blue");
+            }
+        }
 
+        if (gamepad1.a && i == 20)
+        {
+            i = 0;
+            RedCount = 0;
+            BlueCount = 0;
+        }
+
+        telemetry.addData("Counter: ", i);
+        telemetry.addData("Red Count: ", RedCount);
+        telemetry.addData("Blue Count: ", BlueCount);
+        telemetry.addData("color Sensor Blue: ",robot.colorSensor.blue());
+        telemetry.addData("color Sensor Red: ",robot.colorSensor.red());*/
+
+        telemetry.addData("Touch Sensor M Value: ", robot.touchSensorM.getValue());
+        telemetry.addData("Touch Sensor M: ", robot.touchSensorM.isPressed());
         telemetry.update();
 
 

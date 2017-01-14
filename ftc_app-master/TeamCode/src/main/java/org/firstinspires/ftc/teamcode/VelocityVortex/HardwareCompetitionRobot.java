@@ -2,9 +2,15 @@ package org.firstinspires.ftc.teamcode.VelocityVortex;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
+import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -23,16 +29,27 @@ public class HardwareCompetitionRobot
     /* Public OpMode members. */
     public DcMotor  leftMotor   = null;
     public DcMotor  rightMotor  = null;
-
-    public DcMotor Sweeper = null;
     public DcMotor linearSlide = null;
-    public DcMotor forkLift = null;
+    public DcMotor linearSlide2 = null;
+    public DcMotor catapultMotor = null;
 
 
     public Servo buttonRight = null;
     public Servo buttonLeft = null;
+    public Servo catapultReload = null;
 
-    ColorSensor colorSensor;
+    public ColorSensor colorSensor0 = null;
+    public LightSensor colorSensor1 = null;
+    public TouchSensor touchSensor = null;
+    public ColorSensor colorSensor2 = null;
+    public TouchSensor touchSensorM = null;
+    public ColorSensor MRColorSensor = null;
+
+   public float hsvValues[] = {0F,0F,0F};
+    public float hsvValues2[] = {0F,0F,0F};
+
+    // values is a reference to the hsvValues array.
+   public final float values[] = hsvValues;
 
 
     public static final double MID_SERVO       =  0.5 ;
@@ -56,12 +73,9 @@ public class HardwareCompetitionRobot
         // Define and Initialize Motors
         leftMotor   = hwMap.dcMotor.get("motorLeft");
         rightMotor  = hwMap.dcMotor.get("motorRight");
-
-        Sweeper = hwMap.dcMotor.get("sweeper");
-
         linearSlide = hwMap.dcMotor.get("linearSlide");
-        forkLift = hwMap.dcMotor.get("forkLift");
-
+        linearSlide2 = hwMap.dcMotor.get("linearSlide2");
+        catapultMotor = hwMap.dcMotor.get("catapultMotor");
 
 
         leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
@@ -71,25 +85,40 @@ public class HardwareCompetitionRobot
         //leftMotor.setPower(0);
         //rightMotor.setPower(0);
 
-
+        catapultMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        catapultMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
 
         // Define and initialize ALL installed servos.
         buttonRight = hwMap.servo.get("buttonRight");
         buttonLeft = hwMap.servo.get("buttonLeft");
+        catapultReload = hwMap.servo.get("catapultReload");
 
-        buttonRight.setPosition(0.25);
-        buttonLeft.setPosition(1);
+        buttonRight.setPosition(0.9);
+        buttonLeft.setPosition(0.25);
+        catapultReload.setPosition(1);
 
-        boolean bLedOn = true;
-        colorSensor = hwMap.colorSensor.get("colorSensor");
+        colorSensor0 = hwMap.colorSensor.get("colorSensor0");
+        colorSensor1 = hwMap.lightSensor.get("colorSensor1");
+        colorSensor2 = hwMap.colorSensor.get("colorSensor2");
+        MRColorSensor = hwMap.colorSensor.get("cc");
 
-        colorSensor.enableLed(bLedOn);
+
+
+        colorSensor0.enableLed(false);
+        colorSensor1.enableLed(true);
+        colorSensor2.enableLed(false);
+        MRColorSensor.enableLed(false);
+
+        touchSensor =  hwMap.touchSensor.get("touchSensor");
+        touchSensorM = hwMap.touchSensor.get("touchSensorM");
+
 
     }
 

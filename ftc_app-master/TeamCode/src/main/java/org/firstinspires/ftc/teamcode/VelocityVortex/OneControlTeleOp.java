@@ -146,9 +146,9 @@ public class OneControlTeleOp extends OpMode
 
         forkLiftPower = gamepad1.right_stick_y;
         forkLiftPower = Range.clip(forkLiftPower, -1,1);
-        robot.forkLift.setPower(forkLiftPower);
 
-        telemetry.addData("Color Sensor:",robot.colorSensor.blue());
+
+        telemetry.addData("Color Sensor:",robot.colorSensor0.blue());
         telemetry.update();
 
 

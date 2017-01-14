@@ -29,7 +29,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.Lessons;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -39,7 +39,8 @@ import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+
+import org.firstinspires.ftc.teamcode.VelocityVortex.HardwareCompetitionRobot;
 
 /*
  *
@@ -56,7 +57,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 @Disabled
 public class SensorHTColor extends LinearOpMode {
 
-  ColorSensor colorSensor;
+  HardwareCompetitionRobot    robot   = new HardwareCompetitionRobot();
 
 
   @Override
@@ -81,7 +82,7 @@ public class SensorHTColor extends LinearOpMode {
 
     // get a reference to our ColorSensor object.
 
-
+    robot.init(hardwareMap);
     // turn the LED on in the beginning, just so user will know that the sensor is active.
 
 
@@ -101,22 +102,22 @@ public class SensorHTColor extends LinearOpMode {
         // button is transitioning to a pressed state.  Toggle LED.
         // on button press, enable the LED.
         bLedOn = !bLedOn;
-        colorSensor.enableLed(bLedOn);
+        robot.colorSensor1.enableLed(bLedOn);
       }
 
       // update previous state variable.
       bPrevState = bCurrState;
 
       // convert the RGB values to HSV values.
-      Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
+      /*Color.RGBToHSV(robot.colorSensor1.red(), robot.colorSensor1.green(), robot.colorSensor1.blue(), hsvValues);
 
       // send the info back to driver station using telemetry function.
       telemetry.addData("LED", bLedOn ? "On" : "Off");
-      telemetry.addData("Clear", colorSensor.alpha());
-      telemetry.addData("Red  ", colorSensor.red());
-      telemetry.addData("Green", colorSensor.green());
-      telemetry.addData("Blue ", colorSensor.blue());
-      telemetry.addData("Hue", hsvValues[0]);
+      telemetry.addData("Clear", robot.colorSensor1.alpha());
+      telemetry.addData("Red  ", robot.colorSensor1.red());
+      telemetry.addData("Green", robot.colorSensor1.green());
+      telemetry.addData("Blue ", robot.colorSensor1.blue());
+      telemetry.addData("Hue", hsvValues[0]);*/
 
       // change the background color to match the color detected by the RGB sensor.
       // pass a reference to the hue, saturation, and value array as an argument

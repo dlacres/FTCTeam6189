@@ -30,12 +30,11 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode.Lessons;
+package org.firstinspires.ftc.teamcode.VelocityVortex;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
 
@@ -52,18 +51,21 @@ import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Disabled
-@TeleOp(name="Driver Control", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-public class DriverControl extends OpMode
+//@Disabled
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp: Tank Drive", group="TeleOp")  // @Autonomous(...) is the other common choice
+public class TankTeleOp extends OpMode
 {
     /* Declare OpMode members. */
-    HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
+    //HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
     private ElapsedTime runtime = new ElapsedTime();
     RobotDrive robotDrive ;
-    int Speed = 1;
+    HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
 
-   // DcMotor leftMotor;
-    //DcMotor  rightMotor;
+
+
+    double forkLiftPower;
+    double linearSlidePower;
+    int Speed;
 
     /*
     This is where you declare variables such as motors, servos, sensors, and other variables like ints.
@@ -77,11 +79,14 @@ public class DriverControl extends OpMode
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-       // leftMotor   = hardwareMap.dcMotor.get("motorLeft");
-       // rightMotor  = hardwareMap.dcMotor.get("motorRight");
         robot.init(hardwareMap);
+
+
         robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
 
+
+        linearSlidePower = 0;
+        Speed = 1;
 
 
     /*
@@ -111,21 +116,68 @@ public class DriverControl extends OpMode
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
 
+        //gamepad1
 
+        robotDrive.tankDrive(-gamepad1.left_stick_y/Speed,-gamepad1.right_stick_y/Speed);
 
-        //robotDrive.tankDrive(gamepad1.left_stick_y/Speed,gamepad1.right_stick_y/Speed);
-        robotDrive.arcadeDrive(gamepad1.right_stick_y/Speed,gamepad1.right_stick_x/Speed);
-
-        if (gamepad1.right_bumper)
+        if (gamepad1.dpad_up)//Turbo Controls
         {
             Speed = 1;
         }
-        else
+        if (gamepad1.dpad_down)
         {
             Speed = 3;
+        }//End Turbo Controls
+
+        if(gamepad1.right_bumper)//Beacon Servo Controls
+        {
+            robot.buttonRight.setPosition(0.25);
+        }
+        if (gamepad1.right_trigger>0)
+        {
+            robot.buttonRight.setPosition(1);
         }
 
-        robot.sweeperMotor.setPower(gamepad1.left_stick_y);
+        if(gamepad1.left_bumper)
+        {
+            robot.buttonLeft.setPosition(1);
+        }
+        if (gamepad1.left_trigger>0)
+        {
+            robot.buttonLeft.setPosition(0.25);
+        }//End Servo Controls
+
+        if (gamepad1.a)//Catapult Control
+        {
+            robot.catapultMotor.setPower(-0.75);
+        }
+        else if (!gamepad1.a)
+        {
+            robot.catapultMotor.setPower(0);
+        }
+
+        if (gamepad1.x)//Catapult Reload Control
+        {
+            robot.catapultReload.setPosition(0);
+        }
+        else if(!gamepad1.x)
+        {
+            robot.catapultReload.setPosition(1);
+        }//End Catapult Reload Control
+
+        telemetry.addData("Catapult Encoder: ", robot.catapultMotor.getCurrentPosition());
+        telemetry.addData("Touch Sensor Pressed: ",robot.touchSensor.isPressed());
+        telemetry.addData("Touch Sensor Value: ",robot.touchSensor.getValue());
+        telemetry.update();
+
+
+        //gamepad2
+
+        linearSlidePower = gamepad2.left_stick_y;
+        linearSlidePower = Range.clip(linearSlidePower, -1,1);
+        robot.linearSlide.setPower(linearSlidePower);
+        robot.linearSlide2.setPower(-linearSlidePower);
+
         /*
         This is where you put your main code to run the robot. example: setting the motor speed
         or checking a sensor

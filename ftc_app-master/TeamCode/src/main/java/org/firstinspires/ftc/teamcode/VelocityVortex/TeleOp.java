@@ -32,9 +32,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode.VelocityVortex;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -54,7 +57,7 @@ import org.firstinspires.ftc.teamcode.ReusableClasses.RobotDrive;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 //@Disabled
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp: Arcade Drive", group="TeleOp")  // @Autonomous(...) is the other common choice
 public class TeleOp extends OpMode
 {
     /* Declare OpMode members. */
@@ -63,10 +66,10 @@ public class TeleOp extends OpMode
     RobotDrive robotDrive ;
     HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
 
-
-
-    double forkLiftPower;
     double linearSlidePower;
+    int Speed;
+
+
 
     /*
     This is where you declare variables such as motors, servos, sensors, and other variables like ints.
@@ -82,12 +85,10 @@ public class TeleOp extends OpMode
 
         robot.init(hardwareMap);
 
-
         robotDrive = new RobotDrive(robot.rightMotor,robot.leftMotor);
 
-
         linearSlidePower = 0;
-
+        Speed = 1;
 
     /*
     This is where you put init code, such as reseting variables or setting up motors, servos, and sensors with the hardware map
@@ -107,6 +108,7 @@ public class TeleOp extends OpMode
     @Override
     public void start() {
         runtime.reset();
+
     }
 
     /*
@@ -118,41 +120,67 @@ public class TeleOp extends OpMode
 
         //gamepad1
 
-        robotDrive.arcadeDrive(gamepad1.left_stick_y,gamepad1.left_stick_x);
+        robotDrive.arcadeDrive(gamepad1.left_stick_y / Speed,gamepad1.left_stick_x / Speed);
+
+        if (gamepad1.dpad_up)//Turbo Controls
+        {
+            Speed = 1;
+        }
+        if (gamepad1.dpad_down)
+        {
+            Speed = 3;
+        }//End Turbo Controls
 
         if(gamepad1.right_bumper)//Beacon Servo Controls
         {
+            robot.buttonRight.setPosition(0.25);
+        }
+        if (gamepad1.right_trigger>0)
+        {
             robot.buttonRight.setPosition(1);
         }
+
         if(gamepad1.left_bumper)
         {
             robot.buttonLeft.setPosition(1);
         }
+        if (gamepad1.left_trigger>0)
+        {
+            robot.buttonLeft.setPosition(0.25);
+        }//End Servo Control
 
-        if(gamepad1.a)//sweeper controls
+        if (gamepad1.a)//Catapult Control
         {
-            robot.Sweeper.setPower(0.5);
+            robot.catapultMotor.setPower(-0.75);
         }
-        else if(gamepad1.b)
+        else if (!gamepad1.a)
         {
-            robot.Sweeper.setPower(-0.5);
+            robot.catapultMotor.setPower(0);
+        }//End Catapult Control
+
+        if (gamepad1.x)//Catapult Reload Control
+        {
+            robot.catapultReload.setPosition(0);
         }
-        else
+        else if(!gamepad1.x)
         {
-            robot.Sweeper.setPower(0);
-        }//end sweeper controls
+            robot.catapultReload.setPosition(1);
+        }//End Catapult Reload Control
+
 
         //gamepad2
 
         linearSlidePower = gamepad2.left_stick_y;
         linearSlidePower = Range.clip(linearSlidePower, -1,1);
         robot.linearSlide.setPower(linearSlidePower);
+        robot.linearSlide2.setPower(-(linearSlidePower));
 
-        forkLiftPower = gamepad2.right_stick_y;
-        forkLiftPower = Range.clip(forkLiftPower, -1,1);
-        robot.forkLift.setPower(forkLiftPower);
+        Color.RGBToHSV(robot.MRColorSensor.red() * 8, robot.MRColorSensor.green() * 8, robot.MRColorSensor.blue() * 8, robot.hsvValues);
 
-        telemetry.addData("Color Sensor:",robot.colorSensor.blue());
+        telemetry.addData("Color Sensor Adress:",robot.MRColorSensor.getI2cAddress());
+        telemetry.addData("Hue", robot.hsvValues[0]);
+        telemetry.addData("Color Sensor:",robot.colorSensor0.blue());
+        telemetry.addData("Trigger: ",gamepad1.left_trigger);
         telemetry.update();
 
 

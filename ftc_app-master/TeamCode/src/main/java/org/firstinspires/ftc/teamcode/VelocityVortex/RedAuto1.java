@@ -37,8 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Lessons.HardwareSoftwareRobot;
-
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
  * It uses the common Pushbot hardware class to define the drive on the robot.
@@ -66,7 +64,7 @@ import org.firstinspires.ftc.teamcode.Lessons.HardwareSoftwareRobot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous 1: Red", group="Pushbot")
+@Autonomous(name="Red Autonomous: Ramp", group="RampAuto")
 
 public class RedAuto1 extends LinearOpMode {
 
@@ -116,9 +114,9 @@ public class RedAuto1 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  4,  4, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   -2, 2, 5.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, 10, 10, 5.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED,  8,  8, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   -8, 8, 5.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, 25, 25, 5.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
 
         sleep(1000);     // pause for servos to move

@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.Lessons;
 
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -18,9 +15,9 @@ public class HardwareSoftwareRobot
     /* Public OpMode members. */
     public DcMotor  leftMotor   = null;
     public DcMotor  rightMotor  = null;
+    public DcMotor sweeperMotor = null;
 
-    public OpticalDistanceSensor distanceSensor = null;
-    ColorSensor colorSensor;
+
 
 
     public static final double MID_SERVO       =  0.5 ;
@@ -44,6 +41,7 @@ public class HardwareSoftwareRobot
         // Define and Initialize Motors
         leftMotor   = hwMap.dcMotor.get("motorLeft");
         rightMotor  = hwMap.dcMotor.get("motorRight");
+        sweeperMotor  = hwMap.dcMotor.get("sweeperMotor");
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
@@ -63,12 +61,7 @@ public class HardwareSoftwareRobot
 
 
         // Define and initialize ALL installed servos.
-        boolean bLedOn = true;
 
-        distanceSensor = hwMap.opticalDistanceSensor.get("distanceSensor");
-        colorSensor = hwMap.colorSensor.get("colorSensor");
-
-        colorSensor.enableLed(bLedOn);
 
     }
 

@@ -33,10 +33,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode.Lessons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.VelocityVortex.HardwareCompetitionRobot;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -64,13 +65,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@Disabled
-@Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
+//@Disabled
+@Autonomous(name="Line Follower Test", group="Test")
 
-public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
+public class LineFollowTest extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareSoftwareRobot       robot   = new HardwareSoftwareRobot();   // Use a Pushbot's hardware
+    HardwareCompetitionRobot    robot   = new HardwareCompetitionRobot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
 
@@ -81,6 +82,29 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+
+    static final double THRESHOLD = 2.2;
+
+
+    double RedDifference;
+    double BlueDifference;
+    double GreenDifference;
+
+    double RedDifference2;
+    double BlueDifference2;
+    double GreenDifference2;
+
+    double RedComparsion;
+    double BlueComparsion;
+
+    int TrueRed = 255;
+    int TrueBlue = 255;
+
+    int BlueHue = 6000000;
+    int RedHue = 6500000;
+    int RedHueSample = 0;
+    int BlueHueSample = 0;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -109,17 +133,214 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
                           robot.rightMotor.getCurrentPosition());
         telemetry.update();
 
+        RedComparsion = 0;
+        BlueComparsion = 0;
+
+        GreenDifference = 0;
+        RedDifference = 0;
+        BlueDifference = 0;
+
+        GreenDifference2 = 0;
+        RedDifference2 = 0;
+        BlueDifference2 = 0;
+
+        BlueHueSample = 0;
+        RedHueSample = 0;
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  48,  48, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
+
+        /*while (robot.colorSensor1.getRawLightDetected() < THRESHOLD)//Start First Beacon Code
+        {
+            robot.rightMotor.setPower(0.75);
+            robot.leftMotor.setPower(0.75);
+            idle();
+        }
+        encoderDrive(0.5,2,2,3);
+
+        while (robot.colorSensor1.getRawLightDetected() < THRESHOLD)
+        {
+            robot.rightMotor.setPower(-0.75);
+            robot.leftMotor.setPower(0.75);
+            idle();
+        }
 
 
-        sleep(1000);     // pause for servos to move
+        while (!robot.touchSensor.isPressed())
+        {
+            telemetry.addData("Touch Sensor: ", false);
+            telemetry.update();
+
+            // If the sensor is on the line
+            // only the right motor rotates to move it off the line
+            while (robot.colorSensor1.getRawLightDetected() >= THRESHOLD) {
+                robot.rightMotor.setPower(0.4);
+                robot.leftMotor.setPower(0);
+                idle();
+            }
+            // Otherwise (if the sensor is off the line)
+            // only the left motor rotates to move it back toward the line
+            while (robot.colorSensor1.getRawLightDetected() <= THRESHOLD) {
+                robot.leftMotor.setPower(0.4);
+                robot.rightMotor.setPower(0);
+                idle();
+            }
+            idle();
+        }
+        robot.rightMotor.setPower(0);
+        robot.leftMotor.setPower(0);
+
+        BlueDifference = java.lang.Math.pow(robot.colorSensor0.blue()-TrueBlue,2);
+        GreenDifference = java.lang.Math.pow(robot.colorSensor0.green()-0,2);
+        RedDifference = java.lang.Math.pow(robot.colorSensor0.red()-0,2);
+
+        BlueComparsion = java.lang.Math.sqrt(BlueDifference + RedDifference + GreenDifference);
+
+        BlueDifference2 = java.lang.Math.pow(robot.colorSensor0.blue()-0,2);
+        GreenDifference2 = java.lang.Math.pow(robot.colorSensor0.green()-0,2);
+        RedDifference2 = java.lang.Math.pow(robot.colorSensor0.red()-TrueRed,2);
+
+        RedComparsion = java.lang.Math.sqrt(BlueDifference2 + RedDifference2 + GreenDifference2);
+
+        if (BlueComparsion < RedComparsion)//Sensor Sees Blue
+        {
+            robot.buttonRight.setPosition(0.25);
+        }
+        if (RedComparsion < BlueComparsion)//Sensor Sees Red
+        {
+            robot.buttonLeft.setPosition(1);
+        }
+
+        /*if (robot.colorSensor0.argb() < BlueHue)
+        {
+            robot.buttonRight.setPosition(0.25);
+        }
+        if (robot.colorSensor0.argb() > RedHue)
+        {
+            robot.buttonLeft.setPosition(1);
+        }*/                 //End First Beacon Code
+
+        /*encoderDrive(0.7,-2,-2,2);
+        encoderDrive(0.7,2,2,2);
+
+        encoderDrive(0.7,-19,-19,4);
+        encoderDrive(0.5,-7,7,4);
+
+        robot.buttonLeft.setPosition(0.25);
+        robot.buttonRight.setPosition(1);
+
+        RedComparsion = 0;
+        BlueComparsion = 0;
+
+        GreenDifference = 0;
+        RedDifference = 0;
+        BlueDifference = 0;
+
+        GreenDifference2 = 0;
+        RedDifference2 = 0;
+        BlueDifference2 = 0;
+
+        encoderDrive(0.7,6,6,3);
+
+        while (robot.colorSensor1.getRawLightDetected() < THRESHOLD)
+        {
+            robot.rightMotor.setPower(0.9);
+            robot.leftMotor.setPower(0.9);
+            idle();
+        }
+        encoderDrive(0.5,2,2,3);
+
+        while (robot.colorSensor1.getRawLightDetected() < THRESHOLD)
+        {
+            robot.rightMotor.setPower(-0.5);
+            robot.leftMotor.setPower(0.5);
+            idle();
+        }
+
+
+        while (!robot.touchSensor.isPressed())
+        {
+            telemetry.addData("Touch Sensor: ", false);
+            telemetry.update();
+
+            // If the sensor is on the line
+            // only the right motor rotates to move it off the line
+            while (robot.colorSensor1.getRawLightDetected() >= THRESHOLD) {
+                robot.rightMotor.setPower(0.4);
+                robot.leftMotor.setPower(0);
+                idle();
+            }
+            // Otherwise (if the sensor is off the line)
+            // only the left motor rotates to move it back toward the line
+            while (robot.colorSensor1.getRawLightDetected() <= THRESHOLD) {
+                robot.leftMotor.setPower(0.4);
+                robot.rightMotor.setPower(0);
+                idle();
+            }
+            idle();
+        }
+        robot.rightMotor.setPower(0);
+        robot.leftMotor.setPower(0);*/
+
+        while (!robot.touchSensor.isPressed()) {
+            telemetry.addData("Touch Sensor: ", false);
+            telemetry.update();
+        }
+
+        if (robot.colorSensor0.argb() < BlueHue)
+        {
+            BlueHueSample = robot.colorSensor0.argb();
+            RedHueSample = 0;
+        }
+        if (robot.colorSensor0.argb() > RedHue)
+        {
+            BlueHueSample = 0;
+            RedHueSample = robot.colorSensor0.argb();
+        }
+
+        BlueDifference = java.lang.Math.pow(robot.colorSensor0.blue()-TrueBlue,2);
+        GreenDifference = java.lang.Math.pow(robot.colorSensor0.green()-0,2);
+        RedDifference = java.lang.Math.pow(robot.colorSensor0.red()-0,2);
+
+
+        BlueComparsion = java.lang.Math.sqrt(BlueDifference + RedDifference + GreenDifference + BlueHueSample);
+
+        BlueDifference2 = java.lang.Math.pow(robot.colorSensor0.blue()-0,2);
+        GreenDifference2 = java.lang.Math.pow(robot.colorSensor0.green()-0,2);
+        RedDifference2 = java.lang.Math.pow(robot.colorSensor0.red()-TrueRed,2);
+
+        RedComparsion = java.lang.Math.sqrt(BlueDifference2 + RedDifference2 + GreenDifference2 + RedHueSample);
+
+        if (BlueComparsion < RedComparsion)//Sensor Sees Blue
+        {
+            telemetry.addData("Red Comparsion: ", RedComparsion);
+            telemetry.addData("Blue Comparsion: ", BlueComparsion);
+            telemetry.addData("Beacon: ","Blue");
+            telemetry.update();
+            robot.buttonRight.setPosition(0.25);
+        }
+        if (RedComparsion < BlueComparsion)//Sensor Sees Red
+        {
+            telemetry.addData("Red Comparsion: ", RedComparsion);
+            telemetry.addData("Blue Comparsion: ", BlueComparsion);
+            telemetry.addData("Beacon: ","Red");
+            telemetry.update();
+            robot.buttonLeft.setPosition(1);
+        }
+
+        //encoderDrive(0.75,-2,-2,2);
+
+        while (opModeIsActive())
+        {
+            telemetry.addData("Hue: ",robot.colorSensor0.argb());
+            telemetry.addData("Red Comparsion: ", RedComparsion);
+            telemetry.addData("Blue Comparsion: ", BlueComparsion);
+            telemetry.update();
+            idle();
+        }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

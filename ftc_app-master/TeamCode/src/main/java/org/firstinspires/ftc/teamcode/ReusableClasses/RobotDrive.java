@@ -22,8 +22,8 @@ public class RobotDrive {
 
 	public void arcadeDrive(float forwardSpeed, float turnRate)
 	{
-		float rightSpeed = forwardSpeed - turnRate/4.0f;
-		float leftSpeed = forwardSpeed + turnRate/4.0f;
+		float rightSpeed = (forwardSpeed - turnRate);
+		float leftSpeed = (forwardSpeed + turnRate);
 
 		// clip the right/left values so that the values never exceed +/- 1
 

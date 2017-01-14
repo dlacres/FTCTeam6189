@@ -64,7 +64,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous 1: Blue", group="Pushbot")
+@Autonomous(name="Blue Autonomous: Ramp", group="RampAuto")
 
 public class BlueAuto1 extends LinearOpMode {
 

@@ -30,9 +30,10 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode.VelocityVortex;
+package org.firstinspires.ftc.teamcode.Lessons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -63,14 +64,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
+@Disabled
+@Autonomous(name="Software Beacon Auto", group="Pushbot")
 
-@Autonomous(name="Autonomous: Cap Ball", group="CapBallAuto")
-
-public class Auto2 extends LinearOpMode {
+public class SoftwareBeaconAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     //HardwareCompetitionRobot       robot   = new HardwareCompetitionRobot();   // Use a Pushbot's hardware
-    HardwareCompetitionRobot robot = new HardwareCompetitionRobot();
+    HardwareSoftwareRobot robot = new HardwareSoftwareRobot();
     private ElapsedTime     runtime = new ElapsedTime();
 
 
@@ -81,6 +82,9 @@ public class Auto2 extends LinearOpMode {
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.4;
     static final double     TURN_SPEED              = 0.3;
+
+    int BlueCount;
+    int RedCount;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -103,6 +107,9 @@ public class Auto2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        RedCount = 0;
+        BlueCount = 0;
+
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0",  "Starting at %7d :%7d",
                           robot.leftMotor.getCurrentPosition(),
@@ -114,7 +121,24 @@ public class Auto2 extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(0.5, 60, 60, 10.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(0.5, 60, 60, 10.0);// S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,-20,20,5);
+        encoderDrive(DRIVE_SPEED,10,10,5);
+
+        for (int i =0; i<20; i++)
+        {
+
+        }
+        if (RedCount > BlueCount)
+        {
+            telemetry.addData("Beacon:", "Red");
+            //robot.buttonRight.setPosition(0.25);
+        }
+        if (RedCount < BlueCount)
+        {
+            telemetry.addData("Beacon:", "Blue");
+           // robot.buttonLeft.setPosition(1);
+        }
 
 
         sleep(1000);     // pause for servos to move
